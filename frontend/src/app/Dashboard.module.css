@@ -22,10 +22,17 @@
 .content {
   flex: 1;
   padding: 1.5rem;
-  margin-left: 260px;
+  margin-left: 60px; /* Default when sidebar is collapsed */
   position: relative;
   z-index: 1;
+  transition: margin-left 0.3s ease; /* Smooth transition */
 }
+
+/* When sidebar is hovered, adjust margin-left */
+.sidebar:Hover + .content {
+  margin-left: 260px;
+}
+
 
 .header {
   display: flex;

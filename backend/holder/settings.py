@@ -31,7 +31,6 @@ ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
     '192.168.1.227',
-
 ]
 
 
@@ -44,9 +43,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'krsna',
+    'slips',
     'rest_framework',
-    # 'django.contrib.admin',
 
 ]
 
@@ -60,14 +58,10 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'nishantt.urls'
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [
-            # os.path.join(BASE_DIR, '/krnsa/templates')
-                 ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

@@ -1,9 +1,7 @@
 from django.urls import path
-from .views import PaperUploadView, PaperListView, test_endpoint
+from .views import SlipUploadView, SlipListView
 
 urlpatterns = [
-    path('upload/', PaperUploadView.as_view(), name='upload-paper'),
-    path('papers/', PaperListView.as_view(), name='paper-list'),
-    path('test/', test_endpoint, name='test-endpoint'),
-
+    path('upload/', SlipUploadView.as_view(), name='upload-paper'),
+    path('slip/', SlipListView.as_view(), name='paper-list'),
 ]

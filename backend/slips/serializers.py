@@ -1,7 +1,7 @@
 from rest_framework import serializers
-from .models import Paper
+from .models import Slip
 
-class PaperSerializer(serializers.ModelSerializer):
+class SlipSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Paper
-        fields = ['title', 'ipfs_hash', 'user_uid', 'uploaded_at', 'land_size', 'coordinates', 'city']
+        model = Slip
+        fields = ['product_name', 'user-address', 'warranty_start_date', 'warranty_end_date', 'device_name']

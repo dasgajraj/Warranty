@@ -1,0 +1,359 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: #f5f7fa;
+  }
+  
+  /* Header Styles */
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #ffffff;
+    padding: 1rem 2rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  
+  .companyName {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #2c3e50;
+    margin: 0;
+  }
+  
+  .headerRight {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+  }
+  
+  .searchContainer {
+    position: relative;
+  }
+  
+  .searchInput {
+    padding: 0.5rem 1rem;
+    border: 1px solid #e1e4e8;
+    border-radius: 4px;
+    width: 250px;
+    font-size: 0.9rem;
+  }
+  
+  .userProfile {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  
+  .userName {
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+  
+  .userAvatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-color: #3498db;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+  }
+  
+  /* Main Content Styles */
+  .mainContent {
+    display: flex;
+    flex: 1;
+  }
+  
+  /* Sidebar Navigation */
+  .sidebar {
+    width: 220px;
+    background-color: #2c3e50;
+    padding: 2rem 0;
+  }
+  
+  .navMenu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .navItem {
+    padding: 0.75rem 1.5rem;
+    color: #ecf0f1;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    font-size: 0.95rem;
+  }
+  
+  .navItem:hover {
+    background-color: #34495e;
+  }
+  
+  .navItem.active {
+    background-color: #3498db;
+    font-weight: 600;
+  }
+  
+  /* Dashboard Content Area */
+  .dashboardContent {
+    flex: 1;
+    padding: 2rem;
+  }
+  
+  .pageTitle {
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    font-size: 1.75rem;
+    color: #2c3e50;
+  }
+  
+  /* Dashboard Summary Cards */
+  .dashboardSummary {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+  
+  .summaryCard {
+    background-color: #ffffff;
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  }
+  
+  .summaryCard h3 {
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+    color: #7f8c8d;
+  }
+  
+  .summaryNumber {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #2c3e50;
+    margin: 0;
+  }
+  
+  /* Warranty Table */
+  .warrantyTable {
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+  }
+  
+  .tableHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid #ecf0f1;
+  }
+  
+  .tableHeader h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    color: #2c3e50;
+  }
+  
+  .addButton {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+  
+  .addButton:hover {
+    background-color: #2980b9;
+  }
+  
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .table th, .table td {
+    padding: 1rem 1.5rem;
+    text-align: left;
+    border-bottom: 1px solid #ecf0f1;
+  }
+  
+  .table th {
+    font-weight: 600;
+    color: #7f8c8d;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+  }
+  
+  .table tbody tr:hover {
+    background-color: #f8f9fa;
+  }
+  
+  /* Status Badges */
+  .statusBadge {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 500;
+  }
+  
+  .active {
+    background-color: #e6f7ed;
+    color: #27ae60;
+  }
+  
+  .expiringsoon {
+    background-color: #fef9e6;
+    color: #f39c12;
+  }
+  
+  .expired {
+    background-color: #feeae6;
+    color: #e74c3c;
+  }
+  
+  /* Action Buttons */
+  .actionButtons {
+    display: flex;
+    gap: 0.5rem;
+  }
+  
+  .editButton, .deleteButton {
+    border: none;
+    border-radius: 4px;
+    padding: 0.35rem 0.75rem;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+  
+  .editButton {
+    background-color: #f1f5f9;
+    color: #3498db;
+  }
+  
+  .editButton:hover {
+    background-color: #e1e8ed;
+  }
+  
+  .deleteButton {
+    background-color: #fef2f2;
+    color: #e74c3c;
+  }
+  
+  .deleteButton:hover {
+    background-color: #fee2e2;
+  }
+  
+  /* Placeholder for other sections */
+  .placeholderSection {
+    background-color: #ffffff;
+    border-radius: 8px;
+    padding: 2rem;
+    text-align: center;
+    color: #7f8c8d;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  }
+  
+  /* Footer Styles */
+  .footer {
+    background-color: #ffffff;
+    padding: 1.5rem 2rem;
+    box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.05);
+  }
+  .footerContent {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .copyright {
+    color: #7f8c8d;
+    font-size: 0.85rem;
+    margin: 0;
+  }
+  
+  /* Responsive Styles */
+  @media (max-width: 1024px) {
+    .dashboardSummary {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .header {
+      flex-direction: column;
+      gap: 1rem;
+      padding: 1rem;
+    }
+    
+    .headerRight {
+      width: 100%;
+      justify-content: space-between;
+    }
+    
+    .searchInput {
+      width: 180px;
+    }
+    
+    .mainContent {
+      flex-direction: column;
+    }
+    
+    .sidebar {
+      width: 100%;
+      padding: 0.5rem 0;
+    }
+    
+    .navMenu {
+      display: flex;
+      overflow-x: auto;
+    }
+    
+    .navItem {
+      padding: 0.75rem 1rem;
+      white-space: nowrap;
+    }
+    
+    .dashboardContent {
+      padding: 1rem;
+    }
+    
+    .dashboardSummary {
+      grid-template-columns: 1fr;
+    }
+    
+    .table th, .table td {
+      padding: 0.75rem;
+    }
+    
+    .footerContent {
+      flex-direction: column;
+      gap: 0.5rem;
+      text-align: center;
+    }
+  }
+  
+  /* Table Responsiveness */
+  @media (max-width: 992px) {
+    .table {
+      display: block;
+      overflow-x: auto;
+      white-space: nowrap;
+    }
+  }

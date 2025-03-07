@@ -1,182 +1,536 @@
-"use client";
+"use client"
 
-import { useState } from 'react';
-import Link from 'next/link';
-import styles from './Dashboard.module.css';
-
-// Mock warranty data
-const initialWarranties = [
-  { id: 1, product: 'Laptop Model X', customer: 'John Smith', startDate: '2025-01-15', endDate: '2027-01-15', status: 'Active' },
-  { id: 2, product: 'Smartphone Y-Series', customer: 'Emily Johnson', startDate: '2024-11-03', endDate: '2025-11-03', status: 'Active' },
-  { id: 3, product: 'Refrigerator Z400', customer: 'Michael Brown', startDate: '2024-08-22', endDate: '2029-08-22', status: 'Active' },
-  { id: 4, product: 'Television UHD-8000', customer: 'Sarah Davis', startDate: '2023-12-10', endDate: '2024-12-10', status: 'Expiring Soon' },
-  { id: 5, product: 'Coffee Maker Pro', customer: 'Robert Wilson', startDate: '2023-05-17', endDate: '2024-05-17', status: 'Expired' },
-];
+import { useState, useEffect } from "react"
+import {
+  BarChart3,
+  Calendar,
+  CheckCircle2,
+  ChevronRight,
+  CircleEllipsis,
+  ExternalLink,
+  FileText,
+  Home,
+  LineChart,
+  MoreHorizontal,
+  MoreVertical,
+  PieChart,
+  Plus,
+  Search,
+  Settings,
+  Share2,
+  Slack,
+  Target,
+  User,
+  Users,
+} from "lucide-react"
+import styles from "./Dashboard.module.css"
+import sidebarStyles from "./sidebar.module.css"
 
 export default function Dashboard() {
-  const [warranties, setWarranties] = useState(initialWarranties);
-  const [activeSection, setActiveSection] = useState('dashboard');
-  const [searchTerm, setSearchTerm] = useState('');
+  const [activeTab, setActiveTab] = useState("work")
+  const [progress, setProgress] = useState(30)
 
-  // Filter warranties based on search term
-  const filteredWarranties = warranties.filter(warranty => 
-    warranty.product.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    warranty.customer.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    warranty.status.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  // Add a simple animation effect for the progress
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setProgress((prev) => {
+        if (prev >= 30) return 30
+        return prev + 1
+      })
+    }, 50)
 
-  // Count warranties by status
-  const statusCounts = warranties.reduce((acc, warranty) => {
-    acc[warranty.status] = (acc[warranty.status] || 0) + 1;
-    return acc;
-  }, {} as Record<string, number>);
+    return () => clearInterval(interval)
+  }, [])
 
   return (
     <div className={styles.container}>
-      {/* Header */}
-      <header className={styles.header}>
-        <h1 className={styles.companyName}>Hadn't @ 2025</h1>
-        <div className={styles.headerRight}>
-          <div className={styles.searchContainer}>
-            <input 
-              type="text" 
-              placeholder="Search warranties..." 
-              className={styles.searchInput}
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
+      {/* Left Sidebar */}
+      <div className={sidebarStyles.sidebar}>
+        <div className={sidebarStyles.logo}>
+          <div className={sidebarStyles.logoIcon}>
+            <Target className={sidebarStyles.logoSvg} />
           </div>
-          <div className={styles.userProfile}>
-            <span className={styles.userName}>Admin</span>
-            <div className={styles.userAvatar}>A</div>
-          </div>
+          <h1 className={sidebarStyles.logoText}>WarrantyVault</h1>
         </div>
-      </header>
 
-      {/* Main Content */}
-      <div className={styles.mainContent}>
-        {/* Navigation Sidebar */}
-        <nav className={styles.sidebar}>
-          <ul className={styles.navMenu}>
-            <li 
-              className={`${styles.navItem} ${activeSection === 'dashboard' ? styles.active : ''}`}
-              onClick={() => setActiveSection('dashboard')}
-            >
-              Dashboard
-            </li>
-            <li 
-              className={`${styles.navItem} ${activeSection === 'warranties' ? styles.active : ''}`}
-              onClick={() => setActiveSection('warranties')}
-            >
-              Warranties
-            </li>
-            <li 
-              className={`${styles.navItem} ${activeSection === 'customers' ? styles.active : ''}`}
-              onClick={() => setActiveSection('customers')}
-            >
-              Customers
-            </li>
-            <li 
-              className={`${styles.navItem} ${activeSection === 'products' ? styles.active : ''}`}
-              onClick={() => setActiveSection('products')}
-            >
-              Products
-            </li>
-            <li 
-              className={`${styles.navItem} ${activeSection === 'settings' ? styles.active : ''}`}
-              onClick={() => setActiveSection('settings')}
-            >
-              Settings
-            </li>
-          </ul>
+        <nav className={sidebarStyles.nav}>
+          <button className={`${sidebarStyles.navButton} ${sidebarStyles.active}`}>
+            <Home className={sidebarStyles.navIcon} />
+            Dashboard
+          </button>
+          <button className={sidebarStyles.navButton}>
+            <Calendar className={sidebarStyles.navIcon} />
+            Calendar
+          </button>
+          <button className={sidebarStyles.navButton}>
+            <CheckCircle2 className={sidebarStyles.navIcon} />
+            My Documents
+          </button>
+          <button className={sidebarStyles.navButton}>
+            <BarChart3 className={sidebarStyles.navIcon} />
+            Statistics
+          </button>
+          <button className={sidebarStyles.navButton}>
+            <FileText className={sidebarStyles.navIcon} />
+            Warranties
+          </button>
         </nav>
 
-        {/* Main Dashboard Area */}
-        <div className={styles.dashboardContent}>
-          <h2 className={styles.pageTitle}>
-            {activeSection.charAt(0).toUpperCase() + activeSection.slice(1)}
-          </h2>
+        <div className={sidebarStyles.section}>
+          <h3 className={sidebarStyles.sectionTitle}>INTEGRATION</h3>
+          <nav className={sidebarStyles.nav}>
+            <button className={sidebarStyles.navButton}>
+              <Slack className={sidebarStyles.navIcon} />
+              Slack
+            </button>
+            <button className={sidebarStyles.navButton}>
+              <MessageSquare className={sidebarStyles.navIcon} />
+              Discord
+            </button>
+            <button className={sidebarStyles.navButton}>
+              <Plus className={sidebarStyles.navIcon} />
+              Add new plugin
+            </button>
+          </nav>
+        </div>
 
-          {activeSection === 'dashboard' && (
-            <div className={styles.dashboardSummary}>
-              <div className={styles.summaryCard}>
-                <h3>Active Warranties</h3>
-                <p className={styles.summaryNumber}>{statusCounts['Active'] || 0}</p>
-              </div>
-              <div className={styles.summaryCard}>
-                <h3>Expiring Soon</h3>
-                <p className={styles.summaryNumber}>{statusCounts['Expiring Soon'] || 0}</p>
-              </div>
-              <div className={styles.summaryCard}>
-                <h3>Expired</h3>
-                <p className={styles.summaryNumber}>{statusCounts['Expired'] || 0}</p>
-              </div>
-              <div className={styles.summaryCard}>
-                <h3>Total Warranties</h3>
-                <p className={styles.summaryNumber}>{warranties.length}</p>
-              </div>
-            </div>
-          )}
+        <div className={sidebarStyles.section}>
+          <h3 className={sidebarStyles.sectionTitle}>TEAMS</h3>
+          <nav className={sidebarStyles.nav}>
+            <button className={sidebarStyles.navButton}>
+              <Search className={sidebarStyles.navIcon} />
+              Seo
+            </button>
+            <button className={sidebarStyles.navButton}>
+              <LineChart className={sidebarStyles.navIcon} />
+              Marketing
+            </button>
+          </nav>
+        </div>
 
-          {/* Warranty Table */}
-          {(activeSection === 'dashboard' || activeSection === 'warranties') && (
-            <div className={styles.warrantyTable}>
-              <div className={styles.tableHeader}>
-                <h3>{activeSection === 'dashboard' ? 'Recent Warranties' : 'All Warranties'}</h3>
-                <button className={styles.addButton}>+ Add New Warranty</button>
-              </div>
-              <table className={styles.table}>
-                <thead>
-                  <tr>
-                    <th>ID</th>
-                    <th>Product</th>
-                    <th>Customer</th>
-                    <th>Start Date</th>
-                    <th>End Date</th>
-                    <th>Status</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {filteredWarranties.map(warranty => (
-                    <tr key={warranty.id}>
-                      <td>{warranty.id}</td>
-                      <td>{warranty.product}</td>
-                      <td>{warranty.customer}</td>
-                      <td>{warranty.startDate}</td>
-                      <td>{warranty.endDate}</td>
-                      <td>
-                        <span className={`${styles.statusBadge} ${styles[warranty.status.replace(/\s+/g, '').toLowerCase()]}`}>
-                          {warranty.status}
-                        </span>
-                      </td>
-                      <td>
-                        <div className={styles.actionButtons}>
-                          <button className={styles.editButton}>Edit</button>
-                          <button className={styles.deleteButton}>Delete</button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )}
-
-          {/* Placeholder for other sections */}
-          {activeSection === 'customers' && <div className={styles.placeholderSection}>Customers section content will appear here</div>}
-          {activeSection === 'products' && <div className={styles.placeholderSection}>Products section content will appear here</div>}
-          {activeSection === 'settings' && <div className={styles.placeholderSection}>Settings section content will appear here</div>}
+        <div className={sidebarStyles.footer}>
+          <button className={sidebarStyles.navButton}>
+            <Settings className={sidebarStyles.navIcon} />
+            Setting
+          </button>
         </div>
       </div>
 
-      {/* Footer */}
-      <footer className={styles.footer}>
-        <div className={styles.footerContent}>
-          <p className={styles.companyName}>Hadn't @ 2025</p>
-          <p className={styles.copyright}>© 2025 Hadn't. All rights reserved.</p>
+      {/* Main Content */}
+      <div className={styles.content}>
+        <div className={styles.header}>
+          <h1 className={styles.greeting}>Hi, User!</h1>
+          <div className={styles.headerActions}>
+            <button className={styles.createButton}>
+              <Plus className={styles.buttonIcon} />
+              Create
+            </button>
+            <button className={styles.iconButton}>
+              <Search className={styles.iconButtonSvg} />
+            </button>
+            <button className={styles.iconButton}>
+              <Bell className={styles.iconButtonSvg} />
+              <span className={styles.notificationDot}></span>
+            </button>
+            <div className={styles.avatar}>
+              <img src="/placeholder.svg?height=40&width=40" alt="User" />
+            </div>
+          </div>
         </div>
-      </footer>
+
+        <div className={styles.grid}>
+          {/* Task Overview Card */}
+          <div className={`${styles.card} ${styles.darkCard}`}>
+            <div className={styles.cardHeader}>
+              <h3 className={styles.cardTitle}>Document Overview</h3>
+              <div className={styles.cardActions}>
+                <button className={styles.cardIconButton}>
+                  <Share2 className={styles.cardActionIcon} />
+                </button>
+                <button className={styles.cardIconButton}>
+                  <MoreVertical className={styles.cardActionIcon} />
+                </button>
+              </div>
+            </div>
+
+            <div className={styles.statsRow}>
+              <div className={styles.stat}>
+                <h2 className={styles.statValue}>43</h2>
+                <p className={styles.statLabel}>
+                  Documents
+                  <br />
+                  saved
+                </p>
+              </div>
+              <div className={styles.stat}>
+                <h2 className={styles.statValue}>2</h2>
+                <p className={styles.statLabel}>
+                  Warranties
+                  <br />
+                  expiring soon
+                </p>
+              </div>
+            </div>
+
+            <div className={styles.progressBars}>
+              <div className={styles.progressBar}>
+                <div className={styles.progressBarFill} style={{ width: "80%" }}></div>
+              </div>
+              <div className={styles.progressBar}>
+                <div className={styles.progressBarFill} style={{ width: "60%" }}></div>
+              </div>
+            </div>
+
+            <div className={styles.statsGrid}>
+              <div className={styles.statBox}>
+                <Target className={styles.statBoxIcon} />
+                <p className={styles.statBoxLabel}>Categories</p>
+              </div>
+              <div className={styles.statBox}>
+                <div className={styles.statBoxValue}>2</div>
+                <p className={styles.statBoxLabel}>Pending</p>
+              </div>
+              <div className={styles.statBox}>
+                <div className={styles.statBoxValue}>25</div>
+                <p className={styles.statBoxLabel}>Archived</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Weekly Process Card */}
+          <div className={`${styles.card} ${styles.lightCard}`}>
+            <div className={styles.cardHeader}>
+              <h3 className={styles.cardTitle}>Weekly uploads</h3>
+              <button className={styles.cardIconButton}>
+                <PieChart className={styles.cardActionIcon} />
+              </button>
+            </div>
+
+            <div className={styles.chartLegend}>
+              <div className={styles.legendItem}>
+                <div className={`${styles.legendDot} ${styles.blackDot}`}></div>
+                <span className={styles.legendLabel}>Receipts</span>
+              </div>
+              <div className={styles.legendItem}>
+                <div className={`${styles.legendDot} ${styles.grayDot}`}></div>
+                <span className={styles.legendLabel}>Warranties</span>
+              </div>
+            </div>
+
+            <div className={styles.chart}>
+              {/* Chart placeholder - in a real app, use a chart library */}
+              <svg className={styles.chartSvg} viewBox="0 0 300 120">
+                <path
+                  d="M0,100 L30,80 L60,90 L90,40 L120,60 L150,30 L180,70 L210,50 L240,60 L270,40 L300,60"
+                  className={styles.chartLine}
+                />
+                <circle cx="150" cy="30" r="4" className={styles.chartPoint} />
+                <line x1="150" y1="0" x2="150" y2="30" className={styles.chartDashedLine} />
+                <text x="150" y="15" className={styles.chartText}>
+                  7
+                </text>
+              </svg>
+            </div>
+
+            <div className={styles.chartDays}>
+              <div className={styles.day}>M</div>
+              <div className={styles.day}>T</div>
+              <div className={styles.day}>W</div>
+              <div className={styles.day}>T</div>
+              <div className={styles.day}>F</div>
+              <div className={styles.day}>S</div>
+              <div className={`${styles.day} ${styles.activeDay}`}>S</div>
+            </div>
+          </div>
+
+          {/* Month Progress Card */}
+          <div className={`${styles.card} ${styles.whiteCard}`}>
+            <div className={styles.cardHeader}>
+              <h3 className={styles.cardTitle}>Month Progress</h3>
+              <button className={styles.cardIconButton}>
+                <ExternalLink className={styles.cardActionIcon} />
+              </button>
+            </div>
+
+            <div className={styles.progressInfo}>
+              <div className={styles.progressText}>
+                <span className={styles.progressPercent}>{progress}%</span>
+                <span className={styles.progressLabel}>completed to last month*</span>
+              </div>
+            </div>
+
+            <h4 className={styles.sectionTitle}>OVERVIEW</h4>
+
+            <div className={styles.overviewRow}>
+              <div className={styles.legendColumn}>
+                <div className={styles.legendItem}>
+                  <div className={`${styles.legendDot} ${styles.blackDot}`}></div>
+                  <span className={styles.legendLabel}>Receipts</span>
+                </div>
+                <div className={styles.legendItem}>
+                  <div className={`${styles.legendDot} ${styles.grayDot}`}></div>
+                  <span className={styles.legendLabel}>Warranties</span>
+                </div>
+                <div className={styles.legendItem}>
+                  <div className={`${styles.legendDot} ${styles.lightGrayDot}`}></div>
+                  <span className={styles.legendLabel}>Manuals</span>
+                </div>
+              </div>
+              <div className={styles.circleProgressContainer}>
+                <div className={styles.circleProgress}>
+                  <svg className={styles.circleProgressSvg} viewBox="0 0 36 36">
+                    <path
+                      className={styles.circleProgressBg}
+                      d="M18 2.0845
+                        a 15.9155 15.9155 0 0 1 0 31.831
+                        a 15.9155 15.9155 0 0 1 0 -31.831"
+                    />
+                    <path
+                      className={styles.circleProgressFill}
+                      strokeDasharray={`${progress}, 100`}
+                      d="M18 2.0845
+                        a 15.9155 15.9155 0 0 1 0 31.831
+                        a 15.9155 15.9155 0 0 1 0 -31.831"
+                    />
+                    <text x="18" y="20.35" className={styles.circleProgressText}>
+                      {progress}%
+                    </text>
+                  </svg>
+                </div>
+              </div>
+            </div>
+
+            <div className={styles.cardFooter}>
+              <button className={styles.shareButton}>
+                <Share2 className={styles.shareIcon} />
+              </button>
+              <button className={styles.downloadButton}>Download Report</button>
+            </div>
+          </div>
+
+          {/* Month Goals Card */}
+          <div className={`${styles.card} ${styles.whiteCard}`}>
+            <div className={styles.cardHeader}>
+              <h3 className={styles.cardTitle}>Monthly Goals</h3>
+              <div className={styles.badgeContainer}>
+                <span className={styles.badge}>1/4</span>
+                <button className={styles.editButton}>
+                  <PencilIcon className={styles.editIcon} />
+                </button>
+              </div>
+            </div>
+
+            <ul className={styles.goalsList}>
+              <li className={styles.goalItem}>
+                <div className={`${styles.goalCheck} ${styles.goalChecked}`}>
+                  <CheckIcon className={styles.checkIcon} />
+                </div>
+                <span className={styles.goalText}>Scan 10 receipts</span>
+              </li>
+              <li className={styles.goalItem}>
+                <div className={styles.goalCheck}></div>
+                <span className={styles.goalText}>Organize electronics warranties</span>
+              </li>
+              <li className={styles.goalItem}>
+                <div className={styles.goalCheck}></div>
+                <span className={styles.goalText}>Update appliance documents</span>
+              </li>
+              <li className={styles.goalItem}>
+                <div className={styles.goalCheck}></div>
+                <span className={styles.goalText}>Backup all documents to cloud</span>
+              </li>
+            </ul>
+          </div>
+
+          {/* Meeting Cards */}
+          <div className={styles.meetingsColumn}>
+            <div className={`${styles.card} ${styles.whiteCard}`}>
+              <div className={styles.cardHeader}>
+                <div className={styles.meetingInfo}>
+                  <div className={styles.meetingIcon}>
+                    <Users className={styles.meetingIconSvg} />
+                  </div>
+                  <div>
+                    <h3 className={styles.meetingTitle}>Warranty Renewal</h3>
+                  </div>
+                </div>
+                <button className={styles.cardIconButton}>
+                  <MoreHorizontal className={styles.cardActionIcon} />
+                </button>
+              </div>
+
+              <div className={styles.meetingFooter}>
+                <span className={styles.meetingTime}>Tonight</span>
+                <button className={styles.chatButton}>
+                  <MessageSquare className={styles.chatIcon} />
+                </button>
+              </div>
+            </div>
+
+            <div className={`${styles.card} ${styles.whiteCard}`}>
+              <div className={styles.cardHeader}>
+                <div className={styles.meetingInfo}>
+                  <div className={styles.meetingIcon}>
+                    <User className={styles.meetingIconSvg} />
+                  </div>
+                  <div>
+                    <h3 className={styles.meetingTitle}>Insurance Review</h3>
+                  </div>
+                </div>
+                <button className={styles.cardIconButton}>
+                  <MoreHorizontal className={styles.cardActionIcon} />
+                </button>
+              </div>
+
+              <div className={styles.meetingFooter}>
+                <span className={styles.meetingTime}>Next Morning</span>
+                <button className={styles.chatButton}>
+                  <MessageSquare className={styles.chatIcon} />
+                </button>
+              </div>
+            </div>
+
+            <div className={styles.addTaskCard}>
+              <span className={styles.addTaskText}>+ Add a task</span>
+            </div>
+          </div>
+
+          {/* Last Projects Section */}
+          <div className={styles.projectsSection}>
+            <div className={styles.sectionHeader}>
+              <h3 className={styles.sectionTitle}>Recent Documents</h3>
+              <button className={styles.archiveButton}>
+                Open archive
+                <ChevronRight className={styles.archiveIcon} />
+              </button>
+            </div>
+
+            <div className={styles.projectsGrid}>
+              <div className={`${styles.card} ${styles.darkCard}`}>
+                <div className={styles.cardHeader}>
+                  <h3 className={styles.cardTitle}>New TV Warranty</h3>
+                  <button className={styles.projectActionButton}>
+                    <CircleEllipsis className={styles.projectActionIcon} />
+                  </button>
+                </div>
+                <div className={styles.projectStatus}>
+                  <div className={styles.statusDot}></div>
+                  <span className={styles.statusText}>In progress</span>
+                </div>
+                <p className={styles.projectDescription}>
+                  <span className={styles.projectLabel}>Done:</span> Scanned warranty card and uploaded receipt for the
+                  new Samsung TV
+                </p>
+              </div>
+
+              <div className={`${styles.card} ${styles.darkCard}`}>
+                <div className={styles.cardHeader}>
+                  <h3 className={styles.cardTitle}>Phone Insurance</h3>
+                  <button className={styles.projectActionButton}>
+                    <CircleEllipsis className={styles.projectActionIcon} />
+                  </button>
+                </div>
+                <div className={styles.projectStatus}>
+                  <div className={styles.statusDot}></div>
+                  <span className={styles.statusText}>Completed</span>
+                </div>
+              </div>
+
+              <div className={`${styles.card} ${styles.darkCard}`}>
+                <div className={styles.cardHeader}>
+                  <h3 className={styles.cardTitle}>Laptop Receipts</h3>
+                  <button className={styles.projectActionButton}>
+                    <CircleEllipsis className={styles.projectActionIcon} />
+                  </button>
+                </div>
+                <div className={styles.projectStatus}>
+                  <div className={styles.statusDot}></div>
+                  <span className={styles.statusText}>Completed</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-  );
+  )
 }
+
+// Additional icons needed
+function MessageSquare(props) {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+    </svg>
+  )
+}
+
+function Bell(props) {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />
+      <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
+    </svg>
+  )
+}
+
+function PencilIcon(props) {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z" />
+    </svg>
+  )
+}
+
+function CheckIcon(props) {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <polyline points="20 6 9 17 4 12" />
+    </svg>
+  )
+}
+

@@ -1,359 +1,887 @@
 .container {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    background-color: #f5f7fa;
+  display: flex;
+  min-height: 100vh;
+  background-color: #f5f5f5;
+  background-image: linear-gradient(to bottom right, rgba(255, 255, 255, 0.8), rgba(240, 240, 240, 0.8));
+  position: relative;
+  overflow: hidden;
+}
+
+/* Add a subtle pattern overlay */
+.container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23000000' fill-opacity='0.02'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  z-index: 0;
+}
+
+.content {
+  flex: 1;
+  padding: 1.5rem;
+  margin-left: 260px;
+  position: relative;
+  z-index: 1;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.greeting {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #000;
+}
+
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.createButton {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background-color: #000;
+  color: white;
+  border: none;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.createButton:hover {
+  background-color: #333;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.buttonIcon {
+  width: 16px;
+  height: 16px;
+}
+
+.iconButton {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.iconButton:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.iconButtonSvg {
+  width: 20px;
+  height: 20px;
+  color: #555;
+}
+
+.notificationDot {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 8px;
+  height: 8px;
+  background-color: #ff4d4f;
+  border-radius: 50%;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+}
+
+.avatar:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 1rem;
+}
+
+.card {
+  border-radius: 1rem;
+  padding: 1rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(to right, #000, transparent);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.card:hover::before {
+  opacity: 1;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+}
+.darkCard {
+  background-color: #131313;
+  color: white;
+  grid-column: span 4;
+}
+
+.darkCard {
+  background-color: #131313;
+  color: white;
+  grid-column: span 4;
+}
+
+.lightCard {
+  background-color: #f5f5f5;
+  color: #000;
+  grid-column: span 4;
+}
+
+.whiteCard {
+  background-color: #fff;
+  color: #000;
+  grid-column: span 4;
+  border: 1px solid #f0f0f0;
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.cardTitle {
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.cardActions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.cardIconButton {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #999;
+  transition: all 0.2s ease;
+}
+
+.darkCard .cardIconButton {
+  color: #666;
+}
+
+.cardIconButton:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+  color: #000;
+}
+
+.darkCard .cardIconButton:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+.cardActionIcon {
+  width: 16px;
+  height: 16px;
+}
+
+.statsRow {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+}
+
+.stat {
+  flex: 1;
+}
+
+.statValue {
+  font-size: 3rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.statLabel {
+  font-size: 0.75rem;
+  color: #999;
+  margin-top: 0.25rem;
+}
+
+.progressBars {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.progressBar {
+  height: 6px;
+  background-color: #333;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.progressBarFill {
+  height: 100%;
+  background-color: #fff;
+  border-radius: 3px;
+  transition: width 1s ease;
+}
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+}
+
+.statBox {
+  background-color: #333;
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.statBox:hover {
+  background-color: #444;
+  transform: translateY(-2px);
+}
+
+.statBoxIcon {
+  width: 20px;
+  height: 20px;
+  margin: 0 auto 0.25rem;
+}
+
+.statBoxValue {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+}
+
+.statBoxLabel {
+  font-size: 0.75rem;
+  color: #999;
+}
+
+.chartLegend {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.legendDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.blackDot {
+  background-color: #000;
+}
+
+.grayDot {
+  background-color: #999;
+}
+
+.lightGrayDot {
+  background-color: #ddd;
+}
+
+.legendLabel {
+  font-size: 0.75rem;
+}
+
+.chart {
+  height: 160px;
+  margin-bottom: 0.5rem;
+  position: relative;
+}
+
+.chartSvg {
+  width: 100%;
+  height: 100%;
+}
+
+.chartLine {
+  fill: none;
+  stroke: #000;
+  stroke-width: 2;
+}
+
+.chartPoint {
+  fill: #000;
+}
+
+.chartDashedLine {
+  stroke: #000;
+  stroke-width: 1;
+  stroke-dasharray: 2, 2;
+}
+
+.chartText {
+  text-anchor: middle;
+  font-size: 10px;
+  fill: #000;
+}
+
+.chartDays {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: #999;
+}
+
+.day {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.activeDay {
+  background-color: #000;
+  color: #fff;
+  border-radius: 50%;
+}
+
+.progressInfo {
+  margin-bottom: 1rem;
+}
+
+.progressText {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.progressPercent {
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+
+.progressLabel {
+  font-size: 0.75rem;
+  color: #999;
+}
+
+.sectionTitle {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #999;
+  margin-bottom: 1rem;
+  letter-spacing: 0.05em;
+}
+
+.overviewRow {
+  display: flex;
+  margin-bottom: 1rem;
+}
+
+.legendColumn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.circleProgressContainer {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.circleProgress {
+  width: 80px;
+  height: 80px;
+  position: relative;
+}
+
+.circleProgressSvg {
+  transform: rotate(-90deg);
+  width: 100%;
+  height: 100%;
+}
+
+.circleProgressBg {
+  fill: none;
+  stroke: #f0f0f0;
+  stroke-width: 2.8;
+}
+
+.circleProgressFill {
+  fill: none;
+  stroke: #000;
+  stroke-width: 2.8;
+  stroke-linecap: round;
+  transition: stroke-dasharray 1s ease;
+}
+
+.circleProgressText {
+  fill: #000;
+  font-size: 0.7rem;
+  text-anchor: middle;
+  transform: rotate(90deg);
+  dominant-baseline: middle;
+}
+
+.cardFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.shareButton {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #000;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.shareButton:hover {
+  background-color: #333;
+  transform: translateY(-2px);
+}
+
+.shareIcon {
+  width: 16px;
+  height: 16px;
+}
+
+.downloadButton {
+  padding: 0.5rem 1rem;
+  border-radius: 9999px;
+  border: 1px solid #ddd;
+  background-color: transparent;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.downloadButton:hover {
+  border-color: #000;
+  background-color: #f5f5f5;
+}
+
+.badgeContainer {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.badge {
+  padding: 0.25rem 0.5rem;
+  border-radius: 9999px;
+  border: 1px solid #ddd;
+  font-size: 0.75rem;
+}
+
+.editButton {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.editIcon {
+  width: 12px;
+  height: 12px;
+}
+
+.goalsList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.goalItem {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.goalCheck {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 1px solid #ddd;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.goalChecked {
+  background-color: #000;
+  border-color: #000;
+}
+
+.checkIcon {
+  width: 12px;
+  height: 12px;
+  color: #fff;
+}
+
+.goalText {
+  font-size: 0.875rem;
+}
+
+.meetingsColumn {
+  grid-column: span 4;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.meetingInfo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.meetingIcon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: #f5f5f5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.meetingIconSvg {
+  width: 16px;
+  height: 16px;
+}
+
+.meetingTitle {
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.meetingFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.meetingTime {
+  font-size: 0.75rem;
+  color: #999;
+  padding: 0.25rem 0.5rem;
+  border-radius: 9999px;
+  border: 1px solid #ddd;
+}
+
+.chatButton {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #000;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
+
+.chatIcon {
+  width: 14px;
+  height: 14px;
+}
+
+.addTaskCard {
+  flex: 1;
+  border: 1px dashed #ddd;
+  border-radius: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.addTaskCard:hover {
+  border-color: #999;
+  background-color: rgba(0, 0, 0, 0.02);
+}
+
+.addTaskText {
+  color: #999;
+  font-size: 0.875rem;
+}
+
+.projectsSection {
+  grid-column: span 12;
+  margin-top: 1rem;
+}
+
+.sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.archiveButton {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  background: transparent;
+  border: none;
+  font-size: 0.75rem;
+  color: #999;
+  cursor: pointer;
+}
+
+.archiveIcon {
+  width: 12px;
+  height: 12px;
+}
+
+.projectsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.projectActionButton {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 1px solid #333;
+  color: #fff;
+  cursor: pointer;
+}
+
+.projectActionIcon {
+  width: 16px;
+  height: 16px;
+}
+
+.projectStatus {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.statusDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #fff;
+}
+
+.statusText {
+  font-size: 0.75rem;
+  color: #999;
+}
+
+.projectDescription {
+  font-size: 0.75rem;
+  color: #999;
+  line-height: 1.4;
+}
+
+.projectLabel {
+  font-weight: 500;
+  color: #fff;
+}
+
+/* Animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
   }
-  
-  /* Header Styles */
-  .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #ffffff;
-    padding: 1rem 2rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    position: sticky;
-    top: 0;
-    z-index: 100;
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
-  
-  .companyName {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: #2c3e50;
-    margin: 0;
+}
+
+.card {
+  animation: fadeInUp 0.5s ease forwards;
+  opacity: 0;
+}
+
+.card:nth-child(1) {
+  animation-delay: 0.1s;
+}
+.card:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.card:nth-child(3) {
+  animation-delay: 0.3s;
+}
+.card:nth-child(4) {
+  animation-delay: 0.4s;
+}
+.card:nth-child(5) {
+  animation-delay: 0.5s;
+}
+.card:nth-child(6) {
+  animation-delay: 0.6s;
+}
+
+/* Hover effects */
+.card {
+  position: relative;
+  overflow: hidden;
+}
+
+.card::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at center, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 70%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.card:hover::after {
+  opacity: 1;
+}
+
+/* Responsive styles */
+@media (max-width: 1200px) {
+  .grid {
+    grid-template-columns: repeat(6, 1fr);
   }
-  
-  .headerRight {
-    display: flex;
-    align-items: center;
-    gap: 1.5rem;
+
+  .darkCard,
+  .lightCard,
+  .whiteCard,
+  .meetingsColumn {
+    grid-column: span 3;
   }
-  
-  .searchContainer {
-    position: relative;
+
+  .projectsGrid {
+    grid-template-columns: repeat(2, 1fr);
   }
-  
-  .searchInput {
-    padding: 0.5rem 1rem;
-    border: 1px solid #e1e4e8;
-    border-radius: 4px;
-    width: 250px;
-    font-size: 0.9rem;
+}
+
+@media (max-width: 768px) {
+  .content {
+    margin-left: 0;
+    padding-top: 70px;
   }
-  
-  .userProfile {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-  }
-  
-  .userName {
-    font-size: 0.9rem;
-    font-weight: 500;
-  }
-  
-  .userAvatar {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    background-color: #3498db;
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 600;
-  }
-  
-  /* Main Content Styles */
-  .mainContent {
-    display: flex;
-    flex: 1;
-  }
-  
-  /* Sidebar Navigation */
+
   .sidebar {
-    width: 220px;
-    background-color: #2c3e50;
-    padding: 2rem 0;
-  }
-  
-  .navMenu {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-  
-  .navItem {
-    padding: 0.75rem 1.5rem;
-    color: #ecf0f1;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-    font-size: 0.95rem;
-  }
-  
-  .navItem:hover {
-    background-color: #34495e;
-  }
-  
-  .navItem.active {
-    background-color: #3498db;
-    font-weight: 600;
-  }
-  
-  /* Dashboard Content Area */
-  .dashboardContent {
-    flex: 1;
-    padding: 2rem;
-  }
-  
-  .pageTitle {
-    margin-top: 0;
-    margin-bottom: 1.5rem;
-    font-size: 1.75rem;
-    color: #2c3e50;
-  }
-  
-  /* Dashboard Summary Cards */
-  .dashboardSummary {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 1.5rem;
-    margin-bottom: 2rem;
-  }
-  
-  .summaryCard {
-    background-color: #ffffff;
-    border-radius: 8px;
-    padding: 1.5rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-  }
-  
-  .summaryCard h3 {
-    margin-top: 0;
-    margin-bottom: 0.5rem;
-    font-size: 1rem;
-    color: #7f8c8d;
-  }
-  
-  .summaryNumber {
-    font-size: 2rem;
-    font-weight: 700;
-    color: #2c3e50;
-    margin: 0;
-  }
-  
-  /* Warranty Table */
-  .warrantyTable {
-    background-color: #ffffff;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-    overflow: hidden;
-  }
-  
-  .tableHeader {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1.25rem 1.5rem;
-    border-bottom: 1px solid #ecf0f1;
-  }
-  
-  .tableHeader h3 {
-    margin: 0;
-    font-size: 1.1rem;
-    color: #2c3e50;
-  }
-  
-  .addButton {
-    background-color: #3498db;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    padding: 0.5rem 1rem;
-    font-size: 0.9rem;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-  }
-  
-  .addButton:hover {
-    background-color: #2980b9;
-  }
-  
-  .table {
     width: 100%;
-    border-collapse: collapse;
-  }
-  
-  .table th, .table td {
-    padding: 1rem 1.5rem;
-    text-align: left;
-    border-bottom: 1px solid #ecf0f1;
-  }
-  
-  .table th {
-    font-weight: 600;
-    color: #7f8c8d;
-    font-size: 0.85rem;
-    text-transform: uppercase;
-  }
-  
-  .table tbody tr:hover {
-    background-color: #f8f9fa;
-  }
-  
-  /* Status Badges */
-  .statusBadge {
-    display: inline-block;
-    padding: 0.25rem 0.75rem;
-    border-radius: 12px;
-    font-size: 0.8rem;
-    font-weight: 500;
-  }
-  
-  .active {
-    background-color: #e6f7ed;
-    color: #27ae60;
-  }
-  
-  .expiringsoon {
-    background-color: #fef9e6;
-    color: #f39c12;
-  }
-  
-  .expired {
-    background-color: #feeae6;
-    color: #e74c3c;
-  }
-  
-  /* Action Buttons */
-  .actionButtons {
-    display: flex;
-    gap: 0.5rem;
-  }
-  
-  .editButton, .deleteButton {
-    border: none;
-    border-radius: 4px;
-    padding: 0.35rem 0.75rem;
-    font-size: 0.8rem;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-  }
-  
-  .editButton {
-    background-color: #f1f5f9;
-    color: #3498db;
-  }
-  
-  .editButton:hover {
-    background-color: #e1e8ed;
-  }
-  
-  .deleteButton {
-    background-color: #fef2f2;
-    color: #e74c3c;
-  }
-  
-  .deleteButton:hover {
-    background-color: #fee2e2;
-  }
-  
-  /* Placeholder for other sections */
-  .placeholderSection {
-    background-color: #ffffff;
-    border-radius: 8px;
-    padding: 2rem;
-    text-align: center;
-    color: #7f8c8d;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-  }
-  
-  /* Footer Styles */
-  .footer {
-    background-color: #ffffff;
-    padding: 1.5rem 2rem;
-    box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.05);
-  }
-  .footerContent {
-    display: flex;
-    justify-content: space-between;
+    height: 60px;
+    flex-direction: row;
     align-items: center;
+    padding: 0 1rem;
   }
-  
-  .copyright {
-    color: #7f8c8d;
-    font-size: 0.85rem;
+
+  .logo {
     margin: 0;
   }
-  
-  /* Responsive Styles */
-  @media (max-width: 1024px) {
-    .dashboardSummary {
-      grid-template-columns: repeat(2, 1fr);
-    }
+
+  .nav,
+  .section,
+  .footer {
+    display: none;
   }
-  
-  @media (max-width: 768px) {
-    .header {
-      flex-direction: column;
-      gap: 1rem;
-      padding: 1rem;
-    }
-    
-    .headerRight {
-      width: 100%;
-      justify-content: space-between;
-    }
-    
-    .searchInput {
-      width: 180px;
-    }
-    
-    .mainContent {
-      flex-direction: column;
-    }
-    
-    .sidebar {
-      width: 100%;
-      padding: 0.5rem 0;
-    }
-    
-    .navMenu {
-      display: flex;
-      overflow-x: auto;
-    }
-    
-    .navItem {
-      padding: 0.75rem 1rem;
-      white-space: nowrap;
-    }
-    
-    .dashboardContent {
-      padding: 1rem;
-    }
-    
-    .dashboardSummary {
-      grid-template-columns: 1fr;
-    }
-    
-    .table th, .table td {
-      padding: 0.75rem;
-    }
-    
-    .footerContent {
-      flex-direction: column;
-      gap: 0.5rem;
-      text-align: center;
-    }
+
+  .grid {
+    grid-template-columns: repeat(1, 1fr);
   }
-  
-  /* Table Responsiveness */
-  @media (max-width: 992px) {
-    .table {
-      display: block;
-      overflow-x: auto;
-      white-space: nowrap;
-    }
+
+  .darkCard,
+  .lightCard,
+  .whiteCard,
+  .meetingsColumn {
+    grid-column: span 1;
   }
+
+  .projectsGrid {
+    grid-template-columns: 1fr;
+  }
+}
+

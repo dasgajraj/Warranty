@@ -1,65 +1,50 @@
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
+from rest_framework import status
+from rest_framework.decorators import api_view
+from .models import Paper
 
-from django.http import JsonResponse
-from django.shortcuts import render
-from web3 import Web3
-from datetime import datetime, timedelta
-import json
-import os
+from .serializers import PaperSerializer
+from .utils import upload_paper_to_pinata
+from rest_framework.parsers import MultiPartParser, FormParser
+from rest_framework.generics import ListAPIView
 
-from .models import Warranty
-from django.shortcuts import render, redirect  
+class PaperUploadView(APIView):
+    parser_classes = [MultiPartParser, FormParser]
 
+    def post(self, request, *args, **kwargs):
+        file = request.FILES.get('file')  # Get the file from the request
 
+        if file:
+            # Upload the file to IPFS
+            ipfs_hash = upload_paper_to_pinata(file)
 
-def load_contract():
-    with open(os.path.join(os.path.dirname(__file__), '..', 'artifacts', 'contracts', 'Warranty.sol', 'Warranty.json')) as f:
-        contract_data = json.load(f)
-    
-    abi = contract_data['abi']
-    address = '0xA51552879ade9Fb4346e274939Cf790c72EA576f'
-    return abi, address
+            # Store the paper info in the database
+            paper = Paper.objects.create(
+                ipfs_hash=ipfs_hash, 
+                location=request.data.get('location'), 
+                username=request.user.username
+            )
+            
+            serializer = PaperSerializer(paper)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response({"error": "No file uploaded"}, status=status.HTTP_400_BAD_REQUEST)
 
-# Connect to the local Ethereum node
-w3 = Web3(Web3.HTTPProvider('http://127.0.0.1:8545'))
-abi, contract_address = load_contract()
-contract = w3.eth.contract(address=contract_address, abi=abi)
+class PaperListView(ListAPIView):
+    """
+    API endpoint to retrieve papers filtered by user_uid.
+    """
+    serializer_class = PaperSerializer
 
+    def get_queryset(self):
+        user_uid = self.request.query_params.get('user_uid')  # Get user_uid from query params
+        permission_classes = [IsAuthenticated]
+        if user_uid:
+            return Paper.objects.filter(user_uid=user_uid)  # Filter by user_uid
+        return Paper.objects.all()  # Return all if no user_uid is provided
 
-def settings_view(request):
-    return render(request, 'settings.html')
-
-def helpcenter(request):
-    return render(request, 'helpcenter.html')
-
-def marketwarrranties(request):
-    return render(request, 'marketwarranties.html' )
-
-def profile(request):
-    return render(request, 'profile.html')
-
-def warranty_detail(request):
-    
-    return render(request, 'warranty_detail.html' ,{}) 
-
-
-
-def get_warranty_info(request, user_address):
-    try:
-        warranties = Warranty.objects.filter(user_address=user_address)
-
-        if not warranties:
-            return JsonResponse({'error': 'No warranties found for this address'}, status=404)
-
-        expiring_warranties = []
-        for warranty in warranties:
-            if warranty.warranty_end_date <= datetime.now().date() + timedelta(days=10):
-                expiring_warranties.append(warranty)
-
-       
-        return render(request, 'warranty_detail.html', {
-            'warranties': warranties,
-            'expiring_warranties': expiring_warranties
-        })
-
-    except Exception as e:
-        return JsonResponse({'error': str(e)}, status=500)
+@api_view(['GET'])
+def test_endpoint(request):
+    return Response({"message": "is it ?"})

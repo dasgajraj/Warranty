@@ -34,6 +34,7 @@
 .logoIcon {
   width: 32px;
   height: 32px;
+  padding-left: 7px;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -53,6 +54,7 @@
 
 .logoText {
   font-size: 1.25rem;
+  margin-top: 17px;
   font-weight: 700;
   color: #000;
   opacity: 0;

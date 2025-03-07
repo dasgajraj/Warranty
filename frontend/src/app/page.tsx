@@ -311,7 +311,7 @@ export default function Dashboard() {
           {/* Month Goals Card */}
           <div className={`${styles.card} ${styles.whiteCard}`}>
             <div className={styles.cardHeader}>
-              <h3 className={styles.cardTitle}>Monthly Goals</h3>
+              <h3 className={styles.cardTitle}>Monthly Purchased</h3>
               <div className={styles.badgeContainer}>
                 <span className={styles.badge}>1/4</span>
                 <button className={styles.editButton}>
@@ -325,19 +325,19 @@ export default function Dashboard() {
                 <div className={`${styles.goalCheck} ${styles.goalChecked}`}>
                   <CheckIcon className={styles.checkIcon} />
                 </div>
-                <span className={styles.goalText}>Scan 10 receipts</span>
+                <span className={styles.goalText}>Iphone 16 Pro Max</span>
               </li>
               <li className={styles.goalItem}>
                 <div className={styles.goalCheck}></div>
-                <span className={styles.goalText}>Organize electronics warranties</span>
+                <span className={styles.goalText}>Washing Machine</span>
               </li>
               <li className={styles.goalItem}>
                 <div className={styles.goalCheck}></div>
-                <span className={styles.goalText}>Update appliance documents</span>
+                <span className={styles.goalText}>Asus Rog 16x</span>
               </li>
               <li className={styles.goalItem}>
                 <div className={styles.goalCheck}></div>
-                <span className={styles.goalText}>Backup all documents to cloud</span>
+                <span className={styles.goalText}>Ipad Pro </span>
               </li>
             </ul>
           </div>

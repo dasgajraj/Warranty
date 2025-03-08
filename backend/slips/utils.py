@@ -7,7 +7,7 @@ from django.conf import settings
 PINATA_URL = 'https://api.pinata.cloud/pinning/pinFileToIPFS'
 
 # Function to upload a file to Pinata and return its IPFS hash
-def upload_paper_to_pinata(file_content):
+def upload_slip_to_pinata(file_content):
     headers = {
         'pinata_api_key': settings.PINATA_API_KEY,
         'pinata_secret_api_key': settings.PINATA_API_SECRET

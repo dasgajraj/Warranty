@@ -5,7 +5,7 @@ from rest_framework import status
 from .models import Slip
 
 from .serializers import SlipSerializer
-from .utils import upload_paper_to_pinata
+from .utils import upload_slip_to_pinata
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.generics import ListAPIView
 
@@ -17,7 +17,7 @@ class SlipUploadView(APIView):
 
         if file:
             # Upload the file to IPFS
-            ipfs_hash = upload_paper_to_pinata(file)
+            ipfs_hash = upload_slip_to_pinata(file)
 
             # Store the paper info in the database
             Slip = Slip.objects.create(
@@ -41,4 +41,4 @@ class SlipListView(ListAPIView):
         permission_classes = [IsAuthenticated]
         if user_uid:
             return Slip.objects.filter(user_uid=user_uid)  # Filter by user_uid
-        return Slip.objects.all()  # Return all if no user_uid is provided
+        return Slip.objects.all()  # Return all if no user_uid is providedtimezone.datetime(2024, 3, 8, 12, 0, 0)

@@ -1,7 +1,9 @@
 VENV :=  venv
 
+backend:
+	cd backend
 activate:
-	cd backend && source $(VENV)/bin/activate
+	source $(VENV)/bin/activate
 
 run:
 	cd backend && python manage.py runserver

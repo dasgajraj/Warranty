@@ -33,6 +33,8 @@ ALLOWED_HOSTS = [
     '192.168.1.227',
 ]
 
+PINATA_API_KEY ='1184bf93d7ab23ebd260'
+PINATA_API_SECRET = 'affebbff388d78da19a773b8d30f50bc31220a866aa942d47340e9bbc187d3ae'
 
 # Application definition
 
@@ -45,7 +47,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'slips',
     'rest_framework',
-
+    'rest_framework_simplejwt',
+    'corsheaders',
+    'django_extensions',
 ]
 
 MIDDLEWARE = [
@@ -57,6 +61,20 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.AllowAny',
+    ),
+
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer',
+    ),
+}
 
 
 TEMPLATES = [

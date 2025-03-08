@@ -22,11 +22,10 @@ class SlipUploadView(APIView):
             # Store the paper info in the database
             Slip = Slip.objects.create(
                 ipfs_hash=ipfs_hash, 
-                location=request.data.get('location'), 
                 username=request.user.username
             )
             
-            serializer = SlipSerializer(paper)
+            serializer = SlipSerializer(Slip)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response({"error": "No file uploaded"}, status=status.HTTP_400_BAD_REQUEST)

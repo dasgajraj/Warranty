@@ -1,10 +1,34 @@
 "use client"
 
 import { useState, useEffect, useRef } from "react"
-import { BarChart3, Calendar, CheckCircle2, ChevronRight, CircleEllipsis, ExternalLink, FileText, Home, LineChart, MoreHorizontal, MoreVertical, PieChart, Plus, Search, Settings, Share2, Slack, Target, User, Users, ChevronLeft, ChevronDown, X } from 'lucide-react'
+import {
+  BarChart3,
+  Calendar,
+  CheckCircle2,
+  ChevronRight,
+  CircleEllipsis,
+  ExternalLink,
+  FileText,
+  Home,
+  LineChart,
+  MoreHorizontal,
+  MoreVertical,
+  PieChart,
+  Plus,
+  Search,
+  Settings,
+  Share2,
+  Target,
+  User,
+  Users,
+  ChevronLeft,
+  X,
+} from "lucide-react"
 import styles from "./Dashboard.module.css"
 import sidebarStyles from "./sidebar.module.css"
 import calendarStyles from "./calendar/Calendar.module.css"
+import { useAppSelector } from "./store/hooks"
+import AnimatedThemeToggle from "./components/animated-theme-toggle"
 
 export default function Dashboard() {
   const [activeTab, setActiveTab] = useState("work")
@@ -53,31 +77,31 @@ export default function Dashboard() {
   const generateCalendarDays = () => {
     const year = currentDate.getFullYear()
     const month = currentDate.getMonth()
-    
+
     // First day of the month
     const firstDay = new Date(year, month, 1)
     // Last day of the month
     const lastDay = new Date(year, month + 1, 0)
-    
+
     // Get the day of the week for the first day (0 = Sunday, 1 = Monday, etc.)
     const startingDayOfWeek = firstDay.getDay()
     // Adjust for Monday as first day of week
     const adjustedStartDay = startingDayOfWeek === 0 ? 6 : startingDayOfWeek - 1
-    
+
     const totalDays = lastDay.getDate()
     const totalCells = Math.ceil((totalDays + adjustedStartDay) / 7) * 7
-    
+
     const days = []
-    
+
     // Add empty cells for days before the first day of the month
     for (let i = 0; i < adjustedStartDay; i++) {
       days.push({ day: null, date: null })
     }
-    
+
     // Add cells for each day of the month
     for (let i = 1; i <= totalDays; i++) {
       const date = new Date(year, month, i)
-      
+
       // Sample events data - in a real app, this would come from your database
       const events = []
       if (i === 10 || i === 20) {
@@ -86,42 +110,46 @@ export default function Dashboard() {
       if (i === 15 || i === 25) {
         events.push({ type: "warranty_expiry", title: "Warranty Expiry" })
       }
-      
+
       days.push({
         day: i,
         date: date,
-        events: events
+        events: events,
       })
     }
-    
+
     // Add empty cells for days after the last day of the month
     const remainingCells = totalCells - days.length
     for (let i = 0; i < remainingCells; i++) {
       days.push({ day: null, date: null })
     }
-    
+
     return days
   }
 
   const days = generateCalendarDays()
 
   const formatMonth = (date: Date) => {
-    return date.toLocaleString('default', { month: 'long', year: 'numeric' })
+    return date.toLocaleString("default", { month: "long", year: "numeric" })
   }
 
   const isToday = (date: Date) => {
     const today = new Date()
-    return date.getDate() === today.getDate() &&
+    return (
+      date.getDate() === today.getDate() &&
       date.getMonth() === today.getMonth() &&
       date.getFullYear() === today.getFullYear()
+    )
   }
 
   const toggleCalendar = () => {
     setShowCalendar(!showCalendar)
   }
 
+  const theme = useAppSelector((state) => state.theme.mode)
+
   return (
-    <div className={styles.container}>
+    <div className={`${styles.container} ${theme === "dark" ? "dark" : ""}`}>
       {/* Left Sidebar */}
       <div className={sidebarStyles.sidebar}>
         <div className={sidebarStyles.logo}>
@@ -136,10 +164,7 @@ export default function Dashboard() {
             <Home className={sidebarStyles.navIcon} />
             Dashboard
           </button>
-          <button 
-            className={sidebarStyles.navButton}
-            onClick={toggleCalendar}
-          >
+          <button className={sidebarStyles.navButton} onClick={toggleCalendar}>
             <Calendar className={sidebarStyles.navIcon} />
             Calendar
           </button>
@@ -184,22 +209,14 @@ export default function Dashboard() {
         <div className={calendarStyles.calendarOverlay}>
           <div className={calendarStyles.calendarPopup} ref={calendarRef}>
             <div className={calendarStyles.calendarHeader}>
-              <button 
-                className={calendarStyles.calendarNavButton}
-                onClick={prevMonth}
-                aria-label="Previous month"
-              >
+              <button className={calendarStyles.calendarNavButton} onClick={prevMonth} aria-label="Previous month">
                 <ChevronLeft size={20} />
               </button>
               <h2 className={calendarStyles.calendarTitle}>{formatMonth(currentDate)}</h2>
-              <button 
-                className={calendarStyles.calendarNavButton}
-                onClick={nextMonth}
-                aria-label="Next month"
-              >
+              <button className={calendarStyles.calendarNavButton} onClick={nextMonth} aria-label="Next month">
                 <ChevronRight size={20} />
               </button>
-              <button 
+              <button
                 className={calendarStyles.closeButton}
                 onClick={() => setShowCalendar(false)}
                 aria-label="Close calendar"
@@ -207,7 +224,7 @@ export default function Dashboard() {
                 <X size={20} />
               </button>
             </div>
-            
+
             <div className={calendarStyles.calendarGrid}>
               <div className={calendarStyles.weekdays}>
                 <div>Mon</div>
@@ -218,16 +235,16 @@ export default function Dashboard() {
                 <div>Sat</div>
                 <div>Sun</div>
               </div>
-              
+
               <div className={calendarStyles.days}>
                 {days.map((day, index) => (
-                  <div 
-                    key={index} 
+                  <div
+                    key={index}
                     className={`
                       ${calendarStyles.day} 
-                      ${!day.day ? calendarStyles.emptyDay : ''} 
-                      ${day.date && isToday(day.date) ? calendarStyles.today : ''}
-                      ${day.date && selectedDate && day.date.toDateString() === selectedDate.toDateString() ? calendarStyles.selected : ''}
+                      ${!day.day ? calendarStyles.emptyDay : ""} 
+                      ${day.date && isToday(day.date) ? calendarStyles.today : ""}
+                      ${day.date && selectedDate && day.date.toDateString() === selectedDate.toDateString() ? calendarStyles.selected : ""}
                     `}
                     onClick={() => day.date && setSelectedDate(day.date)}
                   >
@@ -237,11 +254,11 @@ export default function Dashboard() {
                         {day.events && day.events.length > 0 && (
                           <div className={calendarStyles.eventDots}>
                             {day.events.map((event, i) => (
-                              <span 
-                                key={i} 
+                              <span
+                                key={i}
                                 className={`
                                   ${calendarStyles.eventDot} 
-                                  ${event.type === 'purchase' ? calendarStyles.purchaseDot : calendarStyles.warrantyDot}
+                                  ${event.type === "purchase" ? calendarStyles.purchaseDot : calendarStyles.warrantyDot}
                                 `}
                                 title={event.title}
                               />
@@ -254,27 +271,27 @@ export default function Dashboard() {
                 ))}
               </div>
             </div>
-            
+
             {selectedDate && (
               <div className={calendarStyles.eventsList}>
-                <h3 className={calendarStyles.eventsTitle}>
-                  Events for {selectedDate.toLocaleDateString()}
-                </h3>
-                {days.find(d => d.date && d.date.toDateString() === selectedDate.toDateString())?.events?.length ? (
+                <h3 className={calendarStyles.eventsTitle}>Events for {selectedDate.toLocaleDateString()}</h3>
+                {days.find((d) => d.date && d.date.toDateString() === selectedDate.toDateString())?.events?.length ? (
                   <ul className={calendarStyles.events}>
-                    {days.find(d => d.date && d.date.toDateString() === selectedDate.toDateString())?.events.map((event, index) => (
-                      <li key={index} className={calendarStyles.eventItem}>
-                        <span 
-                          className={`
+                    {days
+                      .find((d) => d.date && d.date.toDateString() === selectedDate.toDateString())
+                      ?.events.map((event, index) => (
+                        <li key={index} className={calendarStyles.eventItem}>
+                          <span
+                            className={`
                             ${calendarStyles.eventType} 
-                            ${event.type === 'purchase' ? calendarStyles.purchaseType : calendarStyles.warrantyType}
+                            ${event.type === "purchase" ? calendarStyles.purchaseType : calendarStyles.warrantyType}
                           `}
-                        >
-                          {event.type === 'purchase' ? 'Purchase' : 'Warranty Expiry'}
-                        </span>
-                        <span className={calendarStyles.eventTitle}>{event.title}</span>
-                      </li>
-                    ))}
+                          >
+                            {event.type === "purchase" ? "Purchase" : "Warranty Expiry"}
+                          </span>
+                          <span className={calendarStyles.eventTitle}>{event.title}</span>
+                        </li>
+                      ))}
                   </ul>
                 ) : (
                   <p className={calendarStyles.noEvents}>No events for this date</p>
@@ -294,6 +311,7 @@ export default function Dashboard() {
               <Plus className={styles.buttonIcon} />
               Create
             </button>
+            <AnimatedThemeToggle />
             <button className={styles.iconButton}>
               <Search className={styles.iconButtonSvg} />
             </button>
@@ -702,3 +720,4 @@ function CheckIcon(props) {
     </svg>
   )
 }
+

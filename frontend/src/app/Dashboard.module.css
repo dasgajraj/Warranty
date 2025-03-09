@@ -328,6 +328,7 @@
 }
 
 .statBoxIcon {
+  color: #ffff;
   width: 20px;
   height: 20px;
   margin: 0 auto 0.25rem;
@@ -337,11 +338,12 @@
   font-size: 1.25rem;
   font-weight: 700;
   margin-bottom: 0.25rem;
+  color: #ffffff;
 }
 
 .statBoxLabel {
   font-size: 0.75rem;
-  color: #999;
+  color: #ffffff;
 }
 
 .chartLegend {

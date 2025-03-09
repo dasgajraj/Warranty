@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import {
   BarChart3,
   Calendar,
@@ -18,17 +18,25 @@ import {
   Search,
   Settings,
   Share2,
-  Slack,
   Target,
   User,
   Users,
+  ChevronLeft,
+  X,
 } from "lucide-react"
 import styles from "./Dashboard.module.css"
 import sidebarStyles from "./sidebar.module.css"
+import calendarStyles from "./calendar/Calendar.module.css"
+import { useAppSelector } from "./store/hooks"
+import AnimatedThemeToggle from "./components/animated-theme-toggle"
 
 export default function Dashboard() {
   const [activeTab, setActiveTab] = useState("work")
   const [progress, setProgress] = useState(30)
+  const [showCalendar, setShowCalendar] = useState(false)
+  const [currentDate, setCurrentDate] = useState(new Date())
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null)
+  const calendarRef = useRef<HTMLDivElement>(null)
 
   // Add a simple animation effect for the progress
   useEffect(() => {
@@ -42,8 +50,106 @@ export default function Dashboard() {
     return () => clearInterval(interval)
   }, [])
 
+  // Close calendar when clicking outside
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (calendarRef.current && !calendarRef.current.contains(event.target as Node)) {
+        setShowCalendar(false)
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside)
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside)
+    }
+  }, [])
+
+  // Calendar navigation functions
+  const prevMonth = () => {
+    setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1))
+  }
+
+  const nextMonth = () => {
+    setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1))
+  }
+
+  // Generate calendar days
+  const generateCalendarDays = () => {
+    const year = currentDate.getFullYear()
+    const month = currentDate.getMonth()
+
+    // First day of the month
+    const firstDay = new Date(year, month, 1)
+    // Last day of the month
+    const lastDay = new Date(year, month + 1, 0)
+
+    // Get the day of the week for the first day (0 = Sunday, 1 = Monday, etc.)
+    const startingDayOfWeek = firstDay.getDay()
+    // Adjust for Monday as first day of week
+    const adjustedStartDay = startingDayOfWeek === 0 ? 6 : startingDayOfWeek - 1
+
+    const totalDays = lastDay.getDate()
+    const totalCells = Math.ceil((totalDays + adjustedStartDay) / 7) * 7
+
+    const days = []
+
+    // Add empty cells for days before the first day of the month
+    for (let i = 0; i < adjustedStartDay; i++) {
+      days.push({ day: null, date: null })
+    }
+
+    // Add cells for each day of the month
+    for (let i = 1; i <= totalDays; i++) {
+      const date = new Date(year, month, i)
+
+      // Sample events data - in a real app, this would come from your database
+      const events = []
+      if (i === 10 || i === 20) {
+        events.push({ type: "purchase", title: "New Purchase" })
+      }
+      if (i === 15 || i === 25) {
+        events.push({ type: "warranty_expiry", title: "Warranty Expiry" })
+      }
+
+      days.push({
+        day: i,
+        date: date,
+        events: events,
+      })
+    }
+
+    // Add empty cells for days after the last day of the month
+    const remainingCells = totalCells - days.length
+    for (let i = 0; i < remainingCells; i++) {
+      days.push({ day: null, date: null })
+    }
+
+    return days
+  }
+
+  const days = generateCalendarDays()
+
+  const formatMonth = (date: Date) => {
+    return date.toLocaleString("default", { month: "long", year: "numeric" })
+  }
+
+  const isToday = (date: Date) => {
+    const today = new Date()
+    return (
+      date.getDate() === today.getDate() &&
+      date.getMonth() === today.getMonth() &&
+      date.getFullYear() === today.getFullYear()
+    )
+  }
+
+  const toggleCalendar = () => {
+    setShowCalendar(!showCalendar)
+  }
+
+  const theme = useAppSelector((state) => state.theme.mode)
+
   return (
-    <div className={styles.container}>
+    <div className={`${styles.container} ${theme === "dark" ? "dark" : ""}`}>
       {/* Left Sidebar */}
       <div className={sidebarStyles.sidebar}>
         <div className={sidebarStyles.logo}>
@@ -58,7 +164,7 @@ export default function Dashboard() {
             <Home className={sidebarStyles.navIcon} />
             Dashboard
           </button>
-          <button className={sidebarStyles.navButton}>
+          <button className={sidebarStyles.navButton} onClick={toggleCalendar}>
             <Calendar className={sidebarStyles.navIcon} />
             Calendar
           </button>
@@ -77,33 +183,15 @@ export default function Dashboard() {
         </nav>
 
         <div className={sidebarStyles.section}>
-          <h3 className={sidebarStyles.sectionTitle}>INTEGRATION</h3>
-          <nav className={sidebarStyles.nav}>
-            <button className={sidebarStyles.navButton}>
-              <Slack className={sidebarStyles.navIcon} />
-              Slack
-            </button>
-            <button className={sidebarStyles.navButton}>
-              <MessageSquare className={sidebarStyles.navIcon} />
-              Discord
-            </button>
-            <button className={sidebarStyles.navButton}>
-              <Plus className={sidebarStyles.navIcon} />
-              Add new plugin
-            </button>
-          </nav>
-        </div>
-
-        <div className={sidebarStyles.section}>
           <h3 className={sidebarStyles.sectionTitle}>TEAMS</h3>
           <nav className={sidebarStyles.nav}>
             <button className={sidebarStyles.navButton}>
               <Search className={sidebarStyles.navIcon} />
-              Seo
+              Search
             </button>
             <button className={sidebarStyles.navButton}>
               <LineChart className={sidebarStyles.navIcon} />
-              Marketing
+              Insights
             </button>
           </nav>
         </div>
@@ -116,6 +204,104 @@ export default function Dashboard() {
         </div>
       </div>
 
+      {/* Calendar Popup */}
+      {showCalendar && (
+        <div className={calendarStyles.calendarOverlay}>
+          <div className={calendarStyles.calendarPopup} ref={calendarRef}>
+            <div className={calendarStyles.calendarHeader}>
+              <button className={calendarStyles.calendarNavButton} onClick={prevMonth} aria-label="Previous month">
+                <ChevronLeft size={20} />
+              </button>
+              <h2 className={calendarStyles.calendarTitle}>{formatMonth(currentDate)}</h2>
+              <button className={calendarStyles.calendarNavButton} onClick={nextMonth} aria-label="Next month">
+                <ChevronRight size={20} />
+              </button>
+              <button
+                className={calendarStyles.closeButton}
+                onClick={() => setShowCalendar(false)}
+                aria-label="Close calendar"
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            <div className={calendarStyles.calendarGrid}>
+              <div className={calendarStyles.weekdays}>
+                <div>Mon</div>
+                <div>Tue</div>
+                <div>Wed</div>
+                <div>Thu</div>
+                <div>Fri</div>
+                <div>Sat</div>
+                <div>Sun</div>
+              </div>
+
+              <div className={calendarStyles.days}>
+                {days.map((day, index) => (
+                  <div
+                    key={index}
+                    className={`
+                      ${calendarStyles.day} 
+                      ${!day.day ? calendarStyles.emptyDay : ""} 
+                      ${day.date && isToday(day.date) ? calendarStyles.today : ""}
+                      ${day.date && selectedDate && day.date.toDateString() === selectedDate.toDateString() ? calendarStyles.selected : ""}
+                    `}
+                    onClick={() => day.date && setSelectedDate(day.date)}
+                  >
+                    {day.day && (
+                      <>
+                        <span className={calendarStyles.dayNumber}>{day.day}</span>
+                        {day.events && day.events.length > 0 && (
+                          <div className={calendarStyles.eventDots}>
+                            {day.events.map((event, i) => (
+                              <span
+                                key={i}
+                                className={`
+                                  ${calendarStyles.eventDot} 
+                                  ${event.type === "purchase" ? calendarStyles.purchaseDot : calendarStyles.warrantyDot}
+                                `}
+                                title={event.title}
+                              />
+                            ))}
+                          </div>
+                        )}
+                      </>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {selectedDate && (
+              <div className={calendarStyles.eventsList}>
+                <h3 className={calendarStyles.eventsTitle}>Events for {selectedDate.toLocaleDateString()}</h3>
+                {days.find((d) => d.date && d.date.toDateString() === selectedDate.toDateString())?.events?.length ? (
+                  <ul className={calendarStyles.events}>
+                    {days
+                      .find((d) => d.date && d.date.toDateString() === selectedDate.toDateString())
+                      ?.events.map((event, index) => (
+                        <li key={index} className={calendarStyles.eventItem}>
+                          <span
+                            className={`
+                            ${calendarStyles.eventType} 
+                            ${event.type === "purchase" ? calendarStyles.purchaseType : calendarStyles.warrantyType}
+                          `}
+                          >
+                            {event.type === "purchase" ? "Purchase" : "Warranty Expiry"}
+                          </span>
+                          <span className={calendarStyles.eventTitle}>{event.title}</span>
+                        </li>
+                      ))}
+                  </ul>
+                ) : (
+                  <p className={calendarStyles.noEvents}>No events for this date</p>
+                )}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
       {/* Main Content */}
       <div className={styles.content}>
         <div className={styles.header}>
@@ -125,6 +311,7 @@ export default function Dashboard() {
               <Plus className={styles.buttonIcon} />
               Create
             </button>
+            <AnimatedThemeToggle />
             <button className={styles.iconButton}>
               <Search className={styles.iconButtonSvg} />
             </button>

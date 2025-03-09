@@ -181,6 +181,12 @@
   transform: translateX(0);
 }
 
+.themeToggleContainer {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
 .footer {
   margin-top: auto;
   padding-bottom: 1rem;
@@ -252,3 +258,4 @@
 .sidebar:hover + .content {
   margin-left: 260px;
 }
+

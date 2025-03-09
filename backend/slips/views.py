@@ -41,4 +41,4 @@ class SlipListView(ListAPIView):
         permission_classes = [IsAuthenticated]
         if user_uid:
             return Slip.objects.filter(user_uid=user_uid)  # Filter by user_uid
-        return Slip.objects.all()  # Return all if no user_uid is providedtimezone.datetime(2024, 3, 8, 12, 0, 0)
+        return ("error: no user_uid was found!")  # Return all if no user_uid 

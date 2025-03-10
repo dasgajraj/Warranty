@@ -1,0 +1,541 @@
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  animation: fadeIn 0.5s ease-out;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #333;
+  position: relative;
+  display: inline-block;
+}
+
+.title::after {
+  content: "";
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 50%;
+  height: 3px;
+  background: linear-gradient(to right, #000, transparent);
+  animation: expandUnderline 0.5s ease-out forwards;
+}
+
+@keyframes expandUnderline {
+  from {
+    width: 0;
+  }
+  to {
+    width: 50%;
+  }
+}
+
+.addButton {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background-color: #000;
+  color: white;
+  border: none;
+  border-radius: 9999px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.addButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+  background-color: #333;
+}
+
+.addIcon {
+  width: 20px;
+  height: 20px;
+}
+
+.controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.searchBar {
+  display: flex;
+  align-items: center;
+  background-color: #f5f5f5;
+  border-radius: 9999px;
+  padding: 0.5rem 1rem;
+  width: 300px;
+  transition: all 0.3s ease;
+}
+
+.searchBar:focus-within {
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
+}
+
+.searchIcon {
+  width: 20px;
+  height: 20px;
+  color: #666;
+  margin-right: 0.5rem;
+}
+
+.searchInput {
+  border: none;
+  background: transparent;
+  font-size: 1rem;
+  color: #333;
+  width: 100%;
+}
+
+.searchInput:focus {
+  outline: none;
+}
+
+.filterButtons {
+  display: flex;
+  gap: 1rem;
+}
+
+.filterButton {
+  padding: 0.5rem 1rem;
+  border: 1px solid #ddd;
+  border-radius: 9999px;
+  background-color: white;
+  color: #666;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.filterButton:hover,
+.filterButton.active {
+  background-color: #000;
+  color: white;
+  border-color: #000;
+}
+
+.warrantyGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.warrantyCard {
+  background-color: transparent;
+  perspective: 1000px;
+  height: 400px;
+  cursor: pointer;
+}
+
+.cardInner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  transition: transform 0.8s;
+  transform-style: preserve-3d;
+}
+
+.warrantyCard.flipped .cardInner {
+  transform: rotateY(180deg);
+}
+
+.cardFront,
+.cardBack {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border-radius: 1rem;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.cardFront {
+  background-color: white;
+}
+
+.cardBack {
+  background-color: #f8f8f8;
+  transform: rotateY(180deg);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 1.5rem;
+}
+
+.cardHeader {
+  position: relative;
+}
+
+.productImage {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.moreButton {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  background-color: rgba(255, 255, 255, 0.8);
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.moreButton:hover {
+  background-color: white;
+  transform: rotate(90deg);
+}
+
+.moreIcon {
+  width: 18px;
+  height: 18px;
+  color: #333;
+}
+
+.cardContent {
+  padding: 1.5rem;
+}
+
+.productName {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 0.5rem;
+}
+
+.brand {
+  font-size: 0.875rem;
+  color: #666;
+  margin-bottom: 1rem;
+}
+
+.dateInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.date {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  color: #666;
+}
+
+.dateIcon {
+  width: 16px;
+  height: 16px;
+}
+
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.status.active {
+  background-color: #e6f7ed;
+  color: #0e6245;
+}
+
+.status.expiring-soon {
+  background-color: #fff4e5;
+  color: #663c00;
+}
+
+.statusIcon {
+  width: 16px;
+  height: 16px;
+}
+
+.backButton {
+  align-self: flex-start;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: none;
+  border: none;
+  color: #333;
+  font-size: 0.875rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  transition: all 0.3s ease;
+}
+
+.backButton:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.backIcon {
+  width: 16px;
+  height: 16px;
+}
+
+.backTitle {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 1rem;
+}
+
+.backContent {
+  text-align: left;
+  font-size: 0.875rem;
+  color: #666;
+}
+
+.backContent p {
+  margin-bottom: 0.5rem;
+}
+
+.downloadButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  background-color: #000;
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 1rem;
+}
+
+.downloadButton:hover {
+  background-color: #333;
+}
+
+.downloadIcon {
+  width: 16px;
+  height: 16px;
+}
+
+.noResults {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 3rem;
+  background-color: #f5f5f5;
+  border-radius: 1rem;
+  color: #666;
+}
+
+.noResultsIcon {
+  width: 48px;
+  height: 48px;
+  margin-bottom: 1rem;
+}
+
+/* Skeleton loader styles */
+.skeleton {
+  background-color: #f0f0f0;
+  border-radius: 1rem;
+  overflow: hidden;
+}
+
+.skeletonImage {
+  width: 100%;
+  height: 200px;
+  background-color: #e0e0e0;
+  animation: pulse 1.5s infinite;
+}
+
+.skeletonContent {
+  padding: 1.5rem;
+}
+
+.skeletonTitle {
+  width: 80%;
+  height: 24px;
+  background-color: #e0e0e0;
+  margin-bottom: 1rem;
+  animation: pulse 1.5s infinite;
+}
+
+.skeletonText {
+  width: 100%;
+  height: 16px;
+  background-color: #e0e0e0;
+  margin-bottom: 0.5rem;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.6;
+  }
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .controls {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+  }
+
+  .searchBar {
+    width: 100%;
+  }
+
+  .filterButtons {
+    justify-content: space-between;
+  }
+
+  .warrantyGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Enhance accessibility */
+.addButton:focus,
+.filterButton:focus,
+.searchInput:focus,
+.moreButton:focus,
+.backButton:focus,
+.downloadButton:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.3);
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: #1a1a1a;
+    color: #f0f0f0;
+  }
+
+  .title {
+    color: #f0f0f0;
+  }
+
+  .cardFront,
+  .cardBack {
+    background-color: #2a2a2a;
+  }
+
+  .productName {
+    color: #f0f0f0;
+  }
+
+  .brand,
+  .date {
+    color: #b0b0b0;
+  }
+
+  .searchBar {
+    background-color: #2a2a2a;
+  }
+
+  .searchInput {
+    color: #f0f0f0;
+  }
+
+  .filterButton {
+    background-color: #2a2a2a;
+    color: #b0b0b0;
+    border-color: #444;
+  }
+
+  .filterButton:hover,
+  .filterButton.active {
+    background-color: #f0f0f0;
+    color: #1a1a1a;
+  }
+
+  .status.active {
+    background-color: #1c4a2e;
+    color: #6fcf97;
+  }
+
+  .status.expiring-soon {
+    background-color: #4a3c1c;
+    color: #f2c94c;
+  }
+
+  .noResults {
+    background-color: #2a2a2a;
+    color: #b0b0b0;
+  }
+
+  .skeleton {
+    background-color: #2a2a2a;
+  }
+
+  .skeletonImage,
+  .skeletonTitle,
+  .skeletonText {
+    background-color: #3a3a3a;
+  }
+
+  .backButton,
+  .backTitle {
+    color: #f0f0f0;
+  }
+
+  .backContent {
+    color: #b0b0b0;
+  }
+}
+

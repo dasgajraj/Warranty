@@ -156,7 +156,7 @@ export default function Dashboard() {
           <div className={sidebarStyles.logoIcon}>
             <Target className={sidebarStyles.logoSvg} />
           </div>
-          <h1 className={sidebarStyles.logoText}>WarrantyVault</h1>
+          <h1 className={sidebarStyles.logoText}>W~Warranty</h1>
         </div>
 
         <nav className={sidebarStyles.nav}>

@@ -8,7 +8,7 @@ export default function Sidebar() {
     <div className={styles.sidebar}>
       <div className={styles.logo}>
         <div className={styles.logoIcon}></div>
-        <h1>WarrantyVault</h1>
+        <h1>W-Warranty</h1>
       </div>
 
       <nav className={styles.navigation}>

@@ -1,0 +1,371 @@
+.container {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    animation: fadeIn 0.3s ease-in-out;
+  }
+  
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+  }
+  
+  .title {
+    font-size: 2rem;
+    font-weight: 600;
+    color: #000;
+  }
+  
+  .saveButton {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    background-color: #000;
+    color: white;
+    border: none;
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  
+  .saveButton:hover {
+    background-color: #333;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  .saveIcon {
+    width: 16px;
+    height: 16px;
+  }
+  
+  .content {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    gap: 2rem;
+  }
+  
+  .sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .tabButton {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    background: transparent;
+    border: none;
+    border-radius: 0.5rem;
+    color: #666;
+    font-size: 0.875rem;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .tabButton::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background-color: #000;
+    transition: all 0.3s ease;
+    transform: translateX(-50%);
+  }
+  
+  .tabButton:hover {
+    color: #000;
+    background-color: rgba(0, 0, 0, 0.05);
+  }
+  
+  .tabButton:hover::after {
+    width: 80%;
+  }
+  
+  .activeTab {
+    background-color: #000;
+    color: white;
+  }
+  
+  .activeTab::after {
+    width: 0;
+  }
+  
+  .tabIcon {
+    width: 18px;
+    height: 18px;
+  }
+  
+  .mainContent {
+    background-color: #f5f5f5;
+    border-radius: 1rem;
+    padding: 2rem;
+    min-height: 600px;
+  }
+  
+  .section {
+    animation: slideUp 0.3s ease-out;
+  }
+  
+  .sectionTitle {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    color: #000;
+  }
+  
+  .card {
+    background: white;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+  }
+  
+  .card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+  }
+  
+  .settingItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 0;
+    border-bottom: 1px solid #f0f0f0;
+  }
+  
+  .settingItem:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+  
+  .settingInfo {
+    flex: 1;
+    margin-right: 2rem;
+  }
+  
+  .settingTitle {
+    font-size: 0.875rem;
+    font-weight: 500;
+    margin-bottom: 0.25rem;
+    color: #000;
+  }
+  
+  .settingDescription {
+    font-size: 0.75rem;
+    color: #666;
+  }
+  
+  .select {
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    border: 1px solid #ddd;
+    background-color: white;
+    font-size: 0.875rem;
+    color: #333;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-width: 150px;
+  }
+  
+  .select:hover {
+    border-color: #000;
+  }
+  
+  .select:focus {
+    outline: none;
+    border-color: #000;
+    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
+  }
+  
+  .toggle {
+    position: relative;
+    display: inline-block;
+    width: 48px;
+    height: 24px;
+  }
+  
+  .toggle input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  
+  .toggleSlider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ddd;
+    transition: 0.4s;
+    border-radius: 24px;
+  }
+  
+  .toggleSlider:before {
+    position: absolute;
+    content: "";
+    height: 20px;
+    width: 20px;
+    left: 2px;
+    bottom: 2px;
+    background-color: white;
+    transition: 0.4s;
+    border-radius: 50%;
+  }
+  
+  .toggle input:checked + .toggleSlider {
+    background-color: #000;
+  }
+  
+  .toggle input:checked + .toggleSlider:before {
+    transform: translateX(24px);
+  }
+  
+  .themeToggle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: 1px solid #ddd;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  
+  .themeToggle:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+  }
+  
+  .themeToggle.darkMode {
+    background-color: #000;
+    color: white;
+    border-color: #000;
+  }
+  
+  .themeIcon {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .backupStats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #f0f0f0;
+  }
+  
+  .stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  
+  .statLabel {
+    font-size: 0.75rem;
+    color: #666;
+    margin-bottom: 0.25rem;
+  }
+  
+  .statValue {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #000;
+  }
+  
+  .dangerZone {
+    padding: 1rem;
+    border: 1px dashed #ff4d4f;
+    border-radius: 0.5rem;
+    margin-top: 2rem;
+  }
+  
+  .dangerTitle {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #ff4d4f;
+    margin-bottom: 1rem;
+  }
+  
+  .dangerButton {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: #ff4d4f;
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  
+  .dangerButton:hover {
+    background-color: #ff7875;
+  }
+  
+  /* Animations */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .content {
+      grid-template-columns: 1fr;
+    }
+  
+    .sidebar {
+      flex-direction: row;
+      overflow-x: auto;
+      padding-bottom: 1rem;
+      margin-bottom: 1rem;
+    }
+  
+    .tabButton {
+      flex: 0 0 auto;
+    }
+  
+    .mainContent {
+      padding: 1rem;
+    }
+  
+    .backupStats {
+      grid-template-columns: 1fr;
+    }
+  }

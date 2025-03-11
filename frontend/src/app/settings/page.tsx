@@ -1,15 +1,27 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Bell, Shield, Wallet, Users, Mail, Cloud, Globe, Moon, Sun, Save } from "lucide-react"
 import styles from "./settings.module.css"
+import { useAppDispatch, useAppSelector } from "../store/hooks"
+import { toggleTheme } from "../store/theme-slice"
 
 export default function SettingsPage() {
   const [activeTab, setActiveTab] = useState("general")
-  const [darkMode, setDarkMode] = useState(false)
+  const theme = useAppSelector((state) => state.theme.mode)
+  const dispatch = useAppDispatch()
   const [notificationsEnabled, setNotificationsEnabled] = useState(true)
   const [autoBackup, setAutoBackup] = useState(true)
   const [twoFactorAuth, setTwoFactorAuth] = useState(false)
+
+  // Apply theme class to document when theme changes
+  useEffect(() => {
+    if (theme === "dark") {
+      document.documentElement.classList.add("dark")
+    } else {
+      document.documentElement.classList.remove("dark")
+    }
+  }, [theme])
 
   const tabs = [
     { id: "general", label: "General", icon: Globe },
@@ -22,7 +34,7 @@ export default function SettingsPage() {
   ]
 
   return (
-    <div className={styles.container}>
+    <div className={`${styles.container} ${theme === "dark" ? styles.darkContainer : ""}`}>
       <div className={styles.header}>
         <h1 className={styles.title}>Settings</h1>
         <button className={styles.saveButton}>
@@ -57,10 +69,10 @@ export default function SettingsPage() {
                     <p className={styles.settingDescription}>Choose between light and dark mode</p>
                   </div>
                   <button
-                    className={`${styles.themeToggle} ${darkMode ? styles.darkMode : ""}`}
-                    onClick={() => setDarkMode(!darkMode)}
+                    className={`${styles.themeToggle} ${theme === "dark" ? styles.darkMode : ""}`}
+                    onClick={() => dispatch(toggleTheme())}
                   >
-                    {darkMode ? <Moon className={styles.themeIcon} /> : <Sun className={styles.themeIcon} />}
+                    {theme === "dark" ? <Moon className={styles.themeIcon} /> : <Sun className={styles.themeIcon} />}
                   </button>
                 </div>
 

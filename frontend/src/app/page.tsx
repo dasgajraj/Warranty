@@ -29,6 +29,7 @@ import sidebarStyles from "./sidebar.module.css"
 import calendarStyles from "./calendar/Calendar.module.css"
 import { useAppSelector } from "./store/hooks"
 import AnimatedThemeToggle from "./components/animated-theme-toggle"
+import Link from 'next/link';
 
 export default function Dashboard() {
   const [activeTab, setActiveTab] = useState("work")
@@ -176,10 +177,10 @@ export default function Dashboard() {
             <BarChart3 className={sidebarStyles.navIcon} />
             Statistics
           </button>
-          <button className={sidebarStyles.navButton}>
+          <Link href="/warranties" className={sidebarStyles.navButton}>
             <FileText className={sidebarStyles.navIcon} />
             Warranties
-          </button>
+          </Link>
         </nav>
 
         <div className={sidebarStyles.section}>
@@ -197,10 +198,10 @@ export default function Dashboard() {
         </div>
 
         <div className={sidebarStyles.footer}>
-          <button className={sidebarStyles.navButton}>
+        <Link href="/settings" className={sidebarStyles.navButton}>
             <Settings className={sidebarStyles.navIcon} />
             Setting
-          </button>
+          </Link>
         </div>
       </div>
 

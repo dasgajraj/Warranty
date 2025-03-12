@@ -1,0 +1,332 @@
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1100;
+  backdrop-filter: blur(5px);
+  animation: fadeIn 0.3s ease;
+}
+
+.modal {
+  background-color: var(--bg-color, #ffffff);
+  border-radius: 1rem;
+  width: 100%;
+  max-width: 450px;
+  padding: 2rem;
+  position: relative;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  animation: slideUp 0.3s ease;
+}
+
+.dark .modal {
+  background-color: var(--bg-light, #1e1e1e);
+  color: var(--text-color, #f0f0f0);
+}
+
+.closeButton {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: transparent;
+  border: none;
+  color: var(--text-light, #666);
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease;
+}
+
+.closeButton:hover {
+  background-color: var(--bg-light, #f5f5f5);
+}
+
+.dark .closeButton:hover {
+  background-color: var(--bg-dark, #2a2a2a);
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.header h2 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--primary-color, #000);
+  margin: 0;
+}
+
+.dark .header h2 {
+  color: var(--primary-color, #fff);
+}
+
+.error {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: rgba(220, 38, 38, 0.1);
+  color: rgb(220, 38, 38);
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  margin-bottom: 1.5rem;
+  font-size: 0.875rem;
+}
+
+.dark .error {
+  background-color: rgba(248, 113, 113, 0.1);
+  color: rgb(248, 113, 113);
+}
+
+.formGroup {
+  margin-bottom: 1.25rem;
+}
+
+.formGroup label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: var(--text-color, #333);
+  font-size: 0.875rem;
+}
+
+.dark .formGroup label {
+  color: var(--text-color, #f0f0f0);
+}
+
+.inputWrapper {
+  position: relative;
+}
+
+.inputIcon {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-light, #666);
+}
+
+.inputWrapper input {
+  width: 100%;
+  padding: 0.75rem 1rem 0.75rem 2.5rem;
+  border: 1px solid var(--bg-dark, #eaeaea);
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  background-color: var(--bg-color, #ffffff);
+  color: var(--text-color, #333);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.dark .inputWrapper input {
+  background-color: var(--bg-light, #1e1e1e);
+  border-color: var(--bg-dark, #2a2a2a);
+  color: var(--text-color, #f0f0f0);
+}
+
+.inputWrapper input:focus {
+  outline: none;
+  border-color: var(--secondary-color, #6c63ff);
+  box-shadow: 0 0 0 2px rgba(108, 99, 255, 0.2);
+}
+
+.forgotPassword {
+  text-align: right;
+  margin-bottom: 1.5rem;
+}
+
+.forgotPassword a {
+  font-size: 0.875rem;
+  color: var(--secondary-color, #6c63ff);
+  text-decoration: none;
+}
+
+.forgotPassword a:hover {
+  text-decoration: underline;
+}
+
+.primaryButton {
+  width: 100%;
+  padding: 0.75rem 1.5rem;
+  background: var(--gradient-primary, linear-gradient(135deg, #000, #6c63ff));
+  border: none;
+  border-radius: 0.5rem;
+  color: white;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.primaryButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.primaryButton:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  margin: 1.5rem 0;
+  color: var(--text-light, #666);
+}
+
+.divider::before,
+.divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background-color: var(--bg-dark, #eaeaea);
+}
+
+.dark .divider::before,
+.dark .divider::after {
+  background-color: var(--bg-dark, #2a2a2a);
+}
+
+.divider span {
+  padding: 0 1rem;
+  font-size: 0.875rem;
+}
+
+.googleButton {
+  width: 100%;
+  padding: 0.75rem 1.5rem;
+  background-color: white;
+  border: 1px solid var(--bg-dark, #eaeaea);
+  border-radius: 0.5rem;
+  color: var(--text-color, #333);
+  font-weight: 500;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+.dark .googleButton {
+  background-color: var(--bg-light, #1e1e1e);
+  border-color: var(--bg-dark, #2a2a2a);
+  color: var(--text-color, #f0f0f0);
+}
+
+.googleButton:hover {
+  background-color: var(--bg-light, #f5f5f5);
+}
+
+.dark .googleButton:hover {
+  background-color: var(--bg-dark, #2a2a2a);
+}
+
+.googleButton:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.switchMode {
+  margin-top: 1.5rem;
+  text-align: center;
+  font-size: 0.875rem;
+  color: var(--text-light, #666);
+}
+
+.switchMode button {
+  background: transparent;
+  border: none;
+  color: var(--secondary-color, #6c63ff);
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0;
+}
+
+.switchMode button:hover {
+  text-decoration: underline;
+}
+
+.profileContent {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.profileInfo {
+  background-color: var(--bg-light, #f5f5f5);
+  padding: 1rem;
+  border-radius: 0.5rem;
+}
+
+.dark .profileInfo {
+  background-color: var(--bg-dark, #2a2a2a);
+}
+
+.profileInfo p {
+  margin: 0.5rem 0;
+}
+
+.signOutButton {
+  padding: 0.75rem 1.5rem;
+  background-color: transparent;
+  border: 1px solid #dc2626;
+  border-radius: 0.5rem;
+  color: #dc2626;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.signOutButton:hover {
+  background-color: rgba(220, 38, 38, 0.1);
+}
+
+.spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+

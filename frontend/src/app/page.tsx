@@ -1,724 +1,704 @@
 "use client"
 
 import { useState, useEffect, useRef } from "react"
+import { motion, useScroll, useTransform } from "framer-motion"
 import {
-  BarChart3,
-  Calendar,
-  CheckCircle2,
-  ChevronRight,
-  CircleEllipsis,
-  ExternalLink,
+  Shield,
+  Lock,
+  Database,
   FileText,
-  Home,
-  LineChart,
-  MoreHorizontal,
-  MoreVertical,
-  PieChart,
-  Plus,
-  Search,
-  Settings,
-  Share2,
-  Target,
-  User,
-  Users,
-  ChevronLeft,
+  ChevronDown,
+  Sun,
+  Moon,
+  Menu,
   X,
+  Check,
+  ArrowRight,
+  Target,
 } from "lucide-react"
-import styles from "./Dashboard.module.css"
-import sidebarStyles from "./sidebar.module.css"
-import calendarStyles from "./calendar/Calendar.module.css"
-import { useAppSelector } from "./store/hooks"
-import AnimatedThemeToggle from "./components/animated-theme-toggle"
-import Link from 'next/link';
+import Link from "next/link"
+import styles from "./landing.module.css"
 
-export default function Dashboard() {
-  const [activeTab, setActiveTab] = useState("work")
-  const [progress, setProgress] = useState(30)
-  const [showCalendar, setShowCalendar] = useState(false)
-  const [currentDate, setCurrentDate] = useState(new Date())
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null)
-  const calendarRef = useRef<HTMLDivElement>(null)
+export default function LandingPage() {
+  const [darkMode, setDarkMode] = useState(false)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const containerRef = useRef(null)
+  const receiptRef = useRef(null)
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end end"],
+  })
 
-  // Add a simple animation effect for the progress
+  const receiptY = useTransform(scrollYProgress, [0, 0.3], [0, -50])
+  const receiptRotate = useTransform(scrollYProgress, [0, 0.3], [0, 15])
+  const receiptScale = useTransform(scrollYProgress, [0, 0.2, 0.3], [1, 1.1, 1])
+  const receiptOpacity = useTransform(scrollYProgress, [0.8, 1], [1, 0])
+
+  const toggleTheme = () => {
+    setDarkMode(!darkMode)
+    document.documentElement.classList.toggle("dark")
+  }
+
   useEffect(() => {
-    const interval = setInterval(() => {
-      setProgress((prev) => {
-        if (prev >= 30) return 30
-        return prev + 1
+    // Initialize theme based on user preference
+    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches
+    setDarkMode(prefersDark)
+    if (prefersDark) document.documentElement.classList.add("dark")
+
+    // Smooth scroll initialization
+    document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+      anchor.addEventListener("click", function (e) {
+        e.preventDefault()
+        const targetId = this.getAttribute("href")
+        const targetElement = document.querySelector(targetId)
+        if (targetElement) {
+          targetElement.scrollIntoView({
+            behavior: "smooth",
+          })
+        }
       })
-    }, 50)
+    })
+
+    // Simulate tearing attempt animation
+    const interval = setInterval(() => {
+      if (receiptRef.current) {
+        receiptRef.current.classList.add(styles.receiptTearAttempt)
+        setTimeout(() => {
+          if (receiptRef.current) {
+            receiptRef.current.classList.remove(styles.receiptTearAttempt)
+          }
+        }, 1000)
+      }
+    }, 5000)
 
     return () => clearInterval(interval)
   }, [])
 
-  // Close calendar when clicking outside
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (calendarRef.current && !calendarRef.current.contains(event.target as Node)) {
-        setShowCalendar(false)
-      }
-    }
-
-    document.addEventListener("mousedown", handleClickOutside)
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside)
-    }
-  }, [])
-
-  // Calendar navigation functions
-  const prevMonth = () => {
-    setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1))
-  }
-
-  const nextMonth = () => {
-    setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1))
-  }
-
-  // Generate calendar days
-  const generateCalendarDays = () => {
-    const year = currentDate.getFullYear()
-    const month = currentDate.getMonth()
-
-    // First day of the month
-    const firstDay = new Date(year, month, 1)
-    // Last day of the month
-    const lastDay = new Date(year, month + 1, 0)
-
-    // Get the day of the week for the first day (0 = Sunday, 1 = Monday, etc.)
-    const startingDayOfWeek = firstDay.getDay()
-    // Adjust for Monday as first day of week
-    const adjustedStartDay = startingDayOfWeek === 0 ? 6 : startingDayOfWeek - 1
-
-    const totalDays = lastDay.getDate()
-    const totalCells = Math.ceil((totalDays + adjustedStartDay) / 7) * 7
-
-    const days = []
-
-    // Add empty cells for days before the first day of the month
-    for (let i = 0; i < adjustedStartDay; i++) {
-      days.push({ day: null, date: null })
-    }
-
-    // Add cells for each day of the month
-    for (let i = 1; i <= totalDays; i++) {
-      const date = new Date(year, month, i)
-
-      // Sample events data - in a real app, this would come from your database
-      const events = []
-      if (i === 10 || i === 20) {
-        events.push({ type: "purchase", title: "New Purchase" })
-      }
-      if (i === 15 || i === 25) {
-        events.push({ type: "warranty_expiry", title: "Warranty Expiry" })
-      }
-
-      days.push({
-        day: i,
-        date: date,
-        events: events,
-      })
-    }
-
-    // Add empty cells for days after the last day of the month
-    const remainingCells = totalCells - days.length
-    for (let i = 0; i < remainingCells; i++) {
-      days.push({ day: null, date: null })
-    }
-
-    return days
-  }
-
-  const days = generateCalendarDays()
-
-  const formatMonth = (date: Date) => {
-    return date.toLocaleString("default", { month: "long", year: "numeric" })
-  }
-
-  const isToday = (date: Date) => {
-    const today = new Date()
-    return (
-      date.getDate() === today.getDate() &&
-      date.getMonth() === today.getMonth() &&
-      date.getFullYear() === today.getFullYear()
-    )
-  }
-
-  const toggleCalendar = () => {
-    setShowCalendar(!showCalendar)
-  }
-
-  const theme = useAppSelector((state) => state.theme.mode)
-
   return (
-    <div className={`${styles.container} ${theme === "dark" ? "dark" : ""}`}>
-      {/* Left Sidebar */}
-      <div className={sidebarStyles.sidebar}>
-        <div className={sidebarStyles.logo}>
-          <div className={sidebarStyles.logoIcon}>
-            <Target className={sidebarStyles.logoSvg} />
+    <div className={`${styles.container} ${darkMode ? styles.dark : ""}`} ref={containerRef}>
+      {/* Navigation */}
+      <nav className={styles.navbar}>
+        <div className={styles.logo}>
+          <Target className={styles.logoIcon} />
+          <span className={styles.logoText}>W~Warranty</span>
+        </div>
+
+        <div className={`${styles.navLinks} ${mobileMenuOpen ? styles.active : ""}`}>
+          <a href="#features" className={styles.navLink} onClick={() => setMobileMenuOpen(false)}>
+            Features
+          </a>
+          <a href="#how-it-works" className={styles.navLink} onClick={() => setMobileMenuOpen(false)}>
+            How It Works
+          </a>
+          <a href="#benefits" className={styles.navLink} onClick={() => setMobileMenuOpen(false)}>
+            Benefits
+          </a>
+          <a href="#testimonials" className={styles.navLink} onClick={() => setMobileMenuOpen(false)}>
+            Testimonials
+          </a>
+        </div>
+
+        <div className={styles.navRight}>
+          <button className={styles.themeToggle} onClick={toggleTheme}>
+            {darkMode ? <Sun className={styles.themeIcon} /> : <Moon className={styles.themeIcon} />}
+          </button>
+          <div className={styles.authButtons}>
+            <Link href="/dashboard" className={styles.loginButton}>
+              Login
+            </Link>
+            <button className={styles.signupButton}>Sign Up</button>
           </div>
-          <h1 className={sidebarStyles.logoText}>W~Warranty</h1>
+          <button className={styles.menuButton} onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+            {mobileMenuOpen ? <X /> : <Menu />}
+          </button>
+        </div>
+      </nav>
+
+      {/* Hero Section */}
+      <section className={styles.hero}>
+        <div className={styles.heroContent}>
+          <motion.h1
+            className={styles.heroTitle}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+          >
+            Blockchain-Powered
+            <br />
+            Warranty Management
+          </motion.h1>
+          <motion.p
+            className={styles.heroSubtitle}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+          >
+            Secure, immutable, and decentralized warranty records
+            <br />
+            powered by Hyperledger Fabric and IPFS
+          </motion.p>
+          <motion.div
+            className={styles.heroButtons}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+          >
+            <Link href="/dashboard" className={styles.primaryButton}>
+              Get Started
+            </Link>
+            <button className={styles.secondaryButton}>Learn More</button>
+          </motion.div>
         </div>
 
-        <nav className={sidebarStyles.nav}>
-          <button className={`${sidebarStyles.navButton} ${sidebarStyles.active}`}>
-            <Home className={sidebarStyles.navIcon} />
-            Dashboard
-          </button>
-          <button className={sidebarStyles.navButton} onClick={toggleCalendar}>
-            <Calendar className={sidebarStyles.navIcon} />
-            Calendar
-          </button>
-          <button className={sidebarStyles.navButton}>
-            <CheckCircle2 className={sidebarStyles.navIcon} />
-            My Documents
-          </button>
-          <button className={sidebarStyles.navButton}>
-            <BarChart3 className={sidebarStyles.navIcon} />
-            Statistics
-          </button>
-          <Link href="/warranties" className={sidebarStyles.navButton}>
-            <FileText className={sidebarStyles.navIcon} />
-            Warranties
-          </Link>
-        </nav>
-
-        <div className={sidebarStyles.section}>
-          <h3 className={sidebarStyles.sectionTitle}>TEAMS</h3>
-          <nav className={sidebarStyles.nav}>
-            <button className={sidebarStyles.navButton}>
-              <Search className={sidebarStyles.navIcon} />
-              Search
-            </button>
-            <button className={sidebarStyles.navButton}>
-              <LineChart className={sidebarStyles.navIcon} />
-              Insights
-            </button>
-          </nav>
-        </div>
-
-        <div className={sidebarStyles.footer}>
-        <Link href="/settings" className={sidebarStyles.navButton}>
-            <Settings className={sidebarStyles.navIcon} />
-            Setting
-          </Link>
-        </div>
-      </div>
-
-      {/* Calendar Popup */}
-      {showCalendar && (
-        <div className={calendarStyles.calendarOverlay}>
-          <div className={calendarStyles.calendarPopup} ref={calendarRef}>
-            <div className={calendarStyles.calendarHeader}>
-              <button className={calendarStyles.calendarNavButton} onClick={prevMonth} aria-label="Previous month">
-                <ChevronLeft size={20} />
-              </button>
-              <h2 className={calendarStyles.calendarTitle}>{formatMonth(currentDate)}</h2>
-              <button className={calendarStyles.calendarNavButton} onClick={nextMonth} aria-label="Next month">
-                <ChevronRight size={20} />
-              </button>
-              <button
-                className={calendarStyles.closeButton}
-                onClick={() => setShowCalendar(false)}
-                aria-label="Close calendar"
-              >
-                <X size={20} />
-              </button>
-            </div>
-
-            <div className={calendarStyles.calendarGrid}>
-              <div className={calendarStyles.weekdays}>
-                <div>Mon</div>
-                <div>Tue</div>
-                <div>Wed</div>
-                <div>Thu</div>
-                <div>Fri</div>
-                <div>Sat</div>
-                <div>Sun</div>
+        <div className={styles.heroVisual}>
+          <motion.div
+            className={styles.receipt}
+            ref={receiptRef}
+            style={{
+              y: receiptY,
+              rotate: receiptRotate,
+              scale: receiptScale,
+              opacity: receiptOpacity,
+            }}
+          >
+            <div className={styles.receiptContent}>
+              <div className={styles.receiptHeader}>
+                <h3 className={styles.receiptHeaderTitle}>Warranty Receipt</h3>
+                <div className={styles.receiptLogo}>
+                  <Shield size={24} />
+                </div>
               </div>
+              <div className={styles.receiptDivider}></div>
+              <div className={styles.receiptItem}>
+                <span>Product:</span>
+                <span>Samsung 4K QLED TV</span>
+              </div>
+              <div className={styles.receiptItem}>
+                <span>Serial No:</span>
+                <span>SN1234567890</span>
+              </div>
+              <div className={styles.receiptItem}>
+                <span>Purchase Date:</span>
+                <span>2023-01-15</span>
+              </div>
+              <div className={styles.receiptItem}>
+                <span>Warranty Until:</span>
+                <span>2026-01-15</span>
+              </div>
+              <div className={styles.receiptDivider}></div>
+              <div className={styles.receiptFooter}>
+                <div className={styles.blockchainStamp}>
+                  <Lock size={16} />
+                  <span>Blockchain Verified</span>
+                </div>
+                <div className={styles.receiptBarcode}></div>
+              </div>
+            </div>
+            <div className={styles.receiptShadow}></div>
+            <div className={styles.receiptReflection}></div>
+          </motion.div>
 
-              <div className={calendarStyles.days}>
-                {days.map((day, index) => (
-                  <div
-                    key={index}
-                    className={`
-                      ${calendarStyles.day} 
-                      ${!day.day ? calendarStyles.emptyDay : ""} 
-                      ${day.date && isToday(day.date) ? calendarStyles.today : ""}
-                      ${day.date && selectedDate && day.date.toDateString() === selectedDate.toDateString() ? calendarStyles.selected : ""}
-                    `}
-                    onClick={() => day.date && setSelectedDate(day.date)}
-                  >
-                    {day.day && (
-                      <>
-                        <span className={calendarStyles.dayNumber}>{day.day}</span>
-                        {day.events && day.events.length > 0 && (
-                          <div className={calendarStyles.eventDots}>
-                            {day.events.map((event, i) => (
-                              <span
-                                key={i}
-                                className={`
-                                  ${calendarStyles.eventDot} 
-                                  ${event.type === "purchase" ? calendarStyles.purchaseDot : calendarStyles.warrantyDot}
-                                `}
-                                title={event.title}
-                              />
-                            ))}
-                          </div>
-                        )}
-                      </>
-                    )}
+          <motion.div
+            className={styles.blockchainNodes}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1, delay: 1 }}
+          >
+            {[...Array(6)].map((_, i) => (
+              <div key={i} className={styles.node}>
+                <div className={styles.nodeInner}></div>
+              </div>
+            ))}
+            {[...Array(5)].map((_, i) => (
+              <div key={i} className={styles.nodeConnection}></div>
+            ))}
+          </motion.div>
+        </div>
+
+        <a href="#features" className={styles.scrollDown}>
+          <span>Scroll Down</span>
+          <ChevronDown className={styles.scrollIcon} />
+        </a>
+      </section>
+
+      {/* Features Section */}
+      <section id="features" className={styles.features}>
+        <div className={styles.sectionHeader}>
+          <h2 className={styles.sectionHeaderTitle}>Key Features</h2>
+          <p className={styles.sectionHeaderText}>
+            Our blockchain-based warranty system offers unparalleled security and convenience
+          </p>
+        </div>
+
+        <div className={styles.featureGrid}>
+          <motion.div
+            className={styles.featureCard}
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            viewport={{ once: true }}
+          >
+            <div className={styles.featureIcon}>
+              <Lock />
+            </div>
+            <h3>Immutable Records</h3>
+            <p>Warranty information cannot be altered or tampered with once recorded on the blockchain</p>
+          </motion.div>
+
+          <motion.div
+            className={styles.featureCard}
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            viewport={{ once: true }}
+          >
+            <div className={styles.featureIcon}>
+              <Database />
+            </div>
+            <h3>Decentralized Storage</h3>
+            <p>Warranty documents stored on IPFS for enhanced security and accessibility</p>
+          </motion.div>
+
+          <motion.div
+            className={styles.featureCard}
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            viewport={{ once: true }}
+          >
+            <div className={styles.featureIcon}>
+              <FileText />
+            </div>
+            <h3>Smart Contracts</h3>
+            <p>Automated warranty validation and claim processing through smart contracts</p>
+          </motion.div>
+
+          <motion.div
+            className={styles.featureCard}
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+            viewport={{ once: true }}
+          >
+            <div className={styles.featureIcon}>
+              <Shield />
+            </div>
+            <h3>Fraud Prevention</h3>
+            <p>Eliminate warranty fraud with cryptographic proof of purchase and ownership</p>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* How It Works Section */}
+      <section id="how-it-works" className={styles.howItWorks}>
+        <div className={styles.sectionHeader}>
+          <h2 className={styles.sectionHeaderTitle}>How It Works</h2>
+          <p className={styles.sectionHeaderText}>Simple, secure, and transparent warranty management</p>
+        </div>
+
+        <div className={styles.stepsContainer}>
+          <div className={styles.stepsLine}></div>
+
+          <motion.div
+            className={styles.step}
+            initial={{ opacity: 0, x: -50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5 }}
+            viewport={{ once: true }}
+          >
+            <div className={styles.stepNumber}>1</div>
+            <div className={styles.stepContent}>
+              <h3 className={styles.stepContentTitle}>Purchase Registration</h3>
+              <p className={styles.stepContentText}>
+                When you purchase a product, the warranty information is registered on the blockchain with a unique
+                identifier
+              </p>
+            </div>
+          </motion.div>
+
+          <motion.div
+            className={styles.step}
+            initial={{ opacity: 0, x: 50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            viewport={{ once: true }}
+          >
+            <div className={styles.stepNumber}>2</div>
+            <div className={styles.stepContent}>
+              <h3 className={styles.stepContentTitle}>Document Storage</h3>
+              <p className={styles.stepContentText}>
+                Warranty documents and receipts are securely stored on IPFS with references recorded on the blockchain
+              </p>
+            </div>
+          </motion.div>
+
+          <motion.div
+            className={styles.step}
+            initial={{ opacity: 0, x: -50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, delay: 0.4 }}
+            viewport={{ once: true }}
+          >
+            <div className={styles.stepNumber}>3</div>
+            <div className={styles.stepContent}>
+              <h3 className={styles.stepContentTitle}>Warranty Management</h3>
+              <p className={styles.stepContentText}>
+                Access and manage all your warranties through our intuitive dashboard
+              </p>
+            </div>
+          </motion.div>
+
+          <motion.div
+            className={styles.step}
+            initial={{ opacity: 0, x: 50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, delay: 0.6 }}
+            viewport={{ once: true }}
+          >
+            <div className={styles.stepNumber}>4</div>
+            <div className={styles.stepContent}>
+              <h3 className={styles.stepContentTitle}>Claim Processing</h3>
+              <p className={styles.stepContentText}>
+                Submit and track warranty claims with transparent processing through smart contracts
+              </p>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Benefits Section */}
+      <section id="benefits" className={styles.benefits}>
+        <div className={styles.benefitsContent}>
+          <motion.div
+            className={styles.benefitsText}
+            initial={{ opacity: 0, x: -50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5 }}
+            viewport={{ once: true }}
+          >
+            <h2 className={styles.benefitsTextTitle}>Why Choose Blockchain for Warranties?</h2>
+            <ul className={styles.benefitsList}>
+              <li>
+                <span className={styles.checkmark}>
+                  <Check size={18} />
+                </span>
+                <span>Eliminate warranty fraud and disputes</span>
+              </li>
+              <li>
+                <span className={styles.checkmark}>
+                  <Check size={18} />
+                </span>
+                <span>Never lose a warranty document again</span>
+              </li>
+              <li>
+                <span className={styles.checkmark}>
+                  <Check size={18} />
+                </span>
+                <span>Streamlined claim process with faster resolution</span>
+              </li>
+              <li>
+                <span className={styles.checkmark}>
+                  <Check size={18} />
+                </span>
+                <span>Transparent history of ownership and service</span>
+              </li>
+              <li>
+                <span className={styles.checkmark}>
+                  <Check size={18} />
+                </span>
+                <span>Enhanced security through decentralization</span>
+              </li>
+            </ul>
+            <Link href="/dashboard" className={styles.primaryButton}>
+              Start Securing Your Warranties
+              <ArrowRight size={16} className={styles.buttonIcon} />
+            </Link>
+          </motion.div>
+
+          <motion.div
+            className={styles.benefitsImage}
+            initial={{ opacity: 0, x: 50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5 }}
+            viewport={{ once: true }}
+          >
+            <div className={styles.blockchainVisual}>
+              <div className={styles.blockchainBlocks}>
+                {[...Array(5)].map((_, i) => (
+                  <div key={i} className={styles.block}>
+                    <div className={styles.blockHeader}>
+                      <div className={styles.blockHash}>#F8D9A6</div>
+                      <div className={styles.blockTime}>12:45:30</div>
+                    </div>
+                    <div className={styles.blockData}>
+                      <div className={styles.dataLine}></div>
+                      <div className={styles.dataLine}></div>
+                      <div className={styles.dataLine}></div>
+                    </div>
                   </div>
                 ))}
               </div>
-            </div>
-
-            {selectedDate && (
-              <div className={calendarStyles.eventsList}>
-                <h3 className={calendarStyles.eventsTitle}>Events for {selectedDate.toLocaleDateString()}</h3>
-                {days.find((d) => d.date && d.date.toDateString() === selectedDate.toDateString())?.events?.length ? (
-                  <ul className={calendarStyles.events}>
-                    {days
-                      .find((d) => d.date && d.date.toDateString() === selectedDate.toDateString())
-                      ?.events.map((event, index) => (
-                        <li key={index} className={calendarStyles.eventItem}>
-                          <span
-                            className={`
-                            ${calendarStyles.eventType} 
-                            ${event.type === "purchase" ? calendarStyles.purchaseType : calendarStyles.warrantyType}
-                          `}
-                          >
-                            {event.type === "purchase" ? "Purchase" : "Warranty Expiry"}
-                          </span>
-                          <span className={calendarStyles.eventTitle}>{event.title}</span>
-                        </li>
-                      ))}
-                  </ul>
-                ) : (
-                  <p className={calendarStyles.noEvents}>No events for this date</p>
-                )}
+              <div className={styles.blockchainConnectors}>
+                {[...Array(4)].map((_, i) => (
+                  <div key={i} className={styles.connector}></div>
+                ))}
               </div>
-            )}
-          </div>
-        </div>
-      )}
-
-      {/* Main Content */}
-      <div className={styles.content}>
-        <div className={styles.header}>
-          <h1 className={styles.greeting}>Hi, User!</h1>
-          <div className={styles.headerActions}>
-            <button className={styles.createButton}>
-              <Plus className={styles.buttonIcon} />
-              Create
-            </button>
-            <AnimatedThemeToggle />
-            <button className={styles.iconButton}>
-              <Search className={styles.iconButtonSvg} />
-            </button>
-            <button className={styles.iconButton}>
-              <Bell className={styles.iconButtonSvg} />
-              <span className={styles.notificationDot}></span>
-            </button>
-            <div className={styles.avatar}>
-              <img src="/placeholder.svg?height=40&width=40" alt="User" />
             </div>
-          </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Testimonials Section */}
+      <section id="testimonials" className={styles.testimonials}>
+        <div className={styles.sectionHeader}>
+          <h2 className={styles.sectionHeaderTitle}>What Our Users Say</h2>
+          <p className={styles.sectionHeaderText}>
+            Join thousands of satisfied customers who trust our blockchain warranty system
+          </p>
         </div>
 
-        <div className={styles.grid}>
-          {/* Task Overview Card */}
-          <div className={`${styles.card} ${styles.darkCard}`}>
-            <div className={styles.cardHeader}>
-              <h3 className={styles.cardTitle}>Document Overview</h3>
-              <div className={styles.cardActions}>
-                <button className={styles.cardIconButton}>
-                  <Share2 className={styles.cardActionIcon} />
-                </button>
-                <button className={styles.cardIconButton}>
-                  <MoreVertical className={styles.cardActionIcon} />
-                </button>
+        <div className={styles.testimonialGrid}>
+          <motion.div
+            className={styles.testimonialCard}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            viewport={{ once: true }}
+          >
+            <div className={styles.testimonialContent}>
+              <p className={styles.testimonialText}>
+                "I used to lose my warranty papers all the time. Now everything is securely stored and accessible
+                whenever I need it. The blockchain aspect gives me confidence that my records can't be tampered with."
+              </p>
+            </div>
+            <div className={styles.testimonialAuthor}>
+              <div className={styles.authorAvatar}>
+                <img src="/placeholder.svg?height=50&width=50" alt="User Avatar" />
+              </div>
+              <div className={styles.authorInfo}>
+                <h4 className={styles.authorName}>Sarah Johnson</h4>
+                <p className={styles.authorTitle}>Tech Enthusiast</p>
               </div>
             </div>
+          </motion.div>
 
-            <div className={styles.statsRow}>
-              <div className={styles.stat}>
-                <h2 className={styles.statValue}>43</h2>
-                <p className={styles.statLabel}>
-                  Documents
-                  <br />
-                  saved
-                </p>
+          <motion.div
+            className={styles.testimonialCard}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            viewport={{ once: true }}
+          >
+            <div className={styles.testimonialContent}>
+              <p className={styles.testimonialText}>
+                "As a retailer, this system has streamlined our warranty process significantly. Customer disputes have
+                decreased by 78% since we implemented this blockchain solution."
+              </p>
+            </div>
+            <div className={styles.testimonialAuthor}>
+              <div className={styles.authorAvatar}>
+                <img src="/placeholder.svg?height=50&width=50" alt="User Avatar" />
               </div>
-              <div className={styles.stat}>
-                <h2 className={styles.statValue}>2</h2>
-                <p className={styles.statLabel}>
-                  Warranties
-                  <br />
-                  expiring soon
-                </p>
+              <div className={styles.authorInfo}>
+                <h4 className={styles.authorName}>Michael Chen</h4>
+                <p className={styles.authorTitle}>Retail Manager</p>
               </div>
             </div>
+          </motion.div>
 
-            <div className={styles.progressBars}>
-              <div className={styles.progressBar}>
-                <div className={styles.progressBarFill} style={{ width: "80%" }}></div>
+          <motion.div
+            className={styles.testimonialCard}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.4 }}
+            viewport={{ once: true }}
+          >
+            <div className={styles.testimonialContent}>
+              <p className={styles.testimonialText}>
+                "The smart contract functionality automatically notified me when my warranty was about to expire. I was
+                able to get my laptop repaired just in time. Brilliant service!"
+              </p>
+            </div>
+            <div className={styles.testimonialAuthor}>
+              <div className={styles.authorAvatar}>
+                <img src="/placeholder.svg?height=50&width=50" alt="User Avatar" />
               </div>
-              <div className={styles.progressBar}>
-                <div className={styles.progressBarFill} style={{ width: "60%" }}></div>
+              <div className={styles.authorInfo}>
+                <h4 className={styles.authorName}>Alex Rodriguez</h4>
+                <p className={styles.authorTitle}>Software Developer</p>
               </div>
             </div>
+          </motion.div>
+        </div>
+      </section>
 
-            <div className={styles.statsGrid}>
-              <div className={styles.statBox}>
-                <Target className={styles.statBoxIcon} />
-                <p className={styles.statBoxLabel}>Categories</p>
-              </div>
-              <div className={styles.statBox}>
-                <div className={styles.statBoxValue}>2</div>
-                <p className={styles.statBoxLabel}>Pending</p>
-              </div>
-              <div className={styles.statBox}>
-                <div className={styles.statBoxValue}>25</div>
-                <p className={styles.statBoxLabel}>Archived</p>
-              </div>
-            </div>
+      {/* CTA Section */}
+      <section className={styles.cta}>
+        <motion.div
+          className={styles.ctaContent}
+          initial={{ opacity: 0, scale: 0.9 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5 }}
+          viewport={{ once: true }}
+        >
+          <h2 className={styles.ctaTitle}>Ready to Secure Your Warranties?</h2>
+          <p className={styles.ctaText}>
+            Join thousands of users who trust our blockchain-based warranty management system
+          </p>
+          <div className={styles.ctaButtons}>
+            <Link href="/dashboard" className={styles.primaryButton}>
+              Get Started Now
+            </Link>
+            <button className={styles.outlineButton}>Schedule a Demo</button>
+          </div>
+        </motion.div>
+      </section>
+
+      {/* Footer */}
+      <footer className={styles.footer}>
+        <div className={styles.footerContent}>
+          <div className={styles.footerLogo}>
+            <Target className={styles.footerLogoIcon} />
+            <span className={styles.footerLogoText}>WarrantyVault</span>
           </div>
 
-          {/* Weekly Process Card */}
-          <div className={`${styles.card} ${styles.lightCard}`}>
-            <div className={styles.cardHeader}>
-              <h3 className={styles.cardTitle}>Weekly uploads</h3>
-              <button className={styles.cardIconButton}>
-                <PieChart className={styles.cardActionIcon} />
-              </button>
+          <div className={styles.footerLinks}>
+            <div className={styles.footerColumn}>
+              <h3 className={styles.footerColumnTitle}>Product</h3>
+              <ul className={styles.footerColumnList}>
+                <li className={styles.footerColumnListItem}>
+                  <a href="#" className={styles.footerLink}>
+                    Features
+                  </a>
+                </li>
+                <li className={styles.footerColumnListItem}>
+                  <a href="#" className={styles.footerLink}>
+                    Pricing
+                  </a>
+                </li>
+                <li className={styles.footerColumnListItem}>
+                  <a href="#" className={styles.footerLink}>
+                    Case Studies
+                  </a>
+                </li>
+                <li className={styles.footerColumnListItem}>
+                  <a href="#" className={styles.footerLink}>
+                    Documentation
+                  </a>
+                </li>
+              </ul>
             </div>
 
-            <div className={styles.chartLegend}>
-              <div className={styles.legendItem}>
-                <div className={`${styles.legendDot} ${styles.blackDot}`}></div>
-                <span className={styles.legendLabel}>Receipts</span>
-              </div>
-              <div className={styles.legendItem}>
-                <div className={`${styles.legendDot} ${styles.grayDot}`}></div>
-                <span className={styles.legendLabel}>Warranties</span>
-              </div>
+            <div className={styles.footerColumn}>
+              <h3 className={styles.footerColumnTitle}>Company</h3>
+              <ul className={styles.footerColumnList}>
+                <li className={styles.footerColumnListItem}>
+                  <a href="#" className={styles.footerLink}>
+                    About Us
+                  </a>
+                </li>
+                <li className={styles.footerColumnListItem}>
+                  <a href="#" className={styles.footerLink}>
+                    Careers
+                  </a>
+                </li>
+                <li className={styles.footerColumnListItem}>
+                  <a href="#" className={styles.footerLink}>
+                    Blog
+                  </a>
+                </li>
+                <li className={styles.footerColumnListItem}>
+                  <a href="#" className={styles.footerLink}>
+                    Press
+                  </a>
+                </li>
+              </ul>
             </div>
 
-            <div className={styles.chart}>
-              {/* Chart placeholder - in a real app, use a chart library */}
-              <svg className={styles.chartSvg} viewBox="0 0 300 120">
-                <path
-                  d="M0,100 L30,80 L60,90 L90,40 L120,60 L150,30 L180,70 L210,50 L240,60 L270,40 L300,60"
-                  className={styles.chartLine}
-                />
-                <circle cx="150" cy="30" r="4" className={styles.chartPoint} />
-                <line x1="150" y1="0" x2="150" y2="30" className={styles.chartDashedLine} />
-                <text x="150" y="15" className={styles.chartText}>
-                  7
-                </text>
+            <div className={styles.footerColumn}>
+              <h3 className={styles.footerColumnTitle}>Resources</h3>
+              <ul className={styles.footerColumnList}>
+                <li className={styles.footerColumnListItem}>
+                  <a href="#" className={styles.footerLink}>
+                    Support
+                  </a>
+                </li>
+                <li className={styles.footerColumnListItem}>
+                  <a href="#" className={styles.footerLink}>
+                    Contact
+                  </a>
+                </li>
+                <li className={styles.footerColumnListItem}>
+                  <a href="#" className={styles.footerLink}>
+                    Privacy Policy
+                  </a>
+                </li>
+                <li className={styles.footerColumnListItem}>
+                  <a href="#" className={styles.footerLink}>
+                    Terms of Service
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div className={styles.footerBottom}>
+          <p className={styles.footerCopyright}>
+            &copy; {new Date().getFullYear()} WarrantyVault. All rights reserved.
+          </p>
+          <div className={styles.socialLinks}>
+            <a href="#" className={styles.socialLink} aria-label="Twitter">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"></path>
               </svg>
-            </div>
-
-            <div className={styles.chartDays}>
-              <div className={styles.day}>M</div>
-              <div className={styles.day}>T</div>
-              <div className={styles.day}>W</div>
-              <div className={styles.day}>T</div>
-              <div className={styles.day}>F</div>
-              <div className={styles.day}>S</div>
-              <div className={`${styles.day} ${styles.activeDay}`}>S</div>
-            </div>
-          </div>
-
-          {/* Month Progress Card */}
-          <div className={`${styles.card} ${styles.whiteCard}`}>
-            <div className={styles.cardHeader}>
-              <h3 className={styles.cardTitle}>Month Progress</h3>
-              <button className={styles.cardIconButton}>
-                <ExternalLink className={styles.cardActionIcon} />
-              </button>
-            </div>
-
-            <div className={styles.progressInfo}>
-              <div className={styles.progressText}>
-                <span className={styles.progressPercent}>{progress}%</span>
-                <span className={styles.progressLabel}>completed to last month*</span>
-              </div>
-            </div>
-
-            <h4 className={styles.sectionTitle}>OVERVIEW</h4>
-
-            <div className={styles.overviewRow}>
-              <div className={styles.legendColumn}>
-                <div className={styles.legendItem}>
-                  <div className={`${styles.legendDot} ${styles.blackDot}`}></div>
-                  <span className={styles.legendLabel}>Receipts</span>
-                </div>
-                <div className={styles.legendItem}>
-                  <div className={`${styles.legendDot} ${styles.grayDot}`}></div>
-                  <span className={styles.legendLabel}>Warranties</span>
-                </div>
-                <div className={styles.legendItem}>
-                  <div className={`${styles.legendDot} ${styles.lightGrayDot}`}></div>
-                  <span className={styles.legendLabel}>Manuals</span>
-                </div>
-              </div>
-              <div className={styles.circleProgressContainer}>
-                <div className={styles.circleProgress}>
-                  <svg className={styles.circleProgressSvg} viewBox="0 0 36 36">
-                    <path
-                      className={styles.circleProgressBg}
-                      d="M18 2.0845
-                        a 15.9155 15.9155 0 0 1 0 31.831
-                        a 15.9155 15.9155 0 0 1 0 -31.831"
-                    />
-                    <path
-                      className={styles.circleProgressFill}
-                      strokeDasharray={`${progress}, 100`}
-                      d="M18 2.0845
-                        a 15.9155 15.9155 0 0 1 0 31.831
-                        a 15.9155 15.9155 0 0 1 0 -31.831"
-                    />
-                    <text x="18" y="20.35" className={styles.circleProgressText}>
-                      {progress}%
-                    </text>
-                  </svg>
-                </div>
-              </div>
-            </div>
-
-            <div className={styles.cardFooter}>
-              <button className={styles.shareButton}>
-                <Share2 className={styles.shareIcon} />
-              </button>
-              <button className={styles.downloadButton}>Download Report</button>
-            </div>
-          </div>
-
-          {/* Month Goals Card */}
-          <div className={`${styles.card} ${styles.whiteCard}`}>
-            <div className={styles.cardHeader}>
-              <h3 className={styles.cardTitle}>Monthly Purchased</h3>
-              <div className={styles.badgeContainer}>
-                <span className={styles.badge}>1/4</span>
-                <button className={styles.editButton}>
-                  <PencilIcon className={styles.editIcon} />
-                </button>
-              </div>
-            </div>
-
-            <ul className={styles.goalsList}>
-              <li className={styles.goalItem}>
-                <div className={`${styles.goalCheck} ${styles.goalChecked}`}>
-                  <CheckIcon className={styles.checkIcon} />
-                </div>
-                <span className={styles.goalText}>Iphone 16 Pro Max</span>
-              </li>
-              <li className={styles.goalItem}>
-                <div className={styles.goalCheck}></div>
-                <span className={styles.goalText}>Washing Machine</span>
-              </li>
-              <li className={styles.goalItem}>
-                <div className={styles.goalCheck}></div>
-                <span className={styles.goalText}>Asus Rog 16x</span>
-              </li>
-              <li className={styles.goalItem}>
-                <div className={styles.goalCheck}></div>
-                <span className={styles.goalText}>Ipad Pro </span>
-              </li>
-            </ul>
-          </div>
-
-          {/* Meeting Cards */}
-          <div className={styles.meetingsColumn}>
-            <div className={`${styles.card} ${styles.whiteCard}`}>
-              <div className={styles.cardHeader}>
-                <div className={styles.meetingInfo}>
-                  <div className={styles.meetingIcon}>
-                    <Users className={styles.meetingIconSvg} />
-                  </div>
-                  <div>
-                    <h3 className={styles.meetingTitle}>Warranty Renewal</h3>
-                  </div>
-                </div>
-                <button className={styles.cardIconButton}>
-                  <MoreHorizontal className={styles.cardActionIcon} />
-                </button>
-              </div>
-
-              <div className={styles.meetingFooter}>
-                <span className={styles.meetingTime}>Tonight</span>
-                <button className={styles.chatButton}>
-                  <MessageSquare className={styles.chatIcon} />
-                </button>
-              </div>
-            </div>
-
-            <div className={`${styles.card} ${styles.whiteCard}`}>
-              <div className={styles.cardHeader}>
-                <div className={styles.meetingInfo}>
-                  <div className={styles.meetingIcon}>
-                    <User className={styles.meetingIconSvg} />
-                  </div>
-                  <div>
-                    <h3 className={styles.meetingTitle}>Insurance Review</h3>
-                  </div>
-                </div>
-                <button className={styles.cardIconButton}>
-                  <MoreHorizontal className={styles.cardActionIcon} />
-                </button>
-              </div>
-
-              <div className={styles.meetingFooter}>
-                <span className={styles.meetingTime}>Next Morning</span>
-                <button className={styles.chatButton}>
-                  <MessageSquare className={styles.chatIcon} />
-                </button>
-              </div>
-            </div>
-
-            <div className={styles.addTaskCard}>
-              <span className={styles.addTaskText}>+ Add a task</span>
-            </div>
-          </div>
-
-          {/* Last Projects Section */}
-          <div className={styles.projectsSection}>
-            <div className={styles.sectionHeader}>
-              <h3 className={styles.sectionTitle}>Recent Documents</h3>
-              <button className={styles.archiveButton}>
-                Open archive
-                <ChevronRight className={styles.archiveIcon} />
-              </button>
-            </div>
-
-            <div className={styles.projectsGrid}>
-              <div className={`${styles.card} ${styles.darkCard}`}>
-                <div className={styles.cardHeader}>
-                  <h3 className={styles.cardTitle}>New TV Warranty</h3>
-                  <button className={styles.projectActionButton}>
-                    <CircleEllipsis className={styles.projectActionIcon} />
-                  </button>
-                </div>
-                <div className={styles.projectStatus}>
-                  <div className={styles.statusDot}></div>
-                  <span className={styles.statusText}>In progress</span>
-                </div>
-                <p className={styles.projectDescription}>
-                  <span className={styles.projectLabel}>Done:</span> Scanned warranty card and uploaded receipt for the
-                  new Samsung TV
-                </p>
-              </div>
-
-              <div className={`${styles.card} ${styles.darkCard}`}>
-                <div className={styles.cardHeader}>
-                  <h3 className={styles.cardTitle}>Phone Insurance</h3>
-                  <button className={styles.projectActionButton}>
-                    <CircleEllipsis className={styles.projectActionIcon} />
-                  </button>
-                </div>
-                <div className={styles.projectStatus}>
-                  <div className={styles.statusDot}></div>
-                  <span className={styles.statusText}>Completed</span>
-                </div>
-              </div>
-
-              <div className={`${styles.card} ${styles.darkCard}`}>
-                <div className={styles.cardHeader}>
-                  <h3 className={styles.cardTitle}>Laptop Receipts</h3>
-                  <button className={styles.projectActionButton}>
-                    <CircleEllipsis className={styles.projectActionIcon} />
-                  </button>
-                </div>
-                <div className={styles.projectStatus}>
-                  <div className={styles.statusDot}></div>
-                  <span className={styles.statusText}>Completed</span>
-                </div>
-              </div>
-            </div>
+            </a>
+            <a href="#" className={styles.socialLink} aria-label="LinkedIn">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+                <rect x="2" y="9" width="4" height="12"></rect>
+                <circle cx="4" cy="4" r="2"></circle>
+              </svg>
+            </a>
+            <a href="#" className={styles.socialLink} aria-label="GitHub">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
+              </svg>
+            </a>
           </div>
         </div>
-      </div>
+      </footer>
     </div>
-  )
-}
-
-// Additional icons needed
-function MessageSquare(props) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-    </svg>
-  )
-}
-
-function Bell(props) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />
-      <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
-    </svg>
-  )
-}
-
-function PencilIcon(props) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z" />
-    </svg>
-  )
-}
-
-function CheckIcon(props) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <polyline points="20 6 9 17 4 12" />
-    </svg>
   )
 }
 

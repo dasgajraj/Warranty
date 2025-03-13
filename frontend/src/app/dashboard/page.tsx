@@ -29,7 +29,9 @@ import sidebarStyles from "../sidebar.module.css"
 import calendarStyles from "../calendar/Calendar.module.css"
 import { useAppSelector } from "../store/hooks"
 import AnimatedThemeToggle from "../components/animated-theme-toggle"
-import Link from 'next/link';
+import Link from "next/link"
+import { onAuthStateChanged } from "firebase/auth"
+import { auth } from "../firebase-config"
 
 export default function Dashboard() {
   const [activeTab, setActiveTab] = useState("work")
@@ -38,6 +40,22 @@ export default function Dashboard() {
   const [currentDate, setCurrentDate] = useState(new Date())
   const [selectedDate, setSelectedDate] = useState<Date | null>(null)
   const calendarRef = useRef<HTMLDivElement>(null)
+  const [user, setUser] = useState(null)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setLoading(false)
+      if (currentUser) {
+        setUser(currentUser)
+      } else {
+        setUser(null)
+        console.log("No user is signed in")
+      }
+    })
+
+    return () => unsubscribe()
+  }, [])
 
   // Add a simple animation effect for the progress
   useEffect(() => {
@@ -198,7 +216,7 @@ export default function Dashboard() {
         </div>
 
         <div className={sidebarStyles.footer}>
-        <Link href="/settings" className={sidebarStyles.navButton}>
+          <Link href="/settings" className={sidebarStyles.navButton}>
             <Settings className={sidebarStyles.navIcon} />
             Setting
           </Link>
@@ -245,7 +263,11 @@ export default function Dashboard() {
                       ${calendarStyles.day} 
                       ${!day.day ? calendarStyles.emptyDay : ""} 
                       ${day.date && isToday(day.date) ? calendarStyles.today : ""}
-                      ${day.date && selectedDate && day.date.toDateString() === selectedDate.toDateString() ? calendarStyles.selected : ""}
+                      ${
+                        day.date && selectedDate && day.date.toDateString() === selectedDate.toDateString()
+                          ? calendarStyles.selected
+                          : ""
+                      }
                     `}
                     onClick={() => day.date && setSelectedDate(day.date)}
                   >
@@ -306,7 +328,7 @@ export default function Dashboard() {
       {/* Main Content */}
       <div className={styles.content}>
         <div className={styles.header}>
-          <h1 className={styles.greeting}>Hi, User!</h1>
+          <h1 className={styles.greeting}>Hi, {user ? user.displayName || "User" : "User"}!</h1>
           <div className={styles.headerActions}>
             <button className={styles.createButton}>
               <Plus className={styles.buttonIcon} />
@@ -321,7 +343,19 @@ export default function Dashboard() {
               <span className={styles.notificationDot}></span>
             </button>
             <div className={styles.avatar}>
-              <img src="/placeholder.svg?height=40&width=40" alt="User" />
+              {user ? (
+                user.photoURL ? (
+                  <img
+                    src={user.photoURL || "/placeholder.svg"}
+                    alt="User Photo"
+                    style={{ width: "100%", height: "100%", borderRadius: "50%", objectFit: "cover" }}
+                  />
+                ) : (
+                  <User className={styles.iconButtonSvg} />
+                )
+              ) : (
+                <User className={styles.iconButtonSvg} />
+              )}
             </div>
           </div>
         </div>

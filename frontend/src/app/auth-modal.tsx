@@ -5,12 +5,9 @@ import type React from "react"
 import { useState, useEffect } from "react"
 import { createPortal } from "react-dom"
 import { X, Mail, Lock, AlertCircle, Loader2 } from "lucide-react"
-import { initializeApp } from "firebase/app"
 import {
-  getAuth,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
-  GoogleAuthProvider,
   signInWithPopup,
   onAuthStateChanged,
   signOut,
@@ -18,21 +15,9 @@ import {
 } from "firebase/auth"
 import styles from "./auth-modal.module.css"
 
-// Firebase configuration - replace with your own config
-const firebaseConfig = {
-  apiKey: "API",
-  authDomain: "API",
-  projectId: "API",
-  storageBucket: "API",
-  messagingSenderId: "API",
-  appId: "API",
-  measurementId: "API",
-}
+// Replace Firebase initialization at the top with import
+import { auth, googleProvider } from "./firebase-config"
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig)
-const auth = getAuth(app)
-const googleProvider = new GoogleAuthProvider()
 
 interface AuthModalProps {
   isOpen: boolean
@@ -51,6 +36,7 @@ export default function AuthModal({ isOpen, onClose, initialMode = "login" }: Au
   const [mounted, setMounted] = useState(false)
   const [currentUser, setCurrentUser] = useState<User | null>(null)
   const [portalElement, setPortalElement] = useState<HTMLElement | null>(null)
+  const [showRedirectOption, setShowRedirectOption] = useState(false)
 
   useEffect(() => {
     console.log("AuthModal useEffect running, setting mounted to true")
@@ -69,6 +55,8 @@ export default function AuthModal({ isOpen, onClose, initialMode = "login" }: Au
       if (user) {
         // User is signed in, close the modal
         onClose()
+        // Navigate to dashboard
+        window.location.href = "/dashboard"
       }
     })
 
@@ -112,19 +100,55 @@ export default function AuthModal({ isOpen, onClose, initialMode = "login" }: Au
     }
   }
 
-  const handleGoogleSignIn = async () => {
+  const handleGoogleSignIn = async (useRedirect = false) => {
     setError(null)
     setLoading(true)
 
     try {
-      await signInWithPopup(auth, googleProvider)
-      // Auth state listener will handle closing the modal
+      if (useRedirect) {
+        // Use redirect-based authentication as fallback
+        const { signInWithRedirect } = await import("firebase/auth")
+        await signInWithRedirect(auth, googleProvider)
+        // No need to handle success - redirect will happen and auth state will be handled on return
+      } else {
+        // Try popup first
+        await signInWithPopup(auth, googleProvider)
+        // Auth state listener will handle closing the modal and navigation
+      }
     } catch (err: any) {
-      setError(err.message || "Failed to sign in with Google")
+      console.error("Google sign-in error:", err)
+
+      // Handle specific error for closed popup
+      if (err.code === "auth/popup-closed-by-user") {
+        setError("Sign-in window was closed. Try again or use redirect method.")
+        // Show the redirect option
+        setShowRedirectOption(true)
+      } else {
+        setError(err.message || "Failed to sign in with Google")
+      }
     } finally {
       setLoading(false)
     }
   }
+
+  useEffect(() => {
+    const handleRedirectResult = async () => {
+      try {
+        const { getRedirectResult } = await import("firebase/auth")
+        // Check if we have a redirect result
+        const result = await getRedirectResult(auth)
+        if (result) {
+          console.log("Redirect authentication successful")
+          // Auth state listener will handle the rest
+        }
+      } catch (err) {
+        console.error("Error handling redirect result:", err)
+        setError("Failed to complete sign-in. Please try again.")
+      }
+    }
+
+    handleRedirectResult()
+  }, [])
 
   const handleSignOut = async () => {
     try {
@@ -256,7 +280,7 @@ export default function AuthModal({ isOpen, onClose, initialMode = "login" }: Au
           <span>or</span>
         </div>
 
-        <button className={styles.googleButton} onClick={handleGoogleSignIn} disabled={loading}>
+        <button className={styles.googleButton} onClick={() => handleGoogleSignIn(false)} disabled={loading}>
           <svg viewBox="0 0 24 24" width="18" height="18">
             <g transform="matrix(1, 0, 0, 1, 27.009001, -39.238998)">
               <path
@@ -279,6 +303,14 @@ export default function AuthModal({ isOpen, onClose, initialMode = "login" }: Au
           </svg>
           <span>Continue with Google</span>
         </button>
+        {showRedirectOption && (
+          <div className={styles.redirectOption}>
+            <p>Having trouble with the popup?</p>
+            <button className={styles.redirectButton} onClick={() => handleGoogleSignIn(true)} disabled={loading}>
+              Try redirect method instead
+            </button>
+          </div>
+        )}
 
         <div className={styles.switchMode}>
           {mode === "login" ? (

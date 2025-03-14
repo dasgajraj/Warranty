@@ -1,18 +1,48 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { Bell, Shield, Wallet, Users, Mail, Cloud, Globe, Moon, Sun, Save } from "lucide-react"
+import { Bell, Shield, Wallet, Users, Mail, Cloud, Globe, Moon, Sun, Save, User, LogOut } from "lucide-react"
 import styles from "./settings.module.css"
 import { useAppDispatch, useAppSelector } from "../store/hooks"
 import { toggleTheme } from "../store/theme-slice"
+import Link from "next/link"
+import { signOut as firebaseSignOut } from "firebase/auth"
+import { auth } from "../firebase-config"
 
 export default function SettingsPage() {
-  const [activeTab, setActiveTab] = useState("general")
+  const [activeTab, setActiveTab] = useState("account")
   const theme = useAppSelector((state) => state.theme.mode)
   const dispatch = useAppDispatch()
   const [notificationsEnabled, setNotificationsEnabled] = useState(true)
   const [autoBackup, setAutoBackup] = useState(true)
   const [twoFactorAuth, setTwoFactorAuth] = useState(false)
+  const [showNotification, setShowNotification] = useState(false)
+  const [notificationMessage, setNotificationMessage] = useState("")
+  const [isLoading, setIsLoading] = useState(true)
+  const [isSigningOut, setIsSigningOut] = useState(false)
+  const [user, setUser] = useState(null)
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((currentUser) => {
+      setUser(currentUser)
+      setIsLoading(false)
+    })
+
+    return () => unsubscribe()
+  }, [])
+
+  const signOut = async () => {
+    setIsSigningOut(true)
+    try {
+      await firebaseSignOut(auth)
+      showNotificationMessage("Signed out successfully")
+      setTimeout(() => (window.location.href = "/"), 2000)
+    } catch (error) {
+      showNotificationMessage("Failed to sign out")
+      console.error("Sign out error:", error)
+      setIsSigningOut(false) // Reset the signing out state on error
+    }
+  }
 
   // Apply theme class to document when theme changes
   useEffect(() => {
@@ -23,7 +53,18 @@ export default function SettingsPage() {
     }
   }, [theme])
 
+  const showNotificationMessage = (message: string) => {
+    setNotificationMessage(message)
+    setShowNotification(true)
+
+    // Auto-hide notification after 3 seconds
+    setTimeout(() => {
+      setShowNotification(false)
+    }, 3000)
+  }
+
   const tabs = [
+    { id: "account", label: "Account", icon: User },
     { id: "general", label: "General", icon: Globe },
     { id: "notifications", label: "Notifications", icon: Bell },
     { id: "security", label: "Security", icon: Shield },
@@ -35,12 +76,21 @@ export default function SettingsPage() {
 
   return (
     <div className={`${styles.container} ${theme === "dark" ? styles.darkContainer : ""}`}>
+      {showNotification && (
+        <div className={`${styles.notification} ${theme === "dark" ? styles.darkNotification : ""}`}>
+          {notificationMessage}
+        </div>
+      )}
       <div className={styles.header}>
         <h1 className={styles.title}>Settings</h1>
-        <button className={styles.saveButton}>
+        <Link
+          href="/dashboard"
+          className={styles.saveButton}
+          onClick={() => showNotificationMessage("Settings saved successfully")}
+        >
           <Save className={styles.saveIcon} />
           Save Changes
-        </button>
+        </Link>
       </div>
 
       <div className={styles.content}>
@@ -58,6 +108,74 @@ export default function SettingsPage() {
         </nav>
 
         <div className={styles.mainContent}>
+          {activeTab === "account" && (
+            <div className={styles.section}>
+              <h2 className={styles.sectionTitle}>Account Settings</h2>
+
+              <div className={styles.card}>
+                {isLoading ? (
+                  <div className={styles.loadingProfile}>Loading profile information...</div>
+                ) : user ? (
+                  <div className={styles.profileSection}>
+                    <div className={styles.profileHeader}>
+                      <div className={styles.profileImage}>
+                        {user.photoURL ? (
+                          <img src={user.photoURL || "/placeholder.svg"} alt="Profile" className={styles.userPhoto} />
+                        ) : (
+                          <div className={styles.userPhotoPlaceholder}>
+                            <User size={40} />
+                          </div>
+                        )}
+                      </div>
+                      <div className={styles.profileInfo}>
+                        <h3 className={styles.profileName}>{user.displayName || "User"}</h3>
+                        <p className={styles.profileEmail}>{user.email || "No email available"}</p>
+                      </div>
+                    </div>
+
+                    <div className={styles.accountActions}>
+                      <button className={styles.signOutButton} onClick={signOut} disabled={isSigningOut}>
+                        <LogOut className={styles.signOutIcon} />
+                        {isSigningOut ? "Signing out..." : "Sign Out"}
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <div className={styles.notSignedIn}>
+                    <p>You are not signed in.</p>
+                    <Link href="/login" className={styles.signInLink}>
+                      Sign In
+                    </Link>
+                  </div>
+                )}
+              </div>
+
+              <div className={styles.card}>
+                <div className={styles.settingItem}>
+                  <div className={styles.settingInfo}>
+                    <h3 className={styles.settingTitle}>Profile Visibility</h3>
+                    <p className={styles.settingDescription}>Control who can see your profile information</p>
+                  </div>
+                  <select className={styles.select}>
+                    <option value="public">Public</option>
+                    <option value="private">Private</option>
+                    <option value="team">Team Only</option>
+                  </select>
+                </div>
+
+                <div className={styles.settingItem}>
+                  <div className={styles.settingInfo}>
+                    <h3 className={styles.settingTitle}>Account Type</h3>
+                    <p className={styles.settingDescription}>Your current account type</p>
+                  </div>
+                  <div className={styles.accountType}>
+                    <span className={styles.accountBadge}>Personal</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
           {activeTab === "general" && (
             <div className={styles.section}>
               <h2 className={styles.sectionTitle}>General Settings</h2>
@@ -187,13 +305,6 @@ export default function SettingsPage() {
                     <input type="checkbox" checked={autoBackup} onChange={() => setAutoBackup(!autoBackup)} />
                     <span className={styles.toggleSlider}></span>
                   </label>
-                </div>
-              </div>
-
-              <div className={styles.card}>
-                <div className={styles.dangerZone}>
-                  <h3 className={styles.dangerTitle}>Danger Zone</h3>
-                  <button className={styles.dangerButton}>Delete Account</button>
                 </div>
               </div>
             </div>

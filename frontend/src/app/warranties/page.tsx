@@ -147,6 +147,7 @@ export default function WarrantiesPage() {
   const dropdownRef = useRef<HTMLDivElement>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
+
   // Load data and check for expiring warranties
   useEffect(() => {
     // Simulate loading data

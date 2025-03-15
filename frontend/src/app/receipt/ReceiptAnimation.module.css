@@ -1,0 +1,444 @@
+/* Base styling with dark/light mode support */
+.animationContainer {
+  position: relative;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  transition: background-color 0.3s ease;
+}
+
+/* Dark mode color adjustments */
+:root {
+  --primary-color: #4f46e5;
+  --primary-hover: #4338ca;
+  --bg-color: #ffffff;
+  --text-color: #1f2937;
+  --secondary-text: #6b7280;
+  --divider-color: #e5e7eb;
+  --card-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  --highlight-color: rgba(79, 70, 229, 0.1);
+}
+
+.dark {
+  --primary-color: #6366f1;
+  --primary-hover: #818cf8;
+  --bg-color: #1e1e2e;
+  --text-color: #e2e8f0;
+  --secondary-text: #94a3b8;
+  --divider-color: #334155;
+  --card-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+  --highlight-color: rgba(99, 102, 241, 0.15);
+}
+
+.animationStage {
+  position: sticky;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 100%;
+  max-width: 500px;
+  height: 500px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  perspective: 1000px;
+  transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.animationStage:hover {
+  transform: translateY(-50%) scale(1.02);
+}
+
+/* Receipt styling with enhanced hover effects */
+.receipt {
+  position: relative;
+  width: 280px;
+  background-color: var(--bg-color);
+  border-radius: 8px;
+  box-shadow: var(--card-shadow);
+  padding: 1.5rem;
+  transform-style: preserve-3d;
+  z-index: 10;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.receipt:hover {
+  transform: translateY(-8px) scale(1.03) rotateY(5deg);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+}
+
+.receipt:active {
+  transform: translateY(-2px) scale(0.98);
+}
+
+.receiptContent {
+  position: relative;
+  z-index: 2;
+  color: var(--text-color);
+}
+
+.receiptHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.receiptHeaderTitle {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin: 0;
+  color: var(--text-color);
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.receipt:hover .receiptHeaderTitle {
+  transform: scale(1.03);
+  color: var(--primary-color);
+}
+
+.receiptLogo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary-color);
+  transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55), color 0.3s ease;
+}
+
+.receiptLogo:hover {
+  transform: rotate(25deg) scale(1.2);
+  color: var(--primary-hover);
+}
+
+.receiptDivider {
+  width: 100%;
+  height: 1px;
+  background-color: var(--divider-color);
+  margin: 1rem 0;
+  transition: height 0.3s ease, background-color 0.3s ease;
+}
+
+.receipt:hover .receiptDivider {
+  height: 2px;
+  background-color: var(--primary-color);
+}
+
+.receiptItem {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+  margin-bottom: 0.8rem;
+  color: var(--text-color);
+  padding: 0.3rem 0.2rem;
+  border-radius: 4px;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.receiptItem:hover {
+  background-color: var(--highlight-color);
+  transform: translateX(3px);
+  padding-left: 0.5rem;
+}
+
+.receiptFooter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.8rem;
+  margin-top: 1rem;
+}
+
+.blockchainStamp {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--primary-color);
+  font-size: 0.8rem;
+  font-weight: 500;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  padding: 0.3rem 0.6rem;
+  border-radius: 4px;
+}
+
+.blockchainStamp:hover {
+  transform: scale(1.1) rotate(-2deg);
+  background-color: var(--highlight-color);
+  box-shadow: 0 3px 10px rgba(79, 70, 229, 0.2);
+}
+
+.dark .blockchainStamp:hover {
+  box-shadow: 0 3px 10px rgba(99, 102, 241, 0.3);
+}
+
+.receiptBarcode {
+  width: 80%;
+  height: 30px;
+  background: repeating-linear-gradient(
+    90deg,
+    var(--text-color),
+    var(--text-color) 2px,
+    transparent 2px,
+    transparent 5px
+  );
+  margin-top: 0.5rem;
+  transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.receiptBarcode:hover {
+  transform: scaleX(1.12) rotateX(10deg);
+  filter: drop-shadow(0 3px 3px rgba(0, 0, 0, 0.2));
+  background: repeating-linear-gradient(
+    90deg,
+    var(--primary-color),
+    var(--primary-color) 2px,
+    transparent 2px,
+    transparent 5px
+  );
+}
+
+.receiptShadow {
+  position: absolute;
+  bottom: -10px;
+  left: 5%;
+  width: 90%;
+  height: 20px;
+  background: rgba(0, 0, 0, 0.1);
+  filter: blur(10px);
+  border-radius: 50%;
+  z-index: 1;
+  transition: all 0.4s ease;
+}
+
+.receipt:hover .receiptShadow {
+  width: 95%;
+  height: 30px;
+  left: 2.5%;
+  bottom: -15px;
+  filter: blur(15px);
+  background: rgba(0, 0, 0, 0.15);
+}
+
+.dark .receipt:hover .receiptShadow {
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.receiptReflection {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.5) 0%,
+    rgba(255, 255, 255, 0) 50%,
+    rgba(255, 255, 255, 0.1) 100%
+  );
+  border-radius: 8px;
+  z-index: 3;
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+}
+
+.receipt:hover .receiptReflection {
+  opacity: 0.8;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.7) 0%,
+    rgba(255, 255, 255, 0) 60%,
+    rgba(255, 255, 255, 0.2) 100%
+  );
+}
+
+.dark .receipt:hover .receiptReflection {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.3) 0%,
+    rgba(255, 255, 255, 0) 60%,
+    rgba(255, 255, 255, 0.1) 100%
+  );
+}
+
+/* Digital transition lines with enhanced animation */
+.digitalLines {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: 5;
+}
+
+.digitalLine {
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    rgba(79, 70, 229, 0),
+    var(--primary-color),
+    rgba(79, 70, 229, 0)
+  );
+  border-radius: 1px;
+  transition: height 0.3s ease, opacity 0.3s ease, filter 0.3s ease;
+  opacity: 0.5;
+}
+
+.receipt:hover .digitalLine {
+  height: 3px;
+  opacity: 0.8;
+  filter: blur(1px) drop-shadow(0 0 2px var(--primary-color));
+}
+
+.digitalLine:nth-child(odd) {
+  left: -100%;
+}
+
+.digitalLine:nth-child(even) {
+  right: -100%;
+}
+
+.digitalLine:nth-child(1) { top: 5%; }
+.digitalLine:nth-child(2) { top: 12%; }
+.digitalLine:nth-child(3) { top: 19%; }
+.digitalLine:nth-child(4) { top: 26%; }
+.digitalLine:nth-child(5) { top: 33%; }
+.digitalLine:nth-child(6) { top: 40%; }
+.digitalLine:nth-child(7) { top: 47%; }
+.digitalLine:nth-child(8) { top: 54%; }
+.digitalLine:nth-child(9) { top: 61%; }
+.digitalLine:nth-child(10) { top: 68%; }
+.digitalLine:nth-child(11) { top: 75%; }
+.digitalLine:nth-child(12) { top: 82%; }
+.digitalLine:nth-child(13) { top: 89%; }
+.digitalLine:nth-child(14) { top: 96%; }
+.digitalLine:nth-child(15) { top: 99%; }
+
+/* Blockchain styling with interactive effects */
+.blockchain {
+  position: absolute;
+  width: 320px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 10;
+}
+
+.blockchainHeader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
+  margin-bottom: 2rem;
+  color: var(--primary-color);
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.blockchainHeader:hover {
+  transform: scale(1.08);
+}
+
+.blockchainHeader h3 {
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin: 0;
+  color: var(--primary-color);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  position: relative;
+}
+
+.blockchainHeader h3:hover {
+  transform: scale(1.08);
+  color: var(--primary-hover);
+  text-shadow: 0 0 10px rgba(79, 70, 229, 0.3);
+}
+
+.blockchainHeader h3:after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: -4px;
+  left: 50%;
+  background-color: var(--primary-color);
+  transform: translateX(-50%);
+  transition: width 0.3s ease;
+}
+
+.blockchainHeader h3:hover:after {
+  width: 100%;
+}
+
+.blockchainNodes {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  gap: 1.5rem;
+}
+
+.blockchainNode {
+  display: flex;
+  align-items: flex-start;
+  width: 100%;
+  background-color: var(--bg-color);
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: var(--card-shadow);
+  position: relative;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  border: 1px solid transparent;
+}
+
+.blockchainNode:hover {
+  transform: translateY(-5px) translateX(3px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.18);
+  border-color: var(--primary-color);
+}
+
+.dark .blockchainNode:hover {
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.35);
+}
+
+.nodeIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  background-color: var(--primary-color);
+  border-radius: 50%;
+  color: white;
+  margin-right: 1rem;
+  flex-shrink: 0;
+  transition: all 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+}
+
+.blockchainNode:hover .nodeIcon {
+  transform: rotate(25deg) scale(1.15);
+  background-color: var(--primary-hover);
+  box-shadow: 0 0 15px rgba(79, 70, 229, 0.5);
+}
+
+.dark .blockchainNode:hover .nodeIcon {
+  box-shadow: 0 0 15px rgba(99, 102, 241, 0.6);
+}
+
+.nodeContent {
+  flex: 1;
+}
+
+.nodeHeader {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: var(--primary-color);
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.blockchainNode:hover .nodeHeader {
+  color: var(--primary-hover);
+  transform: translateX(3px);
+}

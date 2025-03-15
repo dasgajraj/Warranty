@@ -18,6 +18,7 @@ import {
 } from "lucide-react"
 import styles from "./landing.module.css"
 import AuthModal from "./auth-modal"
+import ReceiptToBlockchainAnimation from './receipt/page'
 
 export default function LandingPage() {
   const [darkMode, setDarkMode] = useState(false)
@@ -161,72 +162,7 @@ export default function LandingPage() {
             <button className={styles.secondaryButton}>Learn More</button>
           </motion.div>
         </div>
-
-        <div className={styles.heroVisual}>
-          <motion.div
-            className={styles.receipt}
-            ref={receiptRef}
-            style={{
-              y: receiptY,
-              rotate: receiptRotate,
-              scale: receiptScale,
-              opacity: receiptOpacity,
-            }}
-          >
-            <div className={styles.receiptContent}>
-              <div className={styles.receiptHeader}>
-                <h3 className={styles.receiptHeaderTitle}>Warranty Receipt</h3>
-                <div className={styles.receiptLogo}>
-                  <Shield size={24} />
-                </div>
-              </div>
-              <div className={styles.receiptDivider}></div>
-              <div className={styles.receiptItem}>
-                <span>Product:</span>
-                <span>Samsung 4K QLED TV</span>
-              </div>
-              <div className={styles.receiptItem}>
-                <span>Serial No:</span>
-                <span>SN1234567890</span>
-              </div>
-              <div className={styles.receiptItem}>
-                <span>Purchase Date:</span>
-                <span>2023-01-15</span>
-              </div>
-              <div className={styles.receiptItem}>
-                <span>Warranty Until:</span>
-                <span>2026-01-15</span>
-              </div>
-              <div className={styles.receiptDivider}></div>
-              <div className={styles.receiptFooter}>
-                <div className={styles.blockchainStamp}>
-                  <Lock size={16} />
-                  <span>Blockchain Verified</span>
-                </div>
-                <div className={styles.receiptBarcode}></div>
-              </div>
-            </div>
-            <div className={styles.receiptShadow}></div>
-            <div className={styles.receiptReflection}></div>
-          </motion.div>
-
-          <motion.div
-            className={styles.blockchainNodes}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1, delay: 1 }}
-          >
-            {[...Array(6)].map((_, i) => (
-              <div key={i} className={styles.node}>
-                <div className={styles.nodeInner}></div>
-              </div>
-            ))}
-            {[...Array(5)].map((_, i) => (
-              <div key={i} className={styles.nodeConnection}></div>
-            ))}
-          </motion.div>
-        </div>
-
+       <ReceiptToBlockchainAnimation speed={1.5} /> {/* Higher number = faster animation */}
         <a href="#features" className={styles.scrollDown}>
           <span>Scroll Down</span>
           <ChevronDown className={styles.scrollIcon} />

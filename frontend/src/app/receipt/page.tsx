@@ -5,69 +5,62 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 import { Shield, Lock, Database, Cpu } from 'lucide-react';
 import styles from './ReceiptAnimation.module.css';
 
-const ReceiptToBlockchainAnimation = () => {
+const ReceiptToBlockchainAnimation = ({ speed = 1 }) => {
   const containerRef = useRef(null);
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    offset: ["start start", "end start"],  // Changed to start from viewport top for better control
-    smooth: 0.1  // Added smoothing to prevent jumpiness with small scrolls
+    offset: ["start start", "end start"],
+    smooth: 0.01 / speed  // Adjust smoothing based on speed
   });
 
-  // Adjusted thresholds for smoother transitions
-  const receiptOpacity = useTransform(scrollYProgress, [0, 0.2, 0.3], [1, 1, 0], { 
+  // Animation ranges adjusted by speed factor
+  const receiptOpacity = useTransform(scrollYProgress, [0, 0.08 / speed, 0.15 / speed], [1, 1, 0], { 
     clamp: true 
   });
-  const blockchainOpacity = useTransform(scrollYProgress, [0.25, 0.35, 0.45], [0, 1, 1], { 
+  const blockchainOpacity = useTransform(scrollYProgress, [0.12 / speed, 0.18 / speed, 0.25 / speed], [0, 1, 1], { 
     clamp: true 
   });
-  const receiptScale = useTransform(scrollYProgress, [0, 0.2, 0.3], [1, 1.05, 0.9], { 
+  const receiptScale = useTransform(scrollYProgress, [0, 0.08 / speed, 0.15 / speed], [1, 1.05, 0.9], { 
     clamp: true 
   });
-  const receiptRotateY = useTransform(scrollYProgress, [0.15, 0.3], [0, 180], { 
+  const receiptRotateY = useTransform(scrollYProgress, [0.05 / speed, 0.15 / speed], [0, 180], { 
     clamp: true 
   });
   
-  // Track animation state with debounced updates
   const [animationPhase, setAnimationPhase] = useState('receipt');
   const [isInitialized, setIsInitialized] = useState(false);
   
   useEffect(() => {
-    // Ensure receipt is shown at first render before any scrolling
     if (!isInitialized) {
       setAnimationPhase('receipt');
       setIsInitialized(true);
     }
     
-    let debounceTimer;
-    
+    // Adjust thresholds based on speed
     const handleScrollChange = (value) => {
-      // Clear previous timer to prevent multiple rapid updates
-      clearTimeout(debounceTimer);
-      
-      // Debounce the animation state change to reduce performance load
-      debounceTimer = setTimeout(() => {
-        if (value < 0.2) {
-          setAnimationPhase('receipt');
-        } else if (value >= 0.2 && value < 0.3) {
-          setAnimationPhase('transition');
-        } else {
-          setAnimationPhase('blockchain');
-        }
-      }, 10); // Small timeout for debouncing
+      if (value < 0.08 / speed) {
+        setAnimationPhase('receipt');
+      } else if (value >= 0.08 / speed && value < 0.15 / speed) {
+        setAnimationPhase('transition');
+      } else {
+        setAnimationPhase('blockchain');
+      }
     };
     
     const unsubscribe = scrollYProgress.onChange(handleScrollChange);
     
     return () => {
       unsubscribe();
-      clearTimeout(debounceTimer);
     };
-  }, [scrollYProgress, isInitialized]);
+  }, [scrollYProgress, isInitialized, speed]);
+
+  // Calculate animation durations based on speed
+  const calculateDuration = (baseDuration) => baseDuration / speed;
 
   return (
     <div ref={containerRef} className={styles.animationContainer}>
       <div className={styles.animationStage}>
-        {/* Original Receipt - Using display conditionals to improve performance */}
+        {/* Original Receipt */}
         <motion.div 
           className={styles.receipt}
           style={{
@@ -75,9 +68,8 @@ const ReceiptToBlockchainAnimation = () => {
             scale: receiptScale,
             rotateY: receiptRotateY,
             display: animationPhase === 'blockchain' ? 'none' : 'block',
-            // Remove rotateX for simpler animation and better performance
           }}
-          initial={{ opacity: 1 }} // Ensure visible at start
+          initial={{ opacity: 1 }}
         >
           <div className={styles.receiptContent}>
             <div className={styles.receiptHeader}>
@@ -116,16 +108,15 @@ const ReceiptToBlockchainAnimation = () => {
           <div className={styles.receiptReflection}></div>
         </motion.div>
 
-        {/* Digital Lines Animation - Optimized for better performance */}
+        {/* Digital Lines Animation */}
         <motion.div 
           className={styles.digitalLines}
           style={{
-            opacity: useTransform(scrollYProgress, [0.15, 0.2, 0.25, 0.3], [0, 1, 1, 0], { clamp: true }),
-            display: animationPhase === 'receipt' && scrollYProgress.get() < 0.15 ? 'none' : 'block'
+            opacity: useTransform(scrollYProgress, [0.05 / speed, 0.08 / speed, 0.12 / speed, 0.15 / speed], [0, 1, 1, 0], { clamp: true }),
+            display: animationPhase === 'receipt' && scrollYProgress.get() < 0.05 / speed ? 'none' : 'block'
           }}
         >
-          {/* Reduced number of lines for better performance */}
-          {[...Array(10)].map((_, i) => (
+          {[...Array(8)].map((_, i) => (
             <motion.div 
               key={i} 
               className={styles.digitalLine}
@@ -134,10 +125,10 @@ const ReceiptToBlockchainAnimation = () => {
                 x: "100%", 
                 opacity: [0, 1, 1, 0],
                 transition: { 
-                  duration: 1.5, // Slightly longer for smoother appearance
+                  duration: calculateDuration(0.6), // Speed-adjusted animation
                   repeat: Infinity, 
-                  delay: i * 0.1, // Slightly increased delay
-                  ease: "linear" // Linear movement for smoother transition
+                  delay: i * calculateDuration(0.04), // Speed-adjusted delay
+                  ease: "linear"
                 }
               } : {}}
             />
@@ -150,7 +141,7 @@ const ReceiptToBlockchainAnimation = () => {
           style={{
             opacity: blockchainOpacity,
             display: animationPhase === 'receipt' ? 'none' : 'flex',
-            willChange: 'opacity', // Performance optimization
+            willChange: 'opacity',
           }}
         >
           <div className={styles.blockchainHeader}>
@@ -158,7 +149,6 @@ const ReceiptToBlockchainAnimation = () => {
             <Cpu size={24} />
           </div>
           
-          {/* Blockchain nodes - Optimized animations */}
           <div className={styles.blockchainNodes}>
             {[...Array(3)].map((_, i) => (
               <motion.div 
@@ -169,10 +159,10 @@ const ReceiptToBlockchainAnimation = () => {
                   scale: [0.95, 1, 0.95], 
                   opacity: [0.8, 1, 0.8],
                   transition: { 
-                    duration: 3,
+                    duration: calculateDuration(1.5), // Speed-adjusted animation
                     repeat: Infinity, 
-                    delay: i * 0.8,
-                    ease: "easeInOut" // Smoother easing
+                    delay: i * calculateDuration(0.2), // Speed-adjusted delay
+                    ease: "easeInOut"
                   }
                 } : {}}
               >
@@ -181,7 +171,6 @@ const ReceiptToBlockchainAnimation = () => {
                 </div>
                 <div className={styles.nodeContent}>
                   <div className={styles.nodeHeader}>Block #{i+1}</div>
-                  {/* Pre-generated hash to avoid re-renders */}
                   <div className={styles.nodeHash}>0x{(i + 1) * 28431 + 'abc'}</div>
                   <div className={styles.nodeData}>
                     <div>Product: Samsung TV</div>
@@ -202,7 +191,7 @@ const ReceiptToBlockchainAnimation = () => {
           </div>
         </motion.div>
         
-        {/* Floating particles - Reduced count and complexity for better performance */}
+        {/* Floating particles */}
         <motion.div 
           className={styles.particles}
           style={{
@@ -210,7 +199,7 @@ const ReceiptToBlockchainAnimation = () => {
             display: animationPhase === 'blockchain' ? 'block' : 'none'
           }}
         >
-          {[...Array(12)].map((_, i) => (
+          {[...Array(10)].map((_, i) => (
             <motion.div 
               key={i} 
               className={styles.particle}
@@ -224,9 +213,9 @@ const ReceiptToBlockchainAnimation = () => {
                 y: Math.random() * 300 - 150,
                 opacity: [0, 0.7, 0],
                 transition: { 
-                  duration: 3 + (i % 3),
+                  duration: calculateDuration(1 + (i % 2)), // Speed-adjusted animation
                   repeat: Infinity,
-                  delay: i * 0.2,
+                  delay: i * calculateDuration(0.1), // Speed-adjusted delay
                   ease: "easeInOut"
                 }
               } : {}}

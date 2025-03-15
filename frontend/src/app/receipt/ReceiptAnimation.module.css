@@ -1,0 +1,362 @@
+/* Main container */
+.animationContainer {
+    position: relative;
+    height: 150vh;
+    width: 100%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 2rem;
+  }
+  
+  .animationStage {
+    position: sticky;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 100%;
+    max-width: 500px;
+    height: 500px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    perspective: 1000px;
+  }
+  
+  /* Receipt styling */
+  .receipt {
+    position: relative;
+    width: 280px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+    transform-style: preserve-3d;
+    z-index: 10;
+  }
+  
+  .receiptContent {
+    position: relative;
+    z-index: 2;
+  }
+  
+  .receiptHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+  
+  .receiptHeaderTitle {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin: 0;
+  }
+  
+  .receiptLogo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #4f46e5;
+  }
+  
+  .receiptDivider {
+    width: 100%;
+    height: 1px;
+    background-color: #e5e7eb;
+    margin: 1rem 0;
+  }
+  
+  .receiptItem {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+    margin-bottom: 0.8rem;
+  }
+  
+  .receiptFooter {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.8rem;
+    margin-top: 1rem;
+  }
+  
+  .blockchainStamp {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #4f46e5;
+    font-size: 0.8rem;
+    font-weight: 500;
+  }
+  
+  .receiptBarcode {
+    width: 80%;
+    height: 30px;
+    background: repeating-linear-gradient(
+      90deg,
+      #000,
+      #000 2px,
+      transparent 2px,
+      transparent 5px
+    );
+    margin-top: 0.5rem;
+  }
+  
+  .receiptShadow {
+    position: absolute;
+    bottom: -10px;
+    left: 5%;
+    width: 90%;
+    height: 20px;
+    background: rgba(0, 0, 0, 0.1);
+    filter: blur(10px);
+    border-radius: 50%;
+    z-index: 1;
+  }
+  
+  .receiptReflection {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.5) 0%,
+      rgba(255, 255, 255, 0) 50%,
+      rgba(255, 255, 255, 0.1) 100%
+    );
+    border-radius: 8px;
+    z-index: 3;
+    pointer-events: none;
+  }
+  
+  /* Digital transition lines */
+  .digitalLines {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: 5;
+  }
+  
+  .digitalLine {
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(
+      90deg,
+      #4f46e500,
+      #4f46e5,
+      #4f46e500
+    );
+    border-radius: 1px;
+  }
+  
+  .digitalLine:nth-child(odd) {
+    left: -100%;
+  }
+  
+  .digitalLine:nth-child(even) {
+    right: -100%;
+  }
+  
+  .digitalLine:nth-child(1) { top: 5%; }
+  .digitalLine:nth-child(2) { top: 12%; }
+  .digitalLine:nth-child(3) { top: 19%; }
+  .digitalLine:nth-child(4) { top: 26%; }
+  .digitalLine:nth-child(5) { top: 33%; }
+  .digitalLine:nth-child(6) { top: 40%; }
+  .digitalLine:nth-child(7) { top: 47%; }
+  .digitalLine:nth-child(8) { top: 54%; }
+  .digitalLine:nth-child(9) { top: 61%; }
+  .digitalLine:nth-child(10) { top: 68%; }
+  .digitalLine:nth-child(11) { top: 75%; }
+  .digitalLine:nth-child(12) { top: 82%; }
+  .digitalLine:nth-child(13) { top: 89%; }
+  .digitalLine:nth-child(14) { top: 96%; }
+  .digitalLine:nth-child(15) { top: 99%; }
+  
+  /* Blockchain styling */
+  .blockchain {
+    position: absolute;
+    width: 320px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 10;
+  }
+  
+  .blockchainHeader {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.8rem;
+    margin-bottom: 2rem;
+    color: #4f46e5;
+  }
+  
+  .blockchainHeader h3 {
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin: 0;
+  }
+  
+  .blockchainNodes {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    gap: 1.5rem;
+  }
+  
+  .blockchainNode {
+    display: flex;
+    align-items: flex-start;
+    width: 100%;
+    background-color: white;
+    padding: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    position: relative;
+  }
+  
+  .nodeIcon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    background-color: #4f46e5;
+    border-radius: 50%;
+    color: white;
+    margin-right: 1rem;
+    flex-shrink: 0;
+  }
+  
+  .nodeContent {
+    flex: 1;
+  }
+  
+  .nodeHeader {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #4f46e5;
+  }
+  
+  .nodeHash {
+    font-family: monospace;
+    font-size: 0.8rem;
+    color: #6b7280;
+    margin-bottom: 0.5rem;
+  }
+  
+  .nodeData {
+    font-size: 0.85rem;
+    line-height: 1.4;
+    color: #374151;
+  }
+  
+  .nodeConnector {
+    position: absolute;
+    width: 2px;
+    height: 30px;
+    background-color: #4f46e5;
+    left: 21px;
+    bottom: -30px;
+  }
+  
+  .blockchainFooter {
+    margin-top: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .securityBadge {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: #4f46e5;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 500;
+  }
+  
+  /* Particles */
+  .particles {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+  }
+  
+  .particle {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background-color: #4f46e5;
+    border-radius: 50%;
+    filter: blur(1px);
+  }
+  
+  /* Explanation text */
+  .explanationText {
+    position: absolute;
+    text-align: center;
+    width: 100%;
+    max-width: 320px;
+    z-index: 20;
+    bottom: 10%;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  
+  .explanationText h2 {
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
+    color: #1f2937;
+  }
+  
+  .explanationText p {
+    font-size: 1rem;
+    color: #6b7280;
+    line-height: 1.6;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .animationContainer {
+      height: 120vh;
+    }
+    
+    .receipt {
+      width: 260px;
+      padding: 1.2rem;
+    }
+    
+    .blockchain {
+      width: 280px;
+    }
+    
+    .blockchainNode {
+      padding: 0.8rem;
+    }
+    
+    .explanationText {
+      max-width: 280px;
+    }
+    
+    .explanationText h2 {
+      font-size: 1.5rem;
+    }
+    
+    .explanationText p {
+      font-size: 0.9rem;
+    }
+  }

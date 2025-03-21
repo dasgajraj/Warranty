@@ -16,218 +16,225 @@ assert web3.is_connected(), "Failed to connect to Hardhat node"
 
 # Smart contract details
 CONTRACT_ADDRESS = "0x5FbDB2315678afecb367f032d93F642f64180aa3"
-CONTRACT_ABI = [
-  {
-    "inputs": [
-      {
-        "internalType": "string",
-        "name": "_ipfsHash",
-        "type": "string"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_warrantyEndDate",
-        "type": "uint256"
-      },
-      {
-        "internalType": "string",
-        "name": "_imeiNumber",
-        "type": "string"
-      }
-    ],
-    "name": "issueWarranty",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "warrantyId",
-        "type": "uint256"
-      },
-      {
-        "internalType": "address",
-        "name": "newOwner",
-        "type": "address"
-      }
-    ],
-    "name": "transferWarranty",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "warrantyId",
-        "type": "uint256"
-      }
-    ],
-    "name": "revokeWarranty",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "warrantyId",
-        "type": "uint256"
-      }
-    ],
-    "name": "getWarrantyDetails",
-    "outputs": [
-      {
-        "internalType": "string",
-        "name": "",
-        "type": "string"
-      },
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      },
-      {
-        "internalType": "string",
-        "name": "",
-        "type": "string"
-      },
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "name": "warranties",
-    "outputs": [
-      {
-        "internalType": "string",
-        "name": "ipfsHash",
-        "type": "string"
-      },
-      {
-        "internalType": "uint256",
-        "name": "warrantyEndDate",
-        "type": "uint256"
-      },
-      {
-        "internalType": "string",
-        "name": "imeiNumber",
-        "type": "string"
-      },
-      {
-        "internalType": "address",
-        "name": "owner",
-        "type": "address"
-      },
-      {
-        "internalType": "bool",
-        "name": "exists",
-        "type": "bool"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "warrantyCounter",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "anonymous": False,
-    "inputs": [
-      {
-        "indexed": True,
-        "internalType": "uint256",
-        "name": "warrantyId",
-        "type": "uint256"
-      },
-      {
-        "indexed": True,
-        "internalType": "address",
-        "name": "owner",
-        "type": "address"
-      },
-      {
-        "indexed": False,
-        "internalType": "string",
-        "name": "imeiNumber",
-        "type": "string"
-      }
-    ],
-    "name": "WarrantyIssued",
-    "type": "event"
-  },
-  {
-    "anonymous": False,
-    "inputs": [
-      {
-        "indexed": True,
-        "internalType": "uint256",
-        "name": "warrantyId",
-        "type": "uint256"
-      },
-      {
-        "indexed": True,
-        "internalType": "address",
-        "name": "from",
-        "type": "address"
-      },
-      {
-        "indexed": True,
-        "internalType": "address",
-        "name": "to",
-        "type": "address"
-      }
-    ],
-    "name": "WarrantyTransferred",
-    "type": "event"
-  },
-  {
-    "anonymous": False,
-    "inputs": [
-      {
-        "indexed": True,
-        "internalType": "uint256",
-        "name": "warrantyId",
-        "type": "uint256"
-      },
-      {
-        "indexed": True,
-        "internalType": "address",
-        "name": "admin",
-        "type": "address"
-      }
-    ],
-    "name": "WarrantyRevoked",
-    "type": "event"
-  }
+CONTRACT_ABI =  [
+    {
+        "inputs": [
+            {
+                "internalType": "string",
+                "name": "_ipfsHash",
+                "type": "string"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_warrantyEndDate",
+                "type": "uint256"
+            },
+            {
+                "internalType": "string",
+                "name": "_imeiNumber",
+                "type": "string"
+            }
+        ],
+        "name": "issueWarranty",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "warrantyId",
+                "type": "uint256"
+            }
+        ],
+        "name": "getWarrantyDetails",
+        "outputs": [
+            {
+                "internalType": "string",
+                "name": "",
+                "type": "string"
+            },
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            },
+            {
+                "internalType": "string",
+                "name": "",
+                "type": "string"
+            },
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "warrantyId",
+                "type": "uint256"
+            },
+            {
+                "internalType": "address",
+                "name": "newOwner",
+                "type": "address"
+            }
+        ],
+        "name": "transferWarranty",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "warrantyId",
+                "type": "uint256"
+            }
+        ],
+        "name": "revokeWarranty",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "string",
+                "name": "_imeiNumber",
+                "type": "string"
+            }
+        ],
+        "name": "searchWarrantyByImei",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "warrantyId",
+                "type": "uint256"
+            },
+            {
+                "internalType": "string",
+                "name": "ipfsHash",
+                "type": "string"
+            },
+            {
+                "internalType": "uint256",
+                "name": "warrantyEndDate",
+                "type": "uint256"
+            },
+            {
+                "internalType": "address",
+                "name": "owner",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "warrantyId",
+                "type": "uint256"
+            }
+        ],
+        "name": "onlyOwner",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "warrantyCounter",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "anonymous": False,
+        "inputs": [
+            {
+                "indexed": True,
+                "internalType": "uint256",
+                "name": "warrantyId",
+                "type": "uint256"
+            },
+            {
+                "indexed": True,
+                "internalType": "address",
+                "name": "owner",
+                "type": "address"
+            },
+            {
+                "indexed": False,
+                "internalType": "string",
+                "name": "imeiNumber",
+                "type": "string"
+            }
+        ],
+        "name": "WarrantyIssued",
+        "type": "event"
+    },
+    {
+        "anonymous": False,
+        "inputs": [
+            {
+                "indexed": True,
+                "internalType": "uint256",
+                "name": "warrantyId",
+                "type": "uint256"
+            },
+            {
+                "indexed": True,
+                "internalType": "address",
+                "name": "from",
+                "type": "address"
+            },
+            {
+                "indexed": True,
+                "internalType": "address",
+                "name": "to",
+                "type": "address"
+            }
+        ],
+        "name": "WarrantyTransferred",
+        "type": "event"
+    },
+    {
+        "anonymous": False,
+        "inputs": [
+            {
+                "indexed": True,
+                "internalType": "uint256",
+                "name": "warrantyId",
+                "type": "uint256"
+            },
+            {
+                "indexed": True,
+                "internalType": "address",
+                "name": "admin",
+                "type": "address"
+            }
+        ],
+        "name": "WarrantyRevoked",
+        "type": "event"
+    }
 ]
-
 
 # Get contract instance
 contract = web3.eth.contract(address=CONTRACT_ADDRESS, abi=CONTRACT_ABI)

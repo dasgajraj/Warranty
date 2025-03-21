@@ -12,11 +12,3 @@ class Slip(models.Model):
 
     def __str__(self):
         return f"{self.product_name} - {self.owner_wallet}"
-    
-
-class UserWallet(models.Model):
-    uid = models.CharField(max_length=255, unique=True)  # OAuth UID
-    wallet_address = models.CharField(max_length=42, unique=True)  # MetaMask Address
-
-    def __str__(self):
-        return f"{self.uid} - {self.wallet_address}"

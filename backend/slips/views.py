@@ -49,17 +49,3 @@ class SlipListView(ListAPIView):
             return Slip.objects.filter(user_uid=user_uid)  # Filter by user_uid
         return Slip.objects.all()  # Return all slips
 
-
-@api_view(['POST'])
-def save_wallet_address(request):
-    """
-    Stores the UID and Wallet Address of a user.
-    Expects: { "uid": "OAUTH_USER_ID", "wallet_address": "0x..." }
-    """
-    serializer = UserWalletSerializer(data=request.data)
-
-    if serializer.is_valid():
-        serializer.save()
-        return Response({"message": "Wallet Address Saved!", "data": serializer.data}, status=status.HTTP_201_CREATED)
-
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

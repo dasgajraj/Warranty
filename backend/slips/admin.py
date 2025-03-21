@@ -5,6 +5,8 @@ from .firebase_utils import fetch_firebase_users
 from .utils import upload_slip_to_pinata  # Adjust to match your function name
 
 class SlipAdminForm(forms.ModelForm):
+    imei = forms.CharField(max_length=50, required=True)  # Add IMEI field manually
+
     class Meta:
         model = Slip
         fields = ['product_name', 'temp_file', 'user_uid', 'warranty_start_date', 'warranty_end_date']
@@ -23,14 +25,21 @@ class SlipAdminForm(forms.ModelForm):
     def clean(self):
         cleaned_data = super().clean()
 
-        # Validate temp_file and handle IPFS hash generation
-        if 'temp_file' in cleaned_data:
+        file = cleaned_data.get('temp_file')
+        warranty_end_date = cleaned_data.get('warranty_end_date')  # Correct variable name
+        imei = cleaned_data.get('imei')  # Get IMEI from the form
+
+        if not warranty_end_date or not imei:
+            raise forms.ValidationError("Missing warranty end date or IMEI.")
+
+        # ✅ Convert warranty_end_date to string in YYYY-MM-DD format
+        warranty_end_date_str = warranty_end_date.strftime('%Y-%m-%d')
+
+        if file:
             try:
-                file = cleaned_data['temp_file']
                 file_content = file.read()
-                ipfs_hash = upload_slip_to_pinata(file_content)  # Replace with actual function
-                
-                # Check if file already exists on IPFS
+                ipfs_hash = upload_slip_to_pinata(file_content, warranty_end_date_str, imei)
+
                 if Slip.objects.filter(ipfs_hash=ipfs_hash).exists():
                     raise forms.ValidationError("This file has already been uploaded.")
 

@@ -18,7 +18,7 @@ import {
 } from "lucide-react"
 import styles from "./landing.module.css"
 import AuthModal from "./auth-modal"
-import ReceiptToBlockchainAnimation from './receipt/page'
+import BlockchainReceiptTransform from "@/app/components/receipt-block-transform-copy"
 
 export default function LandingPage() {
   const [darkMode, setDarkMode] = useState(false)
@@ -162,7 +162,22 @@ export default function LandingPage() {
             <button className={styles.secondaryButton}>Learn More</button>
           </motion.div>
         </div>
-       <ReceiptToBlockchainAnimation speed={1.5} /> {/* Higher number = faster animation */}
+        <div
+          style={{
+            position: "relative",
+            width: "50%",
+            height: "100%",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            "@media (max-width: 768px)": {
+              width: "100%",
+              marginTop: "2rem",
+            },
+          }}
+        >
+          <BlockchainReceiptTransform darkMode={darkMode} />
+        </div>
         <a href="#features" className={styles.scrollDown}>
           <span>Scroll Down</span>
           <ChevronDown className={styles.scrollIcon} />

@@ -63,6 +63,7 @@ export default function WarrantiesPage() {
   const [showNotification, setShowNotification] = useState(false)
   const [notificationMessage, setNotificationMessage] = useState("")
   const [user, setUser] = useState<any>(null)
+  const [imageLoading, setImageLoading] = useState<{[key: string]: boolean}>({})
 
   // Refs
   const dropdownRef = useRef<HTMLDivElement>(null)
@@ -81,6 +82,40 @@ export default function WarrantiesPage() {
 
     return () => unsubscribe()
   }, [])
+
+  // Fetch warranty image function - Updated to use Unsplash
+  const fetchWarrantyImage = async (warranty: Warranty) => {
+    try {
+      setImageLoading(prev => ({...prev, [warranty.ipfs_hash]: true}))
+      
+      // Use product_name as the search query for Unsplash
+      const response = await fetch(
+        `https://api.unsplash.com/search/photos?query=${encodeURIComponent(warranty.product_name)}&client_id=9lrIy300HTEq2ljgU7Jfz0wyPeols_jk6dP2oaVniiw`
+      )
+      
+      if (!response.ok) {
+        throw new Error(`Failed to fetch image with status ${response.status}`)
+      }
+      
+      const data = await response.json()
+      
+      if (data.results && data.results.length > 0) {
+        // Update the specific warranty with the image URL from Unsplash
+        setWarranties(currentWarranties => 
+          currentWarranties.map(w => 
+            w.id === warranty.id ? { ...w, image: data.results[0].urls.regular } : w
+          )
+        )
+      } else {
+        console.log(`No images found for ${warranty.product_name}`)
+        // Keep placeholder image if no results found
+      }
+    } catch (err) {
+      console.error("Error fetching warranty image:", err)
+    } finally {
+      setImageLoading(prev => ({...prev, [warranty.ipfs_hash]: false}))
+    }
+  }
 
   // Fetch warranties from API when user is authenticated
   useEffect(() => {
@@ -111,11 +146,16 @@ export default function WarrantiesPage() {
           model: "Not specified",
           serialNumber: "Not specified",
           status: determineWarrantyStatus(item.warranty_end_date),
-          image: "/placeholder.svg?height=200&width=300",
+          image: "/placeholder.svg?height=200&width=300", // Default placeholder while image loads
           reminderSet: false
         }))
         
         setWarranties(processedData)
+        
+        // After setting warranties, fetch images for each warranty from Unsplash
+        processedData.forEach(warranty => {
+          fetchWarrantyImage(warranty)
+        })
       } catch (err) {
         console.error("Error fetching warranty data:", err)
         showNotificationMessage("Failed to load warranty data. Please try again later.")
@@ -261,6 +301,11 @@ export default function WarrantiesPage() {
     }, 3000)
   }
 
+  // Force reload an image if it failed to load
+  const handleRetryImageLoad = (warranty: Warranty) => {
+    fetchWarrantyImage(warranty)
+  }
+
   return (
     <div className={styles.container}>
       {/* Header with theme toggle */}
@@ -361,11 +406,19 @@ export default function WarrantiesPage() {
                     {/* Front of card */}
                     <div className={styles.cardFront}>
                       <div className={styles.cardHeader}>
-                        <img
-                          src={warranty.image || "/placeholder.svg?height=200&width=300"}
-                          alt={warranty.product_name}
-                          className={styles.productImage}
-                        />
+                        {imageLoading[warranty.ipfs_hash] ? (
+                          <div className={styles.imageLoading}>
+                            <Camera size={24} />
+                            <span>Loading image...</span>
+                          </div>
+                        ) : (
+                          <img
+                            src={warranty.image || "/placeholder.svg?height=200&width=300"}
+                            alt={warranty.product_name}
+                            className={styles.productImage}
+                            onError={() => handleRetryImageLoad(warranty)}
+                          />
+                        )}
 
                         {/* Reminder indicator */}
                         {warranty.reminderSet && (

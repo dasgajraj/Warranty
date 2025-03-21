@@ -55,21 +55,12 @@ from django.http import JsonResponse
 import json
 import os
 
-<<<<<<< Updated upstream
 RPC_URL = "http://127.0.0.1:8545"
 PRIVATE_KEY = "0xc526ee95bf44d8fc405a158bb884d9d1238d99f0612e9f33d006bb0789009aaa"  
 CONTRACT_ADDRESS = "0x5FbDB2315678afecb367f032d93F642f64180aa3"
 # ABI = json.load(open("../../Contract/artifacts/contracts/warrantyStorage.sol/WarrantyStorage.json"))  # Load compiled ABI
 
 web3 = Web3(Web3.HTTPProvider(RPC_URL))
-=======
-# RPC_URL = "http://127.0.0.1:8545"
-# PRIVATE_KEY = "0xc526ee95bf44d8fc405a158bb884d9d1238d99f0612e9f33d006bb0789009aaa"  
-# CONTRACT_ADDRESS = "0x5FbDB2315678afecb367f032d93F642f64180aa3"
-# # ABI = json.load(open("../../Contract/artifacts/contracts/warrantyStorage.sol/WarrantyStorage.json"))  # Load compiled ABI
-
-# web3 = Web3(Web3.HTTPProvider(RPC_URL))
->>>>>>> Stashed changes
 # contract = web3.eth.contract(address=CONTRACT_ADDRESS, abi=ABI)
 
 # def transfer_ownership(request):

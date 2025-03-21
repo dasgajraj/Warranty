@@ -1,6 +1,6 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import AllowAny
 from rest_framework import status
 from .models import Slip
 from .serializers import SlipSerializer
@@ -9,8 +9,9 @@ from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.generics import ListAPIView
 from rest_framework.decorators import api_view
 
+
 class SlipUploadView(APIView):
-    permission_classes = [IsAuthenticated]  # Enforce authentication
+    permission_classes = [AllowAny]  # Enforce authentication
     parser_classes = [MultiPartParser, FormParser]
 
     def post(self, request, *args, **kwargs):
@@ -40,7 +41,7 @@ class SlipListView(ListAPIView):
     API endpoint to retrieve slips filtered by user_uid.
     """
     serializer_class = SlipSerializer
-    permission_classes = [IsAuthenticated]  # Enforce authentication
+    permission_classes = [AllowAny]  # Enforce authentication
 
     def get_queryset(self):
         user_uid = self.request.query_params.get('user_uid')  # Get user_uid from query params

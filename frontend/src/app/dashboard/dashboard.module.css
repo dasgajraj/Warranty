@@ -5,6 +5,13 @@
   background-image: linear-gradient(to bottom right, rgba(255, 255, 255, 0.8), rgba(240, 240, 240, 0.8));
   position: relative;
   overflow: hidden;
+  transition: background-color 0.3s ease, background-image 0.3s ease;
+}
+
+/* Dark mode styles for container */
+.container.dark {
+  background-color: #121212;
+  background-image: linear-gradient(to bottom right, rgba(18, 18, 18, 0.9), rgba(24, 24, 24, 0.9));
 }
 
 /* Add a subtle pattern overlay */
@@ -17,6 +24,12 @@
   bottom: 0;
   background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23000000' fill-opacity='0.02'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
   z-index: 0;
+  transition: background-image 0.3s ease;
+}
+
+/* Dark mode pattern overlay */
+.container.dark::before {
+  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
 }
 
 .content {
@@ -25,11 +38,16 @@
   margin-left: 60px; /* Default when sidebar is collapsed */
   position: relative;
   z-index: 1;
-  transition: margin-left 0.3s ease; /* Smooth transition */
+  transition: margin-left 0.3s ease, color 0.3s ease; /* Smooth transition */
+}
+
+/* Dark mode content text color */
+.container.dark .content {
+  color: #e0e0e0;
 }
 
 /* When sidebar is hovered, adjust margin-left */
-.sidebar:Hover + .content {
+.sidebar:hover + .content {
   margin-left: 260px;
 }
 
@@ -44,6 +62,12 @@
   font-size: 1.5rem;
   font-weight: 600;
   color: #000;
+  transition: color 0.3s ease;
+}
+
+/* Dark mode greeting color */
+.container.dark .greeting {
+  color: #e0e0e0;
 }
 
 .headerActions {
@@ -76,10 +100,22 @@
   transition: all 0.2s ease;
 }
 
+/* Dark mode create button */
+.container.dark .createButton {
+  background-color: #333;
+  color: #e0e0e0;
+}
+
 .createButton:hover {
   background-color: #333;
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Dark mode create button hover */
+.container.dark .createButton:hover {
+  background-color: #444;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 .buttonIcon {
@@ -105,10 +141,21 @@
   background-color: rgba(0, 0, 0, 0.171);
 }
 
+/* Dark mode icon button hover */
+.container.dark .iconButton:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
 .iconButtonSvg {
   width: 20px;
   height: 20px;
   color: #555;
+  transition: color 0.3s ease;
+}
+
+/* Dark mode icon color */
+.container.dark .iconButtonSvg {
+  color: #aaa;
 }
 
 .notificationDot {
@@ -131,9 +178,20 @@
   transition: all 0.2s ease;
 }
 
+/* Dark mode avatar border */
+.container.dark .avatar {
+  border-color: #333;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
 .avatar:hover {
   transform: scale(1.05);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Dark mode avatar hover */
+.container.dark .avatar:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
 }
 
 .avatar img {
@@ -151,10 +209,15 @@
 .card {
   border-radius: 1rem;
   padding: 1rem;
-  box-shadow: var(--card-shadow);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
+}
+
+/* Dark mode card shadow */
+.container.dark .card {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 .card::before {
@@ -169,6 +232,11 @@
   transition: opacity 0.3s ease;
 }
 
+/* Dark mode card accent */
+.container.dark .card::before {
+  background: linear-gradient(to right, #444, transparent);
+}
+
 .card:hover::before {
   opacity: 1;
 }
@@ -177,28 +245,35 @@
   transform: translateY(-5px);
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
 }
+
+/* Dark mode card hover */
+.container.dark .card:hover {
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+}
+
 .darkCard {
-  background-color: #131313;
+  background-color: #ffff;
   color: white;
   grid-column: span 4;
 }
 
-.darkCard {
-  background-color: var(--card-background);
-  color: var(--text-color);
-  grid-column: span 4;
+/* Dark mode darkCard */
+.container.dark .darkCard {
+  background-color: #1a1a1a;
+  color: #e0e0e0;
 }
 
 .lightCard {
   background-color: #f5f5f5;
   color: #000;
   grid-column: span 4;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.lightCard {
-  background-color: var(--background-color);
-  color: var(--text-color);
-  grid-column: span 4;
+/* Dark mode lightCard */
+.container.dark .lightCard {
+  background-color: #222;
+  color: #e0e0e0;
 }
 
 .whiteCard {
@@ -206,13 +281,14 @@
   color: #000;
   grid-column: span 4;
   border: 1px solid #f0f0f0;
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }
 
-.whiteCard {
-  background-color: var(--card-background);
-  color: var(--text-color);
-  grid-column: span 4;
-  border: 1px solid var(--border-color);
+/* Dark mode whiteCard */
+.container.dark .whiteCard {
+  background-color: #2a2a2a;
+  color: #e0e0e0;
+  border-color: #333;
 }
 
 .cardHeader {
@@ -250,6 +326,11 @@
   color: #666;
 }
 
+/* Dark mode card icon button */
+.container.dark .cardIconButton {
+  color: #888;
+}
+
 .cardIconButton:hover {
   background-color: rgba(0, 0, 0, 0.05);
   color: #000;
@@ -258,6 +339,12 @@
 .darkCard .cardIconButton:hover {
   background-color: rgba(255, 255, 255, 0.1);
   color: #fff;
+}
+
+/* Dark mode card icon button hover */
+.container.dark .cardIconButton:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #e0e0e0;
 }
 
 .cardActionIcon {
@@ -285,6 +372,12 @@
   font-size: 0.75rem;
   color: #999;
   margin-top: 0.25rem;
+  transition: color 0.3s ease;
+}
+
+/* Dark mode stat label */
+.container.dark .statLabel {
+  color: #777;
 }
 
 .progressBars {
@@ -301,11 +394,21 @@
   overflow: hidden;
 }
 
+/* Dark mode progress bar */
+.container.dark .progressBar {
+  background-color: #444;
+}
+
 .progressBarFill {
   height: 100%;
   background-color: #fff;
   border-radius: 3px;
   transition: width 1s ease;
+}
+
+/* Dark mode progress bar fill */
+.container.dark .progressBarFill {
+  background-color: #aaa;
 }
 
 .statsGrid {
@@ -322,9 +425,19 @@
   transition: all 0.3s ease;
 }
 
+/* Dark mode stat box */
+.container.dark .statBox {
+  background-color: #444;
+}
+
 .statBox:hover {
   background-color: #444;
   transform: translateY(-2px);
+}
+
+/* Dark mode stat box hover */
+.container.dark .statBox:hover {
+  background-color: #555;
 }
 
 .statBoxIcon {
@@ -368,6 +481,11 @@
   background-color: #000;
 }
 
+/* Dark mode black dot */
+.container.dark .blackDot {
+  background-color: #fff;
+}
+
 .grayDot {
   background-color: #999;
 }
@@ -376,8 +494,19 @@
   background-color: #ddd;
 }
 
+/* Dark mode light gray dot */
+.container.dark .lightGrayDot {
+  background-color: #888;
+}
+
 .legendLabel {
   font-size: 0.75rem;
+  transition: color 0.3s ease;
+}
+
+/* Dark mode legend label */
+.container.dark .legendLabel {
+  color: #ccc;
 }
 
 .chart {
@@ -393,24 +522,48 @@
 
 .chartLine {
   fill: none;
-  stroke: var(--chart-line);
+  stroke: #000;
   stroke-width: 2;
+  transition: stroke 0.3s ease;
+}
+
+/* Dark mode chart line */
+.container.dark .chartLine {
+  stroke: #aaa;
 }
 
 .chartPoint {
-  fill: var(--chart-point);
+  fill: #000;
+  transition: fill 0.3s ease;
+}
+
+/* Dark mode chart point */
+.container.dark .chartPoint {
+  fill: #aaa;
 }
 
 .chartDashedLine {
-  stroke: var(--chart-line);
+  stroke: #000;
   stroke-width: 1;
   stroke-dasharray: 2, 2;
+  transition: stroke 0.3s ease;
+}
+
+/* Dark mode chart dashed line */
+.container.dark .chartDashedLine {
+  stroke: #aaa;
 }
 
 .chartText {
   text-anchor: middle;
   font-size: 10px;
-  fill: var(--chart-text);
+  fill: #000;
+  transition: fill 0.3s ease;
+}
+
+/* Dark mode chart text */
+.container.dark .chartText {
+  fill: #ccc;
 }
 
 .chartDays {
@@ -418,6 +571,12 @@
   justify-content: space-between;
   font-size: 0.75rem;
   color: #999;
+  transition: color 0.3s ease;
+}
+
+/* Dark mode chart days */
+.container.dark .chartDays {
+  color: #777;
 }
 
 .day {
@@ -432,6 +591,12 @@
   background-color: #000;
   color: #fff;
   border-radius: 50%;
+  transition: background-color 0.3s ease;
+}
+
+/* Dark mode active day */
+.container.dark .activeDay {
+  background-color: #555;
 }
 
 .progressInfo {
@@ -452,6 +617,12 @@
 .progressLabel {
   font-size: 0.75rem;
   color: #999;
+  transition: color 0.3s ease;
+}
+
+/* Dark mode progress label */
+.container.dark .progressLabel {
+  color: #777;
 }
 
 .sectionTitle {
@@ -460,6 +631,12 @@
   color: #999;
   margin-bottom: 1rem;
   letter-spacing: 0.05em;
+  transition: color 0.3s ease;
+}
+
+/* Dark mode section title */
+.container.dark .sectionTitle {
+  color: #777;
 }
 
 .overviewRow {
@@ -497,6 +674,12 @@
   fill: none;
   stroke: #f0f0f0;
   stroke-width: 2.8;
+  transition: stroke 0.3s ease;
+}
+
+/* Dark mode circle progress background */
+.container.dark .circleProgressBg {
+  stroke: #444;
 }
 
 .circleProgressFill {
@@ -504,7 +687,12 @@
   stroke: #000;
   stroke-width: 2.8;
   stroke-linecap: round;
-  transition: stroke-dasharray 1s ease;
+  transition: stroke-dasharray 1s ease, stroke 0.3s ease;
+}
+
+/* Dark mode circle progress fill */
+.container.dark .circleProgressFill {
+  stroke: #aaa;
 }
 
 .circleProgressText {
@@ -513,6 +701,12 @@
   text-anchor: middle;
   transform: rotate(90deg);
   dominant-baseline: middle;
+  transition: fill 0.3s ease;
+}
+
+/* Dark mode circle progress text */
+.container.dark .circleProgressText {
+  fill: #ccc;
 }
 
 .cardFooter {
@@ -535,9 +729,19 @@
   transition: all 0.2s ease;
 }
 
+/* Dark mode share button */
+.container.dark .shareButton {
+  background-color: #444;
+}
+
 .shareButton:hover {
   background-color: #333;
   transform: translateY(-2px);
+}
+
+/* Dark mode share button hover */
+.container.dark .shareButton:hover {
+  background-color: #555;
 }
 
 .shareIcon {
@@ -555,9 +759,21 @@
   transition: all 0.2s ease;
 }
 
+/* Dark mode download button */
+.container.dark .downloadButton {
+  border-color: #444;
+  color: #ccc;
+}
+
 .downloadButton:hover {
   border-color: #000;
   background-color: #f5f5f5;
+}
+
+/* Dark mode download button hover */
+.container.dark .downloadButton:hover {
+  border-color: #666;
+  background-color: #333;
 }
 
 .badgeContainer {
@@ -571,6 +787,12 @@
   border-radius: 9999px;
   border: 1px solid #ddd;
   font-size: 0.75rem;
+  transition: border-color 0.3s ease;
+}
+
+/* Dark mode badge */
+.container.dark .badge {
+  border-color: #444;
 }
 
 .editButton {
@@ -588,6 +810,12 @@
 .editIcon {
   width: 12px;
   height: 12px;
+  transition: color 0.3s ease;
+}
+
+/* Dark mode edit icon */
+.container.dark .editIcon {
+  color: #aaa;
 }
 
 .goalsList {
@@ -613,11 +841,24 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: border-color 0.3s ease;
+}
+
+/* Dark mode goal check */
+.container.dark .goalCheck {
+  border-color: #444;
 }
 
 .goalChecked {
   background-color: #000;
   border-color: #000;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Dark mode goal checked */
+.container.dark .goalChecked {
+  background-color: #555;
+  border-color: #555;
 }
 
 .checkIcon {
@@ -651,11 +892,23 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: background-color 0.3s ease;
+}
+
+/* Dark mode meeting icon */
+.container.dark .meetingIcon {
+  background-color: #333;
 }
 
 .meetingIconSvg {
   width: 16px;
   height: 16px;
+  transition: color 0.3s ease;
+}
+
+/* Dark mode meeting icon svg */
+.container.dark .meetingIconSvg {
+  color: #aaa;
 }
 
 .meetingTitle {
@@ -675,6 +928,13 @@
   padding: 0.25rem 0.5rem;
   border-radius: 9999px;
   border: 1px solid #ddd;
+  transition: color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Dark mode meeting time */
+.container.dark .meetingTime {
+  color: #777;
+  border-color: #444;
 }
 
 .chatButton {
@@ -688,6 +948,12 @@
   color: #fff;
   border: none;
   cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+/* Dark mode chat button */
+.container.dark .chatButton {
+  background-color: #444;
 }
 
 .chatIcon {
@@ -703,7 +969,12 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.2s ease, border-color 0.3s ease;
+}
+
+/* Dark mode add task card */
+.container.dark .addTaskCard {
+  border-color: #444;
 }
 
 .addTaskCard:hover {
@@ -711,9 +982,21 @@
   background-color: rgba(0, 0, 0, 0.02);
 }
 
+/* Dark mode add task card hover */
+.container.dark .addTaskCard:hover {
+  border-color: #666;
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
 .addTaskText {
   color: #999;
   font-size: 0.875rem;
+  transition: color 0.3s ease;
+}
+
+/* Dark mode add task text */
+.container.dark .addTaskText {
+  color: #777;
 }
 
 .projectsSection {
@@ -737,6 +1020,12 @@
   font-size: 0.75rem;
   color: #999;
   cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+/* Dark mode archive button */
+.container.dark .archiveButton {
+  color: #777;
 }
 
 .archiveIcon {
@@ -761,6 +1050,12 @@
   border: 1px solid #333;
   color: #fff;
   cursor: pointer;
+  transition: border-color 0.3s ease;
+}
+
+/* Dark mode project action button */
+.container.dark .projectActionButton {
+  border-color: #555;
 }
 
 .projectActionIcon {
@@ -780,17 +1075,35 @@
   height: 8px;
   border-radius: 50%;
   background-color: #fff;
+  transition: background-color 0.3s ease;
+}
+
+/* Dark mode status dot */
+.container.dark .statusDot {
+  background-color: #aaa;
 }
 
 .statusText {
   font-size: 0.75rem;
   color: #999;
+  transition: color 0.3s ease;
+}
+
+/* Dark mode status text */
+.container.dark .statusText {
+  color: #777;
 }
 
 .projectDescription {
   font-size: 0.75rem;
   color: #999;
   line-height: 1.4;
+  transition: color 0.3s ease;
+}
+
+/* Dark mode project description */
+.container.dark .projectDescription {
+  color: #777;
 }
 
 .projectLabel {
@@ -851,6 +1164,11 @@
   opacity: 0;
   transition: opacity 0.3s ease;
   pointer-events: none;
+}
+
+/* Dark mode card hover effect */
+.container.dark .card::after {
+  background: radial-gradient(circle at center, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0) 70%);
 }
 
 .card:hover::after {
@@ -915,3 +1233,26 @@
   }
 }
 
+/* CSS Variables for theme switching */
+:root {
+  --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  --card-background: #fff;
+  --background-color: #f5f5f5;
+  --text-color: #000;
+  --border-color: #f0f0f0;
+  --chart-line: #000;
+  --chart-point: #000;
+  --chart-text: #000;
+}
+
+/* Dark theme variables */
+.container.dark {
+  --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  --card-background: #2a2a2a;
+  --background-color: #222;
+  --text-color: #e0e0e0;
+  --border-color: #333;
+  --chart-line: #aaa;
+  --chart-point: #aaa;
+  --chart-text: #ccc;
+}

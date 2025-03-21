@@ -1,29 +1,7 @@
 "use client"
 
 import { useState, useEffect, useRef } from "react"
-import {
-  BarChart3,
-  Calendar,
-  CheckCircle2,
-  ChevronRight,
-  CircleEllipsis,
-  ExternalLink,
-  FileText,
-  Home,
-  LineChart,
-  MoreHorizontal,
-  MoreVertical,
-  PieChart,
-  Plus,
-  Search,
-  Settings,
-  Share2,
-  Target,
-  User,
-  Users,
-  ChevronLeft,
-  X,
-} from "lucide-react"
+import { BarChart3, Calendar, CheckCircle2, ChevronRight, CircleEllipsis, ExternalLink, FileText, Home, LineChart, MoreHorizontal, MoreVertical, PieChart, Plus, Search, Settings, Share2, Target, User, Users, ChevronLeft, X } from 'lucide-react'
 import styles from "./dashboard.module.css"
 import sidebarStyles from "../sidebar.module.css"
 import calendarStyles from "../calendar/Calendar.module.css"
@@ -168,7 +146,7 @@ export default function Dashboard() {
   const theme = useAppSelector((state) => state.theme.mode)
 
   return (
-    <div className={`${styles.container} ${theme === "dark" ? "dark" : ""}`}>
+    <div className={`${styles.container} ${theme === "dark" ? styles.dark : ""}`}>
       {/* Left Sidebar */}
       <div className={sidebarStyles.sidebar}>
         <div className={sidebarStyles.logo}>
@@ -755,4 +733,3 @@ function CheckIcon(props) {
     </svg>
   )
 }
-

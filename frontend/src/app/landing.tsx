@@ -91,7 +91,7 @@ export default function LandingPage() {
       <nav className={styles.navbar}>
         <div className={styles.logo}>
           <Target className={styles.logoIcon} />
-          <span className={styles.logoText}>W~Warranty</span>
+          <span className={styles.logoText}>RASEED</span>
         </div>
 
         <div className={`${styles.navLinks} ${mobileMenuOpen ? styles.active : ""}`}>

@@ -7,6 +7,7 @@ from .serializers import SlipSerializer
 from .utils import upload_slip_to_pinata
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.generics import ListAPIView
+from rest_framework.decorators import api_view
 
 class SlipUploadView(APIView):
     permission_classes = [IsAuthenticated]  # Enforce authentication
@@ -46,3 +47,18 @@ class SlipListView(ListAPIView):
         if user_uid:
             return Slip.objects.filter(user_uid=user_uid)  # Filter by user_uid
         return Slip.objects.all()  # Return all slips
+
+
+@api_view(['POST'])
+def save_wallet_address(request):
+    """
+    Stores the UID and Wallet Address of a user.
+    Expects: { "uid": "OAUTH_USER_ID", "wallet_address": "0x..." }
+    """
+    serializer = UserWalletSerializer(data=request.data)
+
+    if serializer.is_valid():
+        serializer.save()
+        return Response({"message": "Wallet Address Saved!", "data": serializer.data}, status=status.HTTP_201_CREATED)
+
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

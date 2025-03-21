@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Slip
+from .models import Slip, UserWallet
 
 class SlipSerializer(serializers.ModelSerializer):
     class Meta:
@@ -8,3 +8,7 @@ class SlipSerializer(serializers.ModelSerializer):
         read_only_fields = ['ipfs_hash', 'uploaded_at']  # Prevents modification of these fields
 
 
+class UserWalletSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserWallet
+        fields = ['uid', 'wallet_address']

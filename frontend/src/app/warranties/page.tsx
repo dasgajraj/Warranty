@@ -27,6 +27,7 @@ import { useAppSelector } from "../store/hooks"
 import styles from "./warranties.module.css"
 import { onAuthStateChanged } from "firebase/auth"
 import { auth } from "../firebase-config"
+import UnsplashAPI from "./unsplashConfig"
 
 // Updated Warranty interface to match API structure
 interface Warranty {
@@ -90,7 +91,7 @@ export default function WarrantiesPage() {
       
       // Use product_name as the search query for Unsplash
       const response = await fetch(
-        `https://api.unsplash.com/search/photos?query=${encodeURIComponent(warranty.product_name)}&client_id=9lrIy300HTEq2ljgU7Jfz0wyPeols_jk6dP2oaVniiw`
+        `https://api.unsplash.com/search/photos?query=${encodeURIComponent(warranty.product_name)}&client_id=${UnsplashAPI[0]}`
       )
       
       if (!response.ok) {

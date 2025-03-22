@@ -308,10 +308,6 @@ export default function Dashboard() {
         <div className={styles.header}>
           <h1 className={styles.greeting}>Hi, {user ? user.displayName || "User" : "User"}!</h1>
           <div className={styles.headerActions}>
-            <button className={styles.createButton}>
-              <Plus className={styles.buttonIcon} />
-              Create
-            </button>
             <AnimatedThemeToggle />
             <button className={styles.iconButton}>
               <Search className={styles.iconButtonSvg} />
@@ -574,7 +570,7 @@ export default function Dashboard() {
                     <User className={styles.meetingIconSvg} />
                   </div>
                   <div>
-                    <h3 className={styles.meetingTitle}>Insurance Review</h3>
+                    <h3 className={styles.meetingTitle}>Warranty Transfer</h3>
                   </div>
                 </div>
                 <button className={styles.cardIconButton}>
@@ -590,9 +586,6 @@ export default function Dashboard() {
               </div>
             </div>
 
-            <div className={styles.addTaskCard}>
-              <span className={styles.addTaskText}>+ Add a task</span>
-            </div>
           </div>
 
           {/* Last Projects Section */}
@@ -625,7 +618,7 @@ export default function Dashboard() {
 
               <div className={`${styles.card} ${styles.darkCard}`}>
                 <div className={styles.cardHeader}>
-                  <h3 className={styles.cardTitle}>Phone Insurance</h3>
+                  <h3 className={styles.cardTitle}>Macbook Pro</h3>
                   <button className={styles.projectActionButton}>
                     <CircleEllipsis className={styles.projectActionIcon} />
                   </button>
@@ -638,7 +631,7 @@ export default function Dashboard() {
 
               <div className={`${styles.card} ${styles.darkCard}`}>
                 <div className={styles.cardHeader}>
-                  <h3 className={styles.cardTitle}>Laptop Receipts</h3>
+                  <h3 className={styles.cardTitle}>Laptop Warranty</h3>
                   <button className={styles.projectActionButton}>
                     <CircleEllipsis className={styles.projectActionIcon} />
                   </button>

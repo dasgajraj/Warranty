@@ -1,17 +1,22 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Lato:wght@300;400;500;700&display=swap');
+
 .container {
   display: flex;
   min-height: 100vh;
-  background-color: #f5f5f5;
-  background-image: linear-gradient(to bottom right, rgba(255, 255, 255, 0.8), rgba(240, 240, 240, 0.8));
+  background-color: #e9e2d0; /* Darker beige background */
+  background-image: linear-gradient(to bottom right, rgba(233, 226, 208, 0.9), rgba(220, 210, 190, 0.9));
   position: relative;
   overflow: hidden;
   transition: background-color 0.3s ease, background-image 0.3s ease;
+  color: #3a3a3a; /* Dark grey text for light mode */
+  font-family: 'Lato', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
 /* Dark mode styles for container */
 .container.dark {
-  background-color: #121212;
-  background-image: linear-gradient(to bottom right, rgba(18, 18, 18, 0.9), rgba(24, 24, 24, 0.9));
+  background-color: #2a2d34; /* Dark greyish background */
+  background-image: linear-gradient(to bottom right, rgba(42, 45, 52, 0.9), rgba(35, 37, 43, 0.9));
+  color: #e0e0e0;
 }
 
 /* Add a subtle pattern overlay */
@@ -32,6 +37,11 @@
   background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
 }
 
+.dark {
+  background-color: #121212;
+  color: #f0f0f0;
+}
+
 .content {
   flex: 1;
   padding: 1.5rem;
@@ -39,6 +49,7 @@
   position: relative;
   z-index: 1;
   transition: margin-left 0.3s ease, color 0.3s ease; /* Smooth transition */
+  overflow-y: auto;
 }
 
 /* Dark mode content text color */
@@ -61,13 +72,15 @@
 .greeting {
   font-size: 1.5rem;
   font-weight: 600;
-  color: #000;
+  color: #4a3f2c; /* Darker brown for headings */
   transition: color 0.3s ease;
+  font-family: 'Playfair Display', serif;
+  letter-spacing: 0.02em;
 }
 
 /* Dark mode greeting color */
 .container.dark .greeting {
-  color: #e0e0e0;
+  color: #d0d0d0;
 }
 
 .headerActions {
@@ -90,7 +103,7 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.5rem 1rem;
-  background-color: #000;
+  background-color: #8c7a64; /* Darker brown */
   color: white;
   border: none;
   border-radius: 9999px;
@@ -98,29 +111,76 @@
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(140, 122, 100, 0.3); /* Add shadow to button */
+  font-family: 'Lato', sans-serif;
 }
 
 /* Dark mode create button */
 .container.dark .createButton {
-  background-color: #333;
+  background-color: #4a5568; /* Slate gray for dark mode */
   color: #e0e0e0;
 }
 
 .createButton:hover {
-  background-color: #333;
+  background-color: #75664f; /* Even darker brown on hover */
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 6px 15px rgba(140, 122, 100, 0.4); /* Deeper shadow on hover */
 }
 
 /* Dark mode create button hover */
 .container.dark .createButton:hover {
-  background-color: #444;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  background-color: #5a677d; /* Lighter slate gray on hover */
+  box-shadow: 0 4px 12px rgba(74, 85, 104, 0.3);
 }
 
 .buttonIcon {
   width: 16px;
   height: 16px;
+}
+
+.themeToggle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 1px solid #d6cfc2; /* Light beige border */
+  color: #5c4f3a; /* Warm brown */
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.dark .themeToggle {
+  border-color: #444;
+  color: #f0f0f0;
+}
+
+.dark .themeToggle {
+  border-color: #4a5568; /* Slate gray border */
+  color: #d0d0d0;
+}
+
+.themeToggle:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.themeToggle:hover {
+  background-color: rgba(161, 143, 120, 0.1); /* Subtle beige hover */
+}
+
+.dark .themeToggle:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.dark .themeToggle:hover {
+  background-color: rgba(74, 85, 104, 0.2); /* Subtle slate hover */
+}
+
+.themeIcon {
+  width: 20px;
+  height: 20px;
 }
 
 .iconButton {
@@ -137,25 +197,42 @@
   transition: all 0.2s ease;
 }
 
+.dark .iconButton {
+  border-color: #444;
+  color: #f0f0f0;
+}
+
 .iconButton:hover {
-  background-color: rgba(0, 0, 0, 0.171);
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.iconButton:hover {
+  background-color: rgba(161, 143, 120, 0.1); /* Subtle beige hover */
+}
+
+.dark .iconButton:hover {
+  background-color: rgba(255, 255, 255, 0.05);
 }
 
 /* Dark mode icon button hover */
 .container.dark .iconButton:hover {
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: rgba(74, 85, 104, 0.2); /* Subtle slate hover */
 }
 
 .iconButtonSvg {
   width: 20px;
   height: 20px;
-  color: #555;
+  color: #8c7a64; /* Darker beige/brown */
   transition: color 0.3s ease;
+}
+
+.dark .iconButtonSvg {
+  color: #f0f0f0;
 }
 
 /* Dark mode icon color */
 .container.dark .iconButtonSvg {
-  color: #aaa;
+  color: #a0aec0; /* Light slate */
 }
 
 .notificationDot {
@@ -164,7 +241,7 @@
   right: 8px;
   width: 8px;
   height: 8px;
-  background-color: #ff4d4f;
+  background-color: #e2725b; /* Terracotta accent */
   border-radius: 50%;
 }
 
@@ -173,20 +250,25 @@
   height: 40px;
   border-radius: 50%;
   overflow: hidden;
-  border: 2px solid #fff;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border: 2px solid #e9e2d0; /* Darker beige border */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* Deeper shadow */
   transition: all 0.2s ease;
+}
+
+.dark .avatar {
+  border-color: #fff;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 /* Dark mode avatar border */
 .container.dark .avatar {
-  border-color: #333;
+  border-color: #4a5568; /* Slate gray border */
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 .avatar:hover {
   transform: scale(1.05);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2); /* Even deeper shadow on hover */
 }
 
 /* Dark mode avatar hover */
@@ -209,10 +291,14 @@
 .card {
   border-radius: 1rem;
   padding: 1rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1); /* Deeper shadows */
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
+}
+
+.dark .card {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
 }
 
 /* Dark mode card shadow */
@@ -227,14 +313,14 @@
   left: 0;
   width: 100%;
   height: 4px;
-  background: linear-gradient(to right, #000, transparent);
+  background: linear-gradient(to right, #a18f78, transparent); /* Beige gradient */
   opacity: 0;
   transition: opacity 0.3s ease;
 }
 
 /* Dark mode card accent */
 .container.dark .card::before {
-  background: linear-gradient(to right, #444, transparent);
+  background: linear-gradient(to right, #4a5568, transparent); /* Slate gradient */
 }
 
 .card:hover::before {
@@ -243,7 +329,7 @@
 
 .card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15); /* Much deeper shadows on hover */
 }
 
 /* Dark mode card hover */
@@ -252,43 +338,85 @@
 }
 
 .darkCard {
-  background-color: #ffff;
-  color: white;
+  background-color: #d8ceb7; /* Darker beige */
+  color: #4a3f2c; /* Darker brown text */
+  grid-column: span 4;
+}
+
+.darkCard {
+  background-color: #e8e4d9; /* Light beige */
+  color: #5c4f3a; /* Warm brown */
   grid-column: span 4;
 }
 
 /* Dark mode darkCard */
 .container.dark .darkCard {
-  background-color: #1a1a1a;
+  background-color: #3a3f4a; /* Dark slate */
   color: #e0e0e0;
 }
 
 .lightCard {
-  background-color: #f5f5f5;
-  color: #000;
+  background-color: #e5ddc8; /* Medium beige */
+  color: #4a3f2c; /* Darker brown text */
+  grid-column: span 4;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.lightCard {
+  background-color: white;
+  color: #333;
+}
+
+.lightCard {
+  background-color: #f5f3e9; /* Beige */
+  color: #5c4f3a; /* Warm brown */
   grid-column: span 4;
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* Dark mode lightCard */
 .container.dark .lightCard {
-  background-color: #222;
+  background-color: #353a43; /* Medium slate */
   color: #e0e0e0;
+}
+
+.dark .lightCard {
+  background-color: #1e1e1e;
+  color: #f0f0f0;
+}
+
+.whiteCard {
+  background-color: #f2efe4; /* Light beige instead of white */
+  color: #4a3f2c; /* Darker brown text */
+  grid-column: span 4;
+  border: 1px solid #d8ceb7; /* Darker beige border */
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12); /* Even deeper shadows */
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+.whiteCard {
+  background-color: white;
+  color: #333;
 }
 
 .whiteCard {
   background-color: #fff;
-  color: #000;
+  color: #5c4f3a; /* Warm brown */
   grid-column: span 4;
-  border: 1px solid #f0f0f0;
+  border: 1px solid #e8e4d9; /* Light beige border */
   transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }
 
 /* Dark mode whiteCard */
 .container.dark .whiteCard {
-  background-color: #2a2a2a;
+  background-color: #2f343e; /* Darker slate */
   color: #e0e0e0;
-  border-color: #333;
+  border-color: #4a5568; /* Slate border */
+}
+
+.dark .whiteCard {
+  background-color: #1e1e1e;
+  color: #f0f0f0;
 }
 
 .cardHeader {
@@ -296,6 +424,13 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 1rem;
+}
+
+.cardTitle {
+  font-size: 1.125rem;
+  font-weight: 600;
+  font-family: 'Playfair Display', serif;
+  letter-spacing: 0.02em;
 }
 
 .cardTitle {
@@ -317,34 +452,66 @@
   justify-content: center;
   background: transparent;
   border: none;
+  color: inherit;
   cursor: pointer;
-  color: #999;
+  transition: all 0.2s ease;
+}
+
+.cardIconButton {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #a18f78; /* Beige/brown */
   transition: all 0.2s ease;
 }
 
 .darkCard .cardIconButton {
-  color: #666;
+  color: #8c7a64; /* Darker beige/brown */
 }
 
 /* Dark mode card icon button */
 .container.dark .cardIconButton {
-  color: #888;
+  color: #a0aec0; /* Light slate */
 }
 
 .cardIconButton:hover {
-  background-color: rgba(0, 0, 0, 0.05);
-  color: #000;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.cardIconButton:hover {
+  background-color: rgba(161, 143, 120, 0.1); /* Subtle beige hover */
+  color: #5c4f3a; /* Warm brown */
 }
 
 .darkCard .cardIconButton:hover {
-  background-color: rgba(255, 255, 255, 0.1);
-  color: #fff;
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.darkCard .cardIconButton:hover {
+  background-color: rgba(92, 79, 58, 0.1); /* Subtle brown hover */
+  color: #5c4f3a; /* Warm brown */
 }
 
 /* Dark mode card icon button hover */
 .container.dark .cardIconButton:hover {
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: rgba(160, 174, 192, 0.1); /* Subtle slate hover */
   color: #e0e0e0;
+}
+
+.lightCard .cardIconButton:hover,
+.whiteCard .cardIconButton:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.dark .lightCard .cardIconButton:hover,
+.dark .whiteCard .cardIconButton:hover {
+  background-color: rgba(255, 255, 255, 0.05);
 }
 
 .cardActionIcon {
@@ -359,25 +526,53 @@
 }
 
 .stat {
+  text-align: center;
+}
+
+.stat {
   flex: 1;
+}
+
+.statValue {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
 }
 
 .statValue {
   font-size: 3rem;
   font-weight: 700;
   line-height: 1;
+  color: #5c4f3a; /* Warm brown */
+  font-family: 'Playfair Display', serif;
+}
+
+.container.dark .statValue {
+  color: #e0e0e0;
 }
 
 .statLabel {
   font-size: 0.75rem;
-  color: #999;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.2;
+}
+
+.statLabel {
+  font-size: 0.75rem;
+  color: #a18f78; /* Beige/brown */
   margin-top: 0.25rem;
   transition: color 0.3s ease;
+  font-family: 'Lato', sans-serif;
+  letter-spacing: 0.03em;
 }
 
 /* Dark mode stat label */
 .container.dark .statLabel {
-  color: #777;
+  color: #a0aec0; /* Light slate */
+}
+
+.progressBars {
+  margin-bottom: 1.5rem;
 }
 
 .progressBars {
@@ -389,26 +584,41 @@
 
 .progressBar {
   height: 6px;
-  background-color: #333;
+  background-color: #d8ceb7; /* Darker beige */
   border-radius: 3px;
+  overflow: hidden;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1); /* Inner shadow for depth */
+}
+
+.progressBar {
+  height: 4px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  margin-bottom: 0.5rem;
   overflow: hidden;
 }
 
 /* Dark mode progress bar */
 .container.dark .progressBar {
-  background-color: #444;
+  background-color: #4a5568; /* Slate */
 }
 
 .progressBarFill {
   height: 100%;
-  background-color: #fff;
+  background-color: #8c7a64; /* Darker brown */
   border-radius: 3px;
   transition: width 1s ease;
 }
 
+.progressBarFill {
+  height: 100%;
+  background-color: white;
+  border-radius: 2px;
+}
+
 /* Dark mode progress bar fill */
 .container.dark .progressBarFill {
-  background-color: #aaa;
+  background-color: #a0aec0; /* Light slate */
 }
 
 .statsGrid {
@@ -418,7 +628,27 @@
 }
 
 .statBox {
-  background-color: #333;
+  background-color: #c9bea0; /* Darker beige for stat boxes */
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+  text-align: center;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); /* Add shadow to stat boxes */
+}
+
+.statBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+  text-align: center;
+}
+
+.statBox {
+  background-color: #d6cfc2; /* Lighter beige */
   border-radius: 0.5rem;
   padding: 0.75rem;
   text-align: center;
@@ -427,42 +657,87 @@
 
 /* Dark mode stat box */
 .container.dark .statBox {
-  background-color: #444;
+  background-color: #4a5568; /* Slate */
 }
 
 .statBox:hover {
-  background-color: #444;
+  background-color: #bdb394; /* Even darker beige on hover */
   transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.12); /* Deeper shadow on hover */
 }
 
 /* Dark mode stat box hover */
 .container.dark .statBox:hover {
-  background-color: #555;
+  background-color: #5a677d; /* Lighter slate */
 }
 
 .statBoxIcon {
-  color: #ffff;
+  width: 20px;
+  height: 20px;
+  margin-bottom: 0.5rem;
+}
+
+.statBoxIcon {
+  color: #5c4f3a; /* Warm brown */
   width: 20px;
   height: 20px;
   margin: 0 auto 0.25rem;
+}
+
+.container.dark .statBoxIcon {
+  color: #e0e0e0;
+}
+
+.statBoxValue {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+  font-family: 'Playfair Display', serif;
 }
 
 .statBoxValue {
   font-size: 1.25rem;
   font-weight: 700;
   margin-bottom: 0.25rem;
-  color: #ffffff;
+  color: #5c4f3a; /* Warm brown */
+}
+
+.container.dark .statBoxValue {
+  color: #e0e0e0;
 }
 
 .statBoxLabel {
   font-size: 0.75rem;
-  color: #ffffff;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.statBoxLabel {
+  font-size: 0.75rem;
+  color: #8c7a64; /* Darker beige/brown */
+  font-family: 'Lato', sans-serif;
+  letter-spacing: 0.02em;
+}
+
+.container.dark .statBoxLabel {
+  color: #cbd5e0; /* Very light slate */
+}
+
+.chartLegend {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
 }
 
 .chartLegend {
   display: flex;
   gap: 1rem;
   margin-bottom: 0.5rem;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .legendItem {
@@ -481,32 +756,63 @@
   background-color: #000;
 }
 
+.blackDot {
+  background-color: #5c4f3a; /* Warm brown */
+}
+
 /* Dark mode black dot */
 .container.dark .blackDot {
+  background-color: #e0e0e0;
+}
+
+.dark .blackDot {
   background-color: #fff;
 }
 
 .grayDot {
-  background-color: #999;
+  background-color: #888;
+}
+
+.grayDot {
+  background-color: #a18f78; /* Beige/brown */
+}
+
+.container.dark .grayDot {
+  background-color: #a0aec0; /* Light slate */
 }
 
 .lightGrayDot {
-  background-color: #ddd;
+  background-color: #ccc;
+}
+
+.lightGrayDot {
+  background-color: #d6cfc2; /* Lighter beige */
 }
 
 /* Dark mode light gray dot */
 .container.dark .lightGrayDot {
-  background-color: #888;
+  background-color: #718096; /* Medium slate */
 }
 
 .legendLabel {
   font-size: 0.75rem;
+}
+
+.legendLabel {
+  font-size: 0.75rem;
+  color: #8c7a64; /* Darker beige/brown */
   transition: color 0.3s ease;
+  font-family: 'Lato', sans-serif;
 }
 
 /* Dark mode legend label */
 .container.dark .legendLabel {
-  color: #ccc;
+  color: #cbd5e0; /* Very light slate */
+}
+
+.chart {
+  margin-bottom: 1rem;
+  height: 120px;
 }
 
 .chart {
@@ -524,26 +830,50 @@
   fill: none;
   stroke: #000;
   stroke-width: 2;
+}
+
+.chartLine {
+  fill: none;
+  stroke: #5c4f3a; /* Warm brown */
+  stroke-width: 2;
   transition: stroke 0.3s ease;
 }
 
 /* Dark mode chart line */
 .container.dark .chartLine {
-  stroke: #aaa;
+  stroke: #a0aec0; /* Light slate */
+}
+
+.dark .chartLine {
+  stroke: #fff;
 }
 
 .chartPoint {
   fill: #000;
+}
+
+.chartPoint {
+  fill: #5c4f3a; /* Warm brown */
   transition: fill 0.3s ease;
 }
 
 /* Dark mode chart point */
 .container.dark .chartPoint {
-  fill: #aaa;
+  fill: #a0aec0; /* Light slate */
+}
+
+.dark .chartPoint {
+  fill: #fff;
 }
 
 .chartDashedLine {
-  stroke: #000;
+  stroke: #888;
+  stroke-width: 1;
+  stroke-dasharray: 4 4;
+}
+
+.chartDashedLine {
+  stroke: #a18f78; /* Beige/brown */
   stroke-width: 1;
   stroke-dasharray: 2, 2;
   transition: stroke 0.3s ease;
@@ -551,32 +881,52 @@
 
 /* Dark mode chart dashed line */
 .container.dark .chartDashedLine {
-  stroke: #aaa;
+  stroke: #718096; /* Medium slate */
+}
+
+.chartText {
+  font-size: 10px;
+  text-anchor: middle;
+  fill: #888;
 }
 
 .chartText {
   text-anchor: middle;
   font-size: 10px;
-  fill: #000;
+  fill: #8c7a64; /* Darker beige/brown */
   transition: fill 0.3s ease;
+  font-family: 'Lato', sans-serif;
 }
 
 /* Dark mode chart text */
 .container.dark .chartText {
-  fill: #ccc;
+  fill: #cbd5e0; /* Very light slate */
+}
+
+.chartDays {
+  display: flex;
+  justify-content: space-between;
 }
 
 .chartDays {
   display: flex;
   justify-content: space-between;
   font-size: 0.75rem;
-  color: #999;
+  color: #a18f78; /* Beige/brown */
   transition: color 0.3s ease;
+  font-family: 'Lato', sans-serif;
 }
 
 /* Dark mode chart days */
 .container.dark .chartDays {
-  color: #777;
+  color: #a0aec0; /* Light slate */
+}
+
+.day {
+  font-size: 0.75rem;
+  color: #888;
+  text-align: center;
+  width: 24px;
 }
 
 .day {
@@ -588,7 +938,12 @@
 }
 
 .activeDay {
-  background-color: #000;
+  color: #000;
+  font-weight: 600;
+}
+
+.activeDay {
+  background-color: #a18f78; /* Beige/brown */
   color: #fff;
   border-radius: 50%;
   transition: background-color 0.3s ease;
@@ -596,11 +951,25 @@
 
 /* Dark mode active day */
 .container.dark .activeDay {
-  background-color: #555;
+  background-color: #4a5568; /* Slate */
+}
+
+.dark .activeDay {
+  color: #fff;
+}
+
+.progressInfo {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2rem;
 }
 
 .progressInfo {
   margin-bottom: 1rem;
+}
+
+.progressText {
+  text-align: center;
 }
 
 .progressText {
@@ -610,38 +979,79 @@
 }
 
 .progressPercent {
+  font-size: 2.5rem;
+  font-weight: 700;
+  display: block;
+  margin-bottom: 0.25rem;
+}
+
+.progressPercent {
   font-size: 0.875rem;
   font-weight: 700;
+  color: #5c4f3a; /* Warm brown */
+  font-family: 'Playfair Display', serif;
+}
+
+.container.dark .progressPercent {
+  color: #e0e0e0;
 }
 
 .progressLabel {
   font-size: 0.75rem;
-  color: #999;
+  color: #888;
+}
+
+.progressLabel {
+  font-size: 0.75rem;
+  color: #a18f78; /* Beige/brown */
   transition: color 0.3s ease;
+  font-family: 'Lato', sans-serif;
 }
 
 /* Dark mode progress label */
 .container.dark .progressLabel {
-  color: #777;
+  color: #a0aec0; /* Light slate */
+}
+
+.sectionTitle {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #888;
+  margin-bottom: 1rem;
 }
 
 .sectionTitle {
   font-size: 0.7rem;
   font-weight: 600;
-  color: #999;
+  color: #a18f78; /* Beige/brown */
   margin-bottom: 1rem;
   letter-spacing: 0.05em;
   transition: color 0.3s ease;
+  font-family: 'Playfair Display', serif;
+  text-transform: uppercase;
 }
 
 /* Dark mode section title */
 .container.dark .sectionTitle {
-  color: #777;
+  color: #a0aec0; /* Light slate */
+}
+
+.overviewRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
 }
 
 .overviewRow {
   display: flex;
   margin-bottom: 1rem;
+}
+
+.legendColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
 }
 
 .legendColumn {
@@ -652,6 +1062,11 @@
 }
 
 .circleProgressContainer {
+  width: 100px;
+  height: 100px;
+}
+
+.circleProgressContainer {
   flex: 1;
   display: flex;
   align-items: center;
@@ -659,9 +1074,20 @@
 }
 
 .circleProgress {
+  width: 100%;
+  height: 100%;
+}
+
+.circleProgress {
   width: 80px;
   height: 80px;
   position: relative;
+}
+
+.circleProgressSvg {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
 }
 
 .circleProgressSvg {
@@ -672,14 +1098,24 @@
 
 .circleProgressBg {
   fill: none;
-  stroke: #f0f0f0;
+  stroke: #eee;
+  stroke-width: 2.8;
+}
+
+.circleProgressBg {
+  fill: none;
+  stroke: #e8e4d9; /* Light beige */
   stroke-width: 2.8;
   transition: stroke 0.3s ease;
 }
 
 /* Dark mode circle progress background */
 .container.dark .circleProgressBg {
-  stroke: #444;
+  stroke: #4a5568; /* Slate */
+}
+
+.dark .circleProgressBg {
+  stroke: #333;
 }
 
 .circleProgressFill {
@@ -687,26 +1123,56 @@
   stroke: #000;
   stroke-width: 2.8;
   stroke-linecap: round;
+}
+
+.circleProgressFill {
+  fill: none;
+  stroke: #a18f78; /* Beige/brown */
+  stroke-width: 2.8;
+  stroke-linecap: round;
   transition: stroke-dasharray 1s ease, stroke 0.3s ease;
 }
 
 /* Dark mode circle progress fill */
 .container.dark .circleProgressFill {
-  stroke: #aaa;
+  stroke: #a0aec0; /* Light slate */
+}
+
+.dark .circleProgressFill {
+  stroke: #fff;
 }
 
 .circleProgressText {
   fill: #000;
+  font-size: 0.5rem;
+  text-anchor: middle;
+  font-weight: 600;
+  transform: rotate(90deg);
+}
+
+.circleProgressText {
+  fill: #5c4f3a; /* Warm brown */
   font-size: 0.7rem;
   text-anchor: middle;
   transform: rotate(90deg);
   dominant-baseline: middle;
   transition: fill 0.3s ease;
+  font-family: 'Playfair Display', serif;
 }
 
 /* Dark mode circle progress text */
 .container.dark .circleProgressText {
-  fill: #ccc;
+  fill: #cbd5e0; /* Very light slate */
+}
+
+.dark .circleProgressText {
+  fill: #fff;
+}
+
+.cardFooter {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
 }
 
 .cardFooter {
@@ -722,26 +1188,54 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #000;
+  background-color: #a18f78; /* Beige/brown */
   color: #fff;
   border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Add shadow */
+}
+
+.shareButton {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f5f5f5;
+  border: none;
+  color: #333;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 /* Dark mode share button */
 .container.dark .shareButton {
-  background-color: #444;
+  background-color: #4a5568; /* Slate */
+}
+
+.dark .shareButton {
+  background-color: #333;
+  color: #f0f0f0;
 }
 
 .shareButton:hover {
-  background-color: #333;
+  background-color: #eee;
+}
+
+.shareButton:hover {
+  background-color: #8c7a64; /* Darker beige/brown */
   transform: translateY(-2px);
 }
 
 /* Dark mode share button hover */
 .container.dark .shareButton:hover {
-  background-color: #555;
+  background-color: #5a677d; /* Lighter slate */
+}
+
+.dark .shareButton:hover {
+  background-color: #444;
 }
 
 .shareIcon {
@@ -750,30 +1244,63 @@
 }
 
 .downloadButton {
-  padding: 0.5rem 1rem;
-  border-radius: 9999px;
-  border: 1px solid #ddd;
-  background-color: transparent;
-  font-size: 0.75rem;
+  flex: 1;
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  background-color: #000;
+  border: none;
+  color: white;
+  font-size: 0.875rem;
+  font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
+.downloadButton {
+  padding: 0.5rem 1rem;
+  border-radius: 9999px;
+  border: 1px solid #d6cfc2; /* Lighter beige */
+  background-color: transparent;
+  font-size: 0.75rem;
+  color: #5c4f3a; /* Warm brown */
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: 'Lato', sans-serif;
+}
+
 /* Dark mode download button */
 .container.dark .downloadButton {
-  border-color: #444;
-  color: #ccc;
+  border-color: #4a5568; /* Slate */
+  color: #cbd5e0; /* Very light slate */
+}
+
+.dark .downloadButton {
+  background-color: #333;
 }
 
 .downloadButton:hover {
-  border-color: #000;
-  background-color: #f5f5f5;
+  background-color: #333;
+}
+
+.downloadButton:hover {
+  border-color: #a18f78; /* Beige/brown */
+  background-color: rgba(161, 143, 120, 0.1); /* Subtle beige hover */
 }
 
 /* Dark mode download button hover */
 .container.dark .downloadButton:hover {
-  border-color: #666;
-  background-color: #333;
+  border-color: #718096; /* Medium slate */
+  background-color: rgba(74, 85, 104, 0.2); /* Subtle slate hover */
+}
+
+.dark .downloadButton:hover {
+  background-color: #444;
+}
+
+.badgeContainer {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .badgeContainer {
@@ -785,14 +1312,39 @@
 .badge {
   padding: 0.25rem 0.5rem;
   border-radius: 9999px;
-  border: 1px solid #ddd;
+  border: 1px solid #d8ceb7; /* Darker beige */
   font-size: 0.75rem;
-  transition: border-color 0.3s ease;
+  color: #4a3f2c; /* Darker brown */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05); /* Add subtle shadow */
+  transition: border-color 0.3s ease, color 0.3s ease;
+  font-family: 'Lato', sans-serif;
+}
+
+.badge {
+  padding: 0.25rem 0.5rem;
+  background-color: #f5f5f5;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.badge {
+  padding: 0.25rem 0.5rem;
+  border-radius: 9999px;
+  border: 1px solid #d6cfc2; /* Lighter beige */
+  font-size: 0.75rem;
+  color: #5c4f3a; /* Warm brown */
+  transition: border-color 0.3s ease, color 0.3s ease;
 }
 
 /* Dark mode badge */
 .container.dark .badge {
-  border-color: #444;
+  border-color: #4a5568; /* Slate */
+  color: #cbd5e0; /* Very light slate */
+}
+
+.dark .badge {
+  background-color: #333;
 }
 
 .editButton {
@@ -804,7 +1356,27 @@
   justify-content: center;
   background: transparent;
   border: none;
+  color: #888;
   cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.editButton {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  color: #a18f78; /* Beige/brown */
+  cursor: pointer;
+}
+
+.editIcon {
+  width: 14px;
+  height: 14px;
 }
 
 .editIcon {
@@ -815,7 +1387,13 @@
 
 /* Dark mode edit icon */
 .container.dark .editIcon {
-  color: #aaa;
+  color: #a0aec0; /* Light slate */
+}
+
+.goalsList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
 .goalsList {
@@ -830,14 +1408,40 @@
 .goalItem {
   display: flex;
   align-items: center;
+  gap: 1rem;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #eee;
+}
+
+.goalItem {
+  display: flex;
+  align-items: center;
   gap: 0.5rem;
+}
+
+.dark .goalItem {
+  border-bottom-color: #333;
+}
+
+.goalItem:last-child {
+  border-bottom: none;
+}
+
+.goalCheck {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 2px solid #ddd;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .goalCheck {
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  border: 1px solid #ddd;
+  border: 1px solid #d6cfc2; /* Lighter beige */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -846,19 +1450,40 @@
 
 /* Dark mode goal check */
 .container.dark .goalCheck {
+  border-color: #4a5568; /* Slate */
+}
+
+.dark .goalCheck {
   border-color: #444;
 }
 
 .goalChecked {
   background-color: #000;
   border-color: #000;
+  color: white;
+}
+
+.goalChecked {
+  background-color: #a18f78; /* Beige/brown */
+  border-color: #a18f78; /* Beige/brown */
   transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 /* Dark mode goal checked */
 .container.dark .goalChecked {
-  background-color: #555;
-  border-color: #555;
+  background-color: #4a5568; /* Slate */
+  border-color: #4a5568; /* Slate */
+}
+
+.dark .goalChecked {
+  background-color: #fff;
+  border-color: #fff;
+  color: #000;
+}
+
+.checkIcon {
+  width: 14px;
+  height: 14px;
 }
 
 .checkIcon {
@@ -871,10 +1496,33 @@
   font-size: 0.875rem;
 }
 
+.goalText {
+  font-size: 0.875rem;
+  color: #5c4f3a; /* Warm brown */
+  font-family: 'Lato', sans-serif;
+}
+
+.container.dark .goalText {
+  color: #e0e0e0;
+}
+
+.meetingsColumn {
+  grid-column: span 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
 .meetingsColumn {
   grid-column: span 4;
   display: flex;
   flex-direction: column;
+  gap: 1rem;
+}
+
+.meetingInfo {
+  display: flex;
+  align-items: center;
   gap: 1rem;
 }
 
@@ -888,32 +1536,73 @@
   width: 32px;
   height: 32px;
   border-radius: 50%;
+  background-color: #d8ceb7; /* Darker beige */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1); /* Add shadow */
+  transition: background-color 0.3s ease;
+}
+
+.meetingIcon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
   background-color: #f5f5f5;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background-color 0.3s ease;
+  color: #333;
 }
 
 /* Dark mode meeting icon */
 .container.dark .meetingIcon {
+  background-color: #4a5568; /* Slate */
+}
+
+.dark .meetingIcon {
   background-color: #333;
+  color: #f0f0f0;
+}
+
+.meetingIconSvg {
+  width: 20px;
+  height: 20px;
 }
 
 .meetingIconSvg {
   width: 16px;
   height: 16px;
+  color: #5c4f3a; /* Warm brown */
   transition: color 0.3s ease;
 }
 
 /* Dark mode meeting icon svg */
 .container.dark .meetingIconSvg {
-  color: #aaa;
+  color: #cbd5e0; /* Very light slate */
+}
+
+.meetingTitle {
+  font-size: 1rem;
+  font-weight: 600;
+  font-family: 'Playfair Display', serif;
 }
 
 .meetingTitle {
   font-size: 0.875rem;
   font-weight: 500;
+  color: #5c4f3a; /* Warm brown */
+}
+
+.container.dark .meetingTitle {
+  color: #e0e0e0;
+}
+
+.meetingFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1rem;
 }
 
 .meetingFooter {
@@ -924,17 +1613,23 @@
 
 .meetingTime {
   font-size: 0.75rem;
-  color: #999;
+  color: #888;
+}
+
+.meetingTime {
+  font-size: 0.75rem;
+  color: #a18f78; /* Beige/brown */
   padding: 0.25rem 0.5rem;
   border-radius: 9999px;
-  border: 1px solid #ddd;
+  border: 1px solid #d6cfc2; /* Lighter beige */
   transition: color 0.3s ease, border-color 0.3s ease;
+  font-family: 'Lato', sans-serif;
 }
 
 /* Dark mode meeting time */
 .container.dark .meetingTime {
-  color: #777;
-  border-color: #444;
+  color: #a0aec0; /* Light slate */
+  border-color: #4a5568; /* Slate */
 }
 
 .chatButton {
@@ -944,16 +1639,53 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #000;
+  background-color: #a18f78; /* Beige/brown */
   color: #fff;
   border: none;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Add shadow */
+}
+
+.chatButton {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f5f5f5;
+  border: none;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
 /* Dark mode chat button */
 .container.dark .chatButton {
+  background-color: #4a5568; /* Slate */
+}
+
+.dark .chatButton {
+  background-color: #333;
+  color: #f0f0f0;
+}
+
+.chatButton:hover {
+  background-color: #eee;
+}
+
+.dark .chatButton:hover {
   background-color: #444;
+}
+
+.chatButton:hover, .shareButton:hover {
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Deeper shadow on hover */
+}
+
+.chatIcon {
+  width: 16px;
+  height: 16px;
 }
 
 .chatIcon {
@@ -962,8 +1694,20 @@
 }
 
 .addTaskCard {
+  background-color: rgba(0, 0, 0, 0.03);
+  border: 2px dashed #ddd;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.addTaskCard {
   flex: 1;
-  border: 1px dashed #ddd;
+  border: 1px dashed #d6cfc2; /* Lighter beige */
   border-radius: 1rem;
   display: flex;
   align-items: center;
@@ -974,34 +1718,64 @@
 
 /* Dark mode add task card */
 .container.dark .addTaskCard {
-  border-color: #444;
+  border-color: #4a5568; /* Slate */
+}
+
+.dark .addTaskCard {
+  background-color: rgba(255, 255, 255, 0.03);
+  border-color: #333;
 }
 
 .addTaskCard:hover {
-  border-color: #999;
-  background-color: rgba(0, 0, 0, 0.02);
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.addTaskCard:hover {
+  border-color: #a18f78; /* Beige/brown */
+  background-color: rgba(161, 143, 120, 0.05); /* Very subtle beige */
 }
 
 /* Dark mode add task card hover */
 .container.dark .addTaskCard:hover {
-  border-color: #666;
+  border-color: #718096; /* Medium slate */
+  background-color: rgba(74, 85, 104, 0.1); /* Subtle slate */
+}
+
+.dark .addTaskCard:hover {
   background-color: rgba(255, 255, 255, 0.05);
 }
 
 .addTaskText {
-  color: #999;
+  font-size: 0.875rem;
+  color: #888;
+}
+
+.addTaskText {
+  color: #a18f78; /* Beige/brown */
   font-size: 0.875rem;
   transition: color 0.3s ease;
+  font-family: 'Lato', sans-serif;
 }
 
 /* Dark mode add task text */
 .container.dark .addTaskText {
-  color: #777;
+  color: #a0aec0; /* Light slate */
+}
+
+.projectsSection {
+  grid-column: span 3;
 }
 
 .projectsSection {
   grid-column: span 12;
   margin-top: 1rem;
+}
+
+.sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
 }
 
 .sectionHeader {
@@ -1014,23 +1788,51 @@
 .archiveButton {
   display: flex;
   align-items: center;
+  gap: 0.5rem;
+  background: transparent;
+  border: none;
+  color: #888;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.archiveButton {
+  display: flex;
+  align-items: center;
   gap: 0.25rem;
   background: transparent;
   border: none;
   font-size: 0.75rem;
-  color: #999;
+  color: #a18f78; /* Beige/brown */
   cursor: pointer;
   transition: color 0.3s ease;
+  font-family: 'Lato', sans-serif;
 }
 
 /* Dark mode archive button */
 .container.dark .archiveButton {
-  color: #777;
+  color: #a0aec0; /* Light slate */
+}
+
+.dark .archiveButton:hover {
+  color: #f0f0f0;
+}
+
+.archiveIcon {
+  width: 16px;
+  height: 16px;
 }
 
 .archiveIcon {
   width: 12px;
   height: 12px;
+}
+
+.projectsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
 }
 
 .projectsGrid {
@@ -1047,7 +1849,21 @@
   align-items: center;
   justify-content: center;
   background: transparent;
-  border: 1px solid #333;
+  border: none;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.projectActionButton {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 1px solid #8c7a64; /* Darker beige/brown */
   color: #fff;
   cursor: pointer;
   transition: border-color 0.3s ease;
@@ -1055,12 +1871,23 @@
 
 /* Dark mode project action button */
 .container.dark .projectActionButton {
-  border-color: #555;
+  border-color: #718096; /* Medium slate */
+}
+
+.projectActionButton:hover {
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
 .projectActionIcon {
   width: 16px;
   height: 16px;
+}
+
+.projectStatus {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
 }
 
 .projectStatus {
@@ -1074,41 +1901,70 @@
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background-color: #fff;
+  background-color: #4caf50;
+}
+
+.statusDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #a18f78; /* Beige/brown */
   transition: background-color 0.3s ease;
 }
 
 /* Dark mode status dot */
 .container.dark .statusDot {
-  background-color: #aaa;
+  background-color: #a0aec0; /* Light slate */
 }
 
 .statusText {
   font-size: 0.75rem;
-  color: #999;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.statusText {
+  font-size: 0.75rem;
+  color: #8c7a64; /* Darker beige/brown */
   transition: color 0.3s ease;
+  font-family: 'Lato', sans-serif;
 }
 
 /* Dark mode status text */
 .container.dark .statusText {
-  color: #777;
+  color: #a0aec0; /* Light slate */
+}
+
+.projectDescription {
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.7);
 }
 
 .projectDescription {
   font-size: 0.75rem;
-  color: #999;
+  color: #8c7a64; /* Darker beige/brown */
   line-height: 1.4;
   transition: color 0.3s ease;
+  font-family: 'Lato', sans-serif;
 }
 
 /* Dark mode project description */
 .container.dark .projectDescription {
-  color: #777;
+  color: #a0aec0; /* Light slate */
+}
+
+.projectLabel {
+  font-weight: 600;
+  color: white;
 }
 
 .projectLabel {
   font-weight: 500;
-  color: #fff;
+  color: #5c4f3a; /* Warm brown */
+  font-family: 'Playfair Display', serif;
+}
+
+.container.dark .projectLabel {
+  color: #e0e0e0;
 }
 
 /* Animations */
@@ -1160,7 +2016,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: radial-gradient(circle at center, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 70%);
+  background: radial-gradient(circle at center, rgba(161, 143, 120, 0.1) 0%, rgba(161, 143, 120, 0) 70%);
   opacity: 0;
   transition: opacity 0.3s ease;
   pointer-events: none;
@@ -1168,7 +2024,7 @@
 
 /* Dark mode card hover effect */
 .container.dark .card::after {
-  background: radial-gradient(circle at center, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0) 70%);
+  background: radial-gradient(circle at center, rgba(74, 85, 104, 0.1) 0%, rgba(74, 85, 104, 0) 70%);
 }
 
 .card:hover::after {
@@ -1177,6 +2033,10 @@
 
 /* Responsive styles */
 @media (max-width: 1200px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
   .grid {
     grid-template-columns: repeat(6, 1fr);
   }
@@ -1188,12 +2048,20 @@
     grid-column: span 3;
   }
 
+  .projectsSection {
+    grid-column: span 2;
+  }
+
   .projectsGrid {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
 @media (max-width: 768px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
   .content {
     margin-left: 0;
     padding-top: 70px;
@@ -1217,6 +2085,14 @@
     display: none;
   }
 
+  .projectsSection {
+    grid-column: span 1;
+  }
+
+  .projectsGrid {
+    grid-template-columns: 1fr;
+  }
+
   .grid {
     grid-template-columns: repeat(1, 1fr);
   }
@@ -1231,28 +2107,39 @@
   .projectsGrid {
     grid-template-columns: 1fr;
   }
+
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .headerActions {
+    width: 100%;
+    justify-content: space-between;
+  }
 }
 
 /* CSS Variables for theme switching */
 :root {
   --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   --card-background: #fff;
-  --background-color: #f5f5f5;
-  --text-color: #000;
-  --border-color: #f0f0f0;
-  --chart-line: #000;
-  --chart-point: #000;
-  --chart-text: #000;
+  --background-color: #f5f3e9;
+  --text-color: #5c4f3a;
+  --border-color: #d6cfc2;
+  --chart-line: #5c4f3a;
+  --chart-point: #5c4f3a;
+  --chart-text: #8c7a64;
 }
 
 /* Dark theme variables */
 .container.dark {
   --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  --card-background: #2a2a2a;
-  --background-color: #222;
+  --card-background: #2f343e;
+  --background-color: #2a2d34;
   --text-color: #e0e0e0;
-  --border-color: #333;
-  --chart-line: #aaa;
-  --chart-point: #aaa;
-  --chart-text: #ccc;
+  --border-color: #4a5568;
+  --chart-line: #a0aec0;
+  --chart-point: #a0aec0;
+  --chart-text: #cbd5e0;
 }

@@ -5,7 +5,7 @@ from .firebase_utils import fetch_firebase_users
 from .utils import upload_slip_to_pinata  # Adjust to match your function name
 
 class SlipAdminForm(forms.ModelForm):
-    imei = forms.CharField(max_length=50, required=True)  # Add IMEI field manually
+    # imei_number = forms.CharField(max_length=50, required=True)
 
     class Meta:
         model = Slip

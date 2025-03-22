@@ -9,6 +9,9 @@ class Slip(models.Model):
     temp_file = models.FileField(upload_to='temp', null=True)
     warranty_start_date = models.DateField()
     warranty_end_date = models.DateField()
+    imei_number = models.CharField(max_length=50, null=True)
+
+
 
     def __str__(self):
         return f"{self.product_name} - {self.owner_wallet}"

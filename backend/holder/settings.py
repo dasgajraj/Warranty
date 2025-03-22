@@ -31,6 +31,7 @@ ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
     '192.168.1.227',
+    '*',
 ]
 
 PINATA_API_KEY ='1184bf93d7ab23ebd260'

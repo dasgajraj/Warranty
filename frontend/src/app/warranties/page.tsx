@@ -125,7 +125,7 @@ export default function WarrantiesPage() {
       
       try {
         setIsLoading(true)
-        const response = await fetch(`http://127.0.0.1:5000/api/slip/?user_uid=${user.uid}`)
+        const response = await fetch(`http://192.168.29.234:5000/api/slip/?user_uid=${user.uid}`)
         
         if (!response.ok) {
           throw new Error(`API request failed with status ${response.status}`)

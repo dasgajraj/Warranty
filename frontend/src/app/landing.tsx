@@ -1,4 +1,5 @@
 "use client"
+/** @jsxImportSource @emotion/react */
 
 import { useState, useEffect, useRef } from "react"
 import { motion, useScroll, useTransform } from "framer-motion"
@@ -20,13 +21,29 @@ import styles from "./landing.module.css"
 import AuthModal from "./auth-modal"
 import BlockchainReceiptTransform from "@/app/components/receipt-block-transform-copy"
 
+import styled from "@emotion/styled";
+
+const ResponsiveDiv = styled.div`
+  position: relative;
+  width: 50%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  @media (max-width: 768px) {
+    width: 100%;
+    margin-top: 2rem;
+  }
+`;
+
 export default function LandingPage() {
   const [darkMode, setDarkMode] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [authModalOpen, setAuthModalOpen] = useState(false)
   const [authMode, setAuthMode] = useState<"login" | "signup">("login")
   const containerRef = useRef(null)
-  const receiptRef = useRef(null)
+  const receiptRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end end"],
@@ -48,40 +65,39 @@ export default function LandingPage() {
   }
 
   useEffect(() => {
-    // Initialize theme based on user preference
-    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches
-    setDarkMode(prefersDark)
-    if (prefersDark) document.documentElement.classList.add("dark")
-
-    // Smooth scroll initialization
+    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    setDarkMode(prefersDark);
+    if (prefersDark) document.documentElement.classList.add("dark");
+  
+    // Smooth scrolling
     document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
-      anchor.addEventListener("click", function (e) {
-        e.preventDefault()
-        const targetId = this.getAttribute("href")
-        const targetElement = document.querySelector(targetId)
+      anchor.addEventListener("click", (e) => {
+        e.preventDefault();
+        const targetId = (anchor as HTMLAnchorElement).getAttribute("href");
+        const targetElement = document.querySelector(targetId!);
         if (targetElement) {
           targetElement.scrollIntoView({
             behavior: "smooth",
-          })
+          });
         }
-      })
-    })
-
-    // Simulate tearing attempt animation
+      });
+    });
+  
+    // Simulated tear animation
     const interval = setInterval(() => {
       if (receiptRef.current) {
-        receiptRef.current.classList.add(styles.receiptTearAttempt)
+        receiptRef.current.classList.add(styles.receiptTearAttempt);
         setTimeout(() => {
           if (receiptRef.current) {
-            receiptRef.current.classList.remove(styles.receiptTearAttempt)
+            receiptRef.current.classList.remove(styles.receiptTearAttempt);
           }
-        }, 1000)
+        }, 1000);
       }
-    }, 5000)
-
-    return () => clearInterval(interval)
-  }, [])
-
+    }, 5000);
+  
+    return () => clearInterval(interval);
+  }, []);
+  
   return (
     <div className={`${styles.container} ${darkMode ? styles.dark : ""}`} ref={containerRef}>
       {/* Authentication Modal */}
@@ -162,22 +178,10 @@ export default function LandingPage() {
             <button className={styles.secondaryButton}>Learn More</button>
           </motion.div>
         </div>
-        <div
-          style={{
-            position: "relative",
-            width: "50%",
-            height: "100%",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            "@media (max-width: 768px)": {
-              width: "100%",
-              marginTop: "2rem",
-            },
-          }}
-        >
+        <ResponsiveDiv>
+        
           <BlockchainReceiptTransform darkMode={darkMode} />
-        </div>
+        </ResponsiveDiv>
         <a href="#features" className={styles.scrollDown}>
           <span>Scroll Down</span>
           <ChevronDown className={styles.scrollIcon} />

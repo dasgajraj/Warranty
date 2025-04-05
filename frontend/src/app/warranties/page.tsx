@@ -47,6 +47,7 @@ interface Warranty {
   reminderSet?: boolean
 }
 
+
 export default function WarrantiesPage() {
   // Redux state
   const theme = useAppSelector((state) => state.theme.mode)
@@ -154,7 +155,7 @@ export default function WarrantiesPage() {
         setWarranties(processedData)
         
         // After setting warranties, fetch images for each warranty from Unsplash
-        processedData.forEach(warranty => {
+        processedData.forEach((warranty: Warranty) => {
           fetchWarrantyImage(warranty)
         })
       } catch (err) {

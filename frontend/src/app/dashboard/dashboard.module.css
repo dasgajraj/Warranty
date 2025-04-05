@@ -2120,17 +2120,6 @@
   }
 }
 
-/* CSS Variables for theme switching */
-:root {
-  --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  --card-background: #fff;
-  --background-color: #f5f3e9;
-  --text-color: #5c4f3a;
-  --border-color: #d6cfc2;
-  --chart-line: #5c4f3a;
-  --chart-point: #5c4f3a;
-  --chart-text: #8c7a64;
-}
 
 /* Dark theme variables */
 .container.dark {

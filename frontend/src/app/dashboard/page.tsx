@@ -1,152 +1,185 @@
-"use client"
+"use client";
 
-import { useState, useEffect, useRef } from "react"
-import { BarChart3, Calendar, CheckCircle2, ChevronRight, CircleEllipsis, ExternalLink, FileText, Home, LineChart, MoreHorizontal, MoreVertical, PieChart, Plus, Search, Settings, Share2, Target, User, Users, ChevronLeft, X } from 'lucide-react'
-import styles from "./dashboard.module.css"
-import sidebarStyles from "../sidebar.module.css"
-import calendarStyles from "../calendar/Calendar.module.css"
-import { useAppSelector } from "../store/hooks"
-import AnimatedThemeToggle from "../components/animated-theme-toggle"
-import Link from "next/link"
-import { onAuthStateChanged } from "firebase/auth"
-import { auth } from "../firebase-config"
+import { useState, useEffect, useRef } from "react";
+import {
+  BarChart3,
+  Calendar,
+  CheckCircle2,
+  ChevronRight,
+  CircleEllipsis,
+  ExternalLink,
+  FileText,
+  Home,
+  LineChart,
+  MoreHorizontal,
+  MoreVertical,
+  PieChart,
+  Search,
+  Settings,
+  Share2,
+  Target,
+  User,
+  Users,
+  ChevronLeft,
+  X,
+} from "lucide-react";
+import styles from "./dashboard.module.css";
+import sidebarStyles from "../sidebar.module.css";
+import calendarStyles from "../calendar/Calendar.module.css";
+import { useAppSelector } from "../store/hooks";
+import AnimatedThemeToggle from "../components/animated-theme-toggle";
+import Link from "next/link";
+import { onAuthStateChanged, User as FirebaseUser } from "firebase/auth";
+import { auth } from "../firebase-config";
+import Image from "next/image";
 
 export default function Dashboard() {
-  const [activeTab, setActiveTab] = useState("work")
-  const [progress, setProgress] = useState(30)
-  const [showCalendar, setShowCalendar] = useState(false)
-  const [currentDate, setCurrentDate] = useState(new Date())
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null)
-  const calendarRef = useRef<HTMLDivElement>(null)
-  const [user, setUser] = useState(null)
-  const [loading, setLoading] = useState(true)
+  // Removed unused state 'activeTab' and 'setActiveTab'
+  const [progress, setProgress] = useState(30);
+  const [showCalendar, setShowCalendar] = useState(false);
+  const [currentDate, setCurrentDate] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const calendarRef = useRef<HTMLDivElement>(null);
+  const [user, setUser] = useState<FirebaseUser | null>(null);
+  // We're keeping loading state as it might be used for UI conditionals later
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setLoading(false)
+      setLoading(false);
       if (currentUser) {
-        setUser(currentUser)
+        setUser(currentUser);
       } else {
-        setUser(null)
-        console.log("No user is signed in")
+        setUser(null);
+        console.log("No user is signed in");
       }
-    })
+    });
 
-    return () => unsubscribe()
-  }, [])
+    return () => unsubscribe();
+  }, []);
 
   // Add a simple animation effect for the progress
   useEffect(() => {
     const interval = setInterval(() => {
       setProgress((prev) => {
-        if (prev >= 30) return 30
-        return prev + 1
-      })
-    }, 50)
+        if (prev >= 30) return 30;
+        return prev + 1;
+      });
+    }, 50);
 
-    return () => clearInterval(interval)
-  }, [])
+    return () => clearInterval(interval);
+  }, []);
 
   // Close calendar when clicking outside
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
-      if (calendarRef.current && !calendarRef.current.contains(event.target as Node)) {
-        setShowCalendar(false)
+      if (
+        calendarRef.current &&
+        !calendarRef.current.contains(event.target as Node)
+      ) {
+        setShowCalendar(false);
       }
     }
 
-    document.addEventListener("mousedown", handleClickOutside)
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside)
-    }
-  }, [])
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   // Calendar navigation functions
   const prevMonth = () => {
-    setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1))
-  }
+    setCurrentDate(
+      new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1)
+    );
+  };
 
   const nextMonth = () => {
-    setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1))
-  }
+    setCurrentDate(
+      new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1)
+    );
+  };
 
   // Generate calendar days
   const generateCalendarDays = () => {
-    const year = currentDate.getFullYear()
-    const month = currentDate.getMonth()
+    const year = currentDate.getFullYear();
+    const month = currentDate.getMonth();
 
     // First day of the month
-    const firstDay = new Date(year, month, 1)
+    const firstDay = new Date(year, month, 1);
     // Last day of the month
-    const lastDay = new Date(year, month + 1, 0)
+    const lastDay = new Date(year, month + 1, 0);
 
     // Get the day of the week for the first day (0 = Sunday, 1 = Monday, etc.)
-    const startingDayOfWeek = firstDay.getDay()
+    const startingDayOfWeek = firstDay.getDay();
     // Adjust for Monday as first day of week
-    const adjustedStartDay = startingDayOfWeek === 0 ? 6 : startingDayOfWeek - 1
+    const adjustedStartDay =
+      startingDayOfWeek === 0 ? 6 : startingDayOfWeek - 1;
 
-    const totalDays = lastDay.getDate()
-    const totalCells = Math.ceil((totalDays + adjustedStartDay) / 7) * 7
+    const totalDays = lastDay.getDate();
+    const totalCells = Math.ceil((totalDays + adjustedStartDay) / 7) * 7;
 
-    const days = []
+    const days = [];
 
     // Add empty cells for days before the first day of the month
     for (let i = 0; i < adjustedStartDay; i++) {
-      days.push({ day: null, date: null })
+      days.push({ day: null, date: null });
     }
 
     // Add cells for each day of the month
     for (let i = 1; i <= totalDays; i++) {
-      const date = new Date(year, month, i)
+      const date = new Date(year, month, i);
 
       // Sample events data - in a real app, this would come from your database
-      const events = []
+      const events = [];
       if (i === 10 || i === 20) {
-        events.push({ type: "purchase", title: "New Purchase" })
+        events.push({ type: "purchase", title: "New Purchase" });
       }
       if (i === 15 || i === 25) {
-        events.push({ type: "warranty_expiry", title: "Warranty Expiry" })
+        events.push({ type: "warranty_expiry", title: "Warranty Expiry" });
       }
 
       days.push({
         day: i,
         date: date,
         events: events,
-      })
+      });
     }
 
     // Add empty cells for days after the last day of the month
-    const remainingCells = totalCells - days.length
+    const remainingCells = totalCells - days.length;
     for (let i = 0; i < remainingCells; i++) {
-      days.push({ day: null, date: null })
+      days.push({ day: null, date: null });
     }
 
-    return days
-  }
+    return days;
+  };
 
-  const days = generateCalendarDays()
+  const days = generateCalendarDays();
 
   const formatMonth = (date: Date) => {
-    return date.toLocaleString("default", { month: "long", year: "numeric" })
-  }
+    return date.toLocaleString("default", { month: "long", year: "numeric" });
+  };
 
   const isToday = (date: Date) => {
-    const today = new Date()
+    const today = new Date();
     return (
       date.getDate() === today.getDate() &&
       date.getMonth() === today.getMonth() &&
       date.getFullYear() === today.getFullYear()
-    )
-  }
+    );
+  };
 
   const toggleCalendar = () => {
-    setShowCalendar(!showCalendar)
-  }
+    setShowCalendar(!showCalendar);
+  };
 
-  const theme = useAppSelector((state) => state.theme.mode)
+  const theme = useAppSelector((state) => state.theme.mode);
 
   return (
-    <div className={`${styles.container} ${theme === "dark" ? styles.dark : ""}`}>
+    <div
+      className={`${styles.container} ${theme === "dark" ? styles.dark : ""}`}
+    >
       {/* Left Sidebar */}
       <div className={sidebarStyles.sidebar}>
         <div className={sidebarStyles.logo}>
@@ -157,7 +190,9 @@ export default function Dashboard() {
         </div>
 
         <nav className={sidebarStyles.nav}>
-          <button className={`${sidebarStyles.navButton} ${sidebarStyles.active}`}>
+          <button
+            className={`${sidebarStyles.navButton} ${sidebarStyles.active}`}
+          >
             <Home className={sidebarStyles.navIcon} />
             Dashboard
           </button>
@@ -206,11 +241,21 @@ export default function Dashboard() {
         <div className={calendarStyles.calendarOverlay}>
           <div className={calendarStyles.calendarPopup} ref={calendarRef}>
             <div className={calendarStyles.calendarHeader}>
-              <button className={calendarStyles.calendarNavButton} onClick={prevMonth} aria-label="Previous month">
+              <button
+                className={calendarStyles.calendarNavButton}
+                onClick={prevMonth}
+                aria-label="Previous month"
+              >
                 <ChevronLeft size={20} />
               </button>
-              <h2 className={calendarStyles.calendarTitle}>{formatMonth(currentDate)}</h2>
-              <button className={calendarStyles.calendarNavButton} onClick={nextMonth} aria-label="Next month">
+              <h2 className={calendarStyles.calendarTitle}>
+                {formatMonth(currentDate)}
+              </h2>
+              <button
+                className={calendarStyles.calendarNavButton}
+                onClick={nextMonth}
+                aria-label="Next month"
+              >
                 <ChevronRight size={20} />
               </button>
               <button
@@ -240,9 +285,15 @@ export default function Dashboard() {
                     className={`
                       ${calendarStyles.day} 
                       ${!day.day ? calendarStyles.emptyDay : ""} 
-                      ${day.date && isToday(day.date) ? calendarStyles.today : ""}
                       ${
-                        day.date && selectedDate && day.date.toDateString() === selectedDate.toDateString()
+                        day.date && isToday(day.date)
+                          ? calendarStyles.today
+                          : ""
+                      }
+                      ${
+                        day.date &&
+                        selectedDate &&
+                        day.date.toDateString() === selectedDate.toDateString()
                           ? calendarStyles.selected
                           : ""
                       }
@@ -251,7 +302,9 @@ export default function Dashboard() {
                   >
                     {day.day && (
                       <>
-                        <span className={calendarStyles.dayNumber}>{day.day}</span>
+                        <span className={calendarStyles.dayNumber}>
+                          {day.day}
+                        </span>
                         {day.events && day.events.length > 0 && (
                           <div className={calendarStyles.eventDots}>
                             {day.events.map((event, i) => (
@@ -259,7 +312,11 @@ export default function Dashboard() {
                                 key={i}
                                 className={`
                                   ${calendarStyles.eventDot} 
-                                  ${event.type === "purchase" ? calendarStyles.purchaseDot : calendarStyles.warrantyDot}
+                                  ${
+                                    event.type === "purchase"
+                                      ? calendarStyles.purchaseDot
+                                      : calendarStyles.warrantyDot
+                                  }
                                 `}
                                 title={event.title}
                               />
@@ -275,27 +332,47 @@ export default function Dashboard() {
 
             {selectedDate && (
               <div className={calendarStyles.eventsList}>
-                <h3 className={calendarStyles.eventsTitle}>Events for {selectedDate.toLocaleDateString()}</h3>
-                {days.find((d) => d.date && d.date.toDateString() === selectedDate.toDateString())?.events?.length ? (
+                <h3 className={calendarStyles.eventsTitle}>
+                  Events for {selectedDate.toLocaleDateString()}
+                </h3>
+                {days.find(
+                  (d) =>
+                    d.date &&
+                    d.date.toDateString() === selectedDate.toDateString()
+                )?.events?.length ? (
                   <ul className={calendarStyles.events}>
                     {days
-                      .find((d) => d.date && d.date.toDateString() === selectedDate.toDateString())
-                      ?.events.map((event, index) => (
+                      .find(
+                        (d) =>
+                          d.date &&
+                          d.date.toDateString() === selectedDate.toDateString()
+                      )
+                      ?.events?.map((event, index) => (
                         <li key={index} className={calendarStyles.eventItem}>
                           <span
                             className={`
                             ${calendarStyles.eventType} 
-                            ${event.type === "purchase" ? calendarStyles.purchaseType : calendarStyles.warrantyType}
+                            ${
+                              event.type === "purchase"
+                                ? calendarStyles.purchaseType
+                                : calendarStyles.warrantyType
+                            }
                           `}
                           >
-                            {event.type === "purchase" ? "Purchase" : "Warranty Expiry"}
+                            {event.type === "purchase"
+                              ? "Purchase"
+                              : "Warranty Expiry"}
                           </span>
-                          <span className={calendarStyles.eventTitle}>{event.title}</span>
+                          <span className={calendarStyles.eventTitle}>
+                            {event.title}
+                          </span>
                         </li>
                       ))}
                   </ul>
                 ) : (
-                  <p className={calendarStyles.noEvents}>No events for this date</p>
+                  <p className={calendarStyles.noEvents}>
+                    No events for this date
+                  </p>
                 )}
               </div>
             )}
@@ -306,7 +383,9 @@ export default function Dashboard() {
       {/* Main Content */}
       <div className={styles.content}>
         <div className={styles.header}>
-          <h1 className={styles.greeting}>Hi, {user ? user.displayName || "User" : "User"}!</h1>
+          <h1 className={styles.greeting}>
+            Hi, {user ? user.displayName || "User" : "User"}!
+          </h1>
           <div className={styles.headerActions}>
             <AnimatedThemeToggle />
             <button className={styles.iconButton}>
@@ -317,16 +396,15 @@ export default function Dashboard() {
               <span className={styles.notificationDot}></span>
             </button>
             <div className={styles.avatar}>
-              {user ? (
-                user.photoURL ? (
-                  <img
-                    src={user.photoURL || "/placeholder.svg"}
-                    alt="User Photo"
-                    style={{ width: "100%", height: "100%", borderRadius: "50%", objectFit: "cover" }}
-                  />
-                ) : (
-                  <User className={styles.iconButtonSvg} />
-                )
+              {user && user.photoURL ? (
+                <Image
+                  src={user.photoURL}
+                  alt="User Photo"
+                  width={40}
+                  height={40}
+                  className="rounded-full object-cover"
+                  unoptimized // Optional: disables optimization for external URLs
+                />
               ) : (
                 <User className={styles.iconButtonSvg} />
               )}
@@ -370,10 +448,16 @@ export default function Dashboard() {
 
             <div className={styles.progressBars}>
               <div className={styles.progressBar}>
-                <div className={styles.progressBarFill} style={{ width: "80%" }}></div>
+                <div
+                  className={styles.progressBarFill}
+                  style={{ width: "80%" }}
+                ></div>
               </div>
               <div className={styles.progressBar}>
-                <div className={styles.progressBarFill} style={{ width: "60%" }}></div>
+                <div
+                  className={styles.progressBarFill}
+                  style={{ width: "60%" }}
+                ></div>
               </div>
             </div>
 
@@ -421,7 +505,13 @@ export default function Dashboard() {
                   className={styles.chartLine}
                 />
                 <circle cx="150" cy="30" r="4" className={styles.chartPoint} />
-                <line x1="150" y1="0" x2="150" y2="30" className={styles.chartDashedLine} />
+                <line
+                  x1="150"
+                  y1="0"
+                  x2="150"
+                  y2="30"
+                  className={styles.chartDashedLine}
+                />
                 <text x="150" y="15" className={styles.chartText}>
                   7
                 </text>
@@ -451,7 +541,9 @@ export default function Dashboard() {
             <div className={styles.progressInfo}>
               <div className={styles.progressText}>
                 <span className={styles.progressPercent}>{progress}%</span>
-                <span className={styles.progressLabel}>completed to last month*</span>
+                <span className={styles.progressLabel}>
+                  completed to last month*
+                </span>
               </div>
             </div>
 
@@ -460,15 +552,21 @@ export default function Dashboard() {
             <div className={styles.overviewRow}>
               <div className={styles.legendColumn}>
                 <div className={styles.legendItem}>
-                  <div className={`${styles.legendDot} ${styles.blackDot}`}></div>
+                  <div
+                    className={`${styles.legendDot} ${styles.blackDot}`}
+                  ></div>
                   <span className={styles.legendLabel}>Receipts</span>
                 </div>
                 <div className={styles.legendItem}>
-                  <div className={`${styles.legendDot} ${styles.grayDot}`}></div>
+                  <div
+                    className={`${styles.legendDot} ${styles.grayDot}`}
+                  ></div>
                   <span className={styles.legendLabel}>Warranties</span>
                 </div>
                 <div className={styles.legendItem}>
-                  <div className={`${styles.legendDot} ${styles.lightGrayDot}`}></div>
+                  <div
+                    className={`${styles.legendDot} ${styles.lightGrayDot}`}
+                  ></div>
                   <span className={styles.legendLabel}>Manuals</span>
                 </div>
               </div>
@@ -488,7 +586,11 @@ export default function Dashboard() {
                         a 15.9155 15.9155 0 0 1 0 31.831
                         a 15.9155 15.9155 0 0 1 0 -31.831"
                     />
-                    <text x="18" y="20.35" className={styles.circleProgressText}>
+                    <text
+                      x="18"
+                      y="20.35"
+                      className={styles.circleProgressText}
+                    >
                       {progress}%
                     </text>
                   </svg>
@@ -585,7 +687,6 @@ export default function Dashboard() {
                 </button>
               </div>
             </div>
-
           </div>
 
           {/* Last Projects Section */}
@@ -611,8 +712,8 @@ export default function Dashboard() {
                   <span className={styles.statusText}>In progress</span>
                 </div>
                 <p className={styles.projectDescription}>
-                  <span className={styles.projectLabel}>Done:</span> Scanned warranty card and uploaded receipt for the
-                  new Samsung TV
+                  <span className={styles.projectLabel}>Done:</span> Scanned
+                  warranty card and uploaded receipt for the new Samsung TV
                 </p>
               </div>
 
@@ -646,11 +747,11 @@ export default function Dashboard() {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 // Additional icons needed
-function MessageSquare(props) {
+function MessageSquare(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
       {...props}
@@ -666,10 +767,10 @@ function MessageSquare(props) {
     >
       <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
     </svg>
-  )
+  );
 }
 
-function Bell(props) {
+function Bell(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
       {...props}
@@ -686,10 +787,10 @@ function Bell(props) {
       <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />
       <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
     </svg>
-  )
+  );
 }
 
-function PencilIcon(props) {
+function PencilIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
       {...props}
@@ -705,10 +806,10 @@ function PencilIcon(props) {
     >
       <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z" />
     </svg>
-  )
+  );
 }
 
-function CheckIcon(props) {
+function CheckIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
       {...props}
@@ -724,5 +825,5 @@ function CheckIcon(props) {
     >
       <polyline points="20 6 9 17 4 12" />
     </svg>
-  )
+  );
 }

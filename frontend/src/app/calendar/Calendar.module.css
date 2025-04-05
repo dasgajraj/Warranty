@@ -1,26 +1,5 @@
 /* Calendar Module CSS with Light/Dark Theme Support */
-:root {
-  /* Light mode variables */
-  --background: #ffffff;
-  --card-background: #ffffff;
-  --text-color: #333333;
-  --text-secondary: #666666;
-  --text-muted: #888888;
-  --border-color: #e5e5e5;
-  --hover-color: #f5f5f5;
-  --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  --dot-purchase: #4a6cf7;
-  --dot-warranty: #ff6b6b;
-  --dot-manual: #22c55e;
-  --overlay-bg: rgba(0, 0, 0, 0.5);
-  --event-purchase-bg: rgba(74, 108, 247, 0.1);
-  --event-purchase-text: #4a6cf7;
-  --event-warranty-bg: rgba(255, 107, 107, 0.1);
-  --event-warranty-text: #ff6b6b;
-  --today-bg: #181e1f;
-  --selected-bg: rgba(74, 108, 247, 0.15);
-  --selected-border: #4a6cf7;
-}
+
 
 .dark {
   /* Dark mode variables */

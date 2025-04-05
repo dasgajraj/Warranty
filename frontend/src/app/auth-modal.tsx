@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
-import { X, AlertCircle, Loader2, LogIn } from "lucide-react";
+import { X, AlertCircle, Loader2 } from "lucide-react";
 import { signInWithPopup, onAuthStateChanged, type User } from "firebase/auth";
 import { auth, googleProvider } from "./firebase-config";
 import styles from "./auth-modal.module.css";
@@ -13,6 +13,11 @@ interface AuthModalProps {
   initialMode?: "login" | "signup";
 }
 
+interface FirebaseError {
+  code: string;
+  message: string;
+}
+
 export default function AuthModal({
   isOpen,
   onClose,
@@ -21,7 +26,6 @@ export default function AuthModal({
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [mounted, setMounted] = useState(false);
-  const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [portalElement, setPortalElement] = useState<HTMLElement | null>(null);
   const [showRedirectOption, setShowRedirectOption] = useState(false);
   const [authSuccess, setAuthSuccess] = useState(false);
@@ -37,7 +41,6 @@ export default function AuthModal({
 
     // Listen for auth state changes
     const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setCurrentUser(user);
       if (user) {
         // User is signed in, show success state briefly
         setAuthSuccess(true);
@@ -78,21 +81,24 @@ export default function AuthModal({
         await signInWithPopup(auth, googleProvider);
         // Auth state listener will handle closing the modal and navigation
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("Google sign-in error:", err);
+      
+      // Type guard to check if the error is a FirebaseError
+      const firebaseError = err as FirebaseError;
 
       // Handle specific error for closed popup
-      if (err.code === "auth/popup-closed-by-user") {
+      if (firebaseError.code === "auth/popup-closed-by-user") {
         setError("Sign-in window was closed. Please try again.");
         // Show the redirect option
         setShowRedirectOption(true);
-      } else if (err.code === "auth/popup-blocked") {
+      } else if (firebaseError.code === "auth/popup-blocked") {
         setError(
           "Pop-up was blocked by your browser. Please try the redirect method."
         );
         setShowRedirectOption(true);
       } else {
-        setError(err.message || "Failed to sign in with Google");
+        setError(firebaseError.message || "Failed to sign in with Google");
       }
     } finally {
       setLoading(false);

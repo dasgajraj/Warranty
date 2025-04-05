@@ -1,7 +1,6 @@
 "use client"
 import Link from "next/link"
 import styles from "./sidebar.module.css"
-import ThemeToggle from "@/components/theme-toggle"
 
 export default function Sidebar() {
   return (
@@ -202,7 +201,6 @@ export default function Sidebar() {
       </nav>
 
       <div className={styles.sidebarFooter}>
-        <ThemeToggle />
         <Link href="#" className={styles.navItem}>
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path

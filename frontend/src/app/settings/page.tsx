@@ -6,7 +6,8 @@ import styles from "./settings.module.css"
 import { useAppDispatch, useAppSelector } from "../store/hooks"
 import { toggleTheme } from "../store/theme-slice"
 import Link from "next/link"
-import { signOut as firebaseSignOut } from "firebase/auth"
+import Image from "next/image"
+import { signOut as firebaseSignOut, User as FirebaseUser } from "firebase/auth"
 import { auth } from "../firebase-config"
 
 export default function SettingsPage() {
@@ -20,7 +21,8 @@ export default function SettingsPage() {
   const [notificationMessage, setNotificationMessage] = useState("")
   const [isLoading, setIsLoading] = useState(true)
   const [isSigningOut, setIsSigningOut] = useState(false)
-  const [user, setUser] = useState(null)
+  
+const [user, setUser] = useState<FirebaseUser | null>(null);
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((currentUser) => {
@@ -118,9 +120,17 @@ export default function SettingsPage() {
                 ) : user ? (
                   <div className={styles.profileSection}>
                     <div className={styles.profileHeader}>
-                      <div className={styles.profileImage}>
+                      <div className={styles.profileImage}> 
                         {user.photoURL ? (
-                          <img src={user.photoURL || "/placeholder.svg"} alt="Profile" className={styles.userPhoto} />
+                          <div className={styles.imageWrapper}>
+                            <Image 
+                              src={user.photoURL} 
+                              alt="Profile" 
+                              className={styles.userPhoto} 
+                              width={50} 
+                              height={50}
+                            />
+                          </div>
                         ) : (
                           <div className={styles.userPhotoPlaceholder}>
                             <User size={40} />
@@ -360,4 +370,3 @@ export default function SettingsPage() {
     </div>
   )
 }
-

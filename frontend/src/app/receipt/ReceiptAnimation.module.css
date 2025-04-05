@@ -12,29 +12,6 @@
   transition: background-color 0.3s ease;
 }
 
-/* Dark mode color adjustments */
-:root {
-  --primary-color: #4f46e5;
-  --primary-hover: #4338ca;
-  --bg-color: #ffffff;
-  --text-color: #1f2937;
-  --secondary-text: #6b7280;
-  --divider-color: #e5e7eb;
-  --card-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-  --highlight-color: rgba(79, 70, 229, 0.1);
-}
-
-.dark {
-  --primary-color: #6366f1;
-  --primary-hover: #818cf8;
-  --bg-color: #1e1e2e;
-  --text-color: #e2e8f0;
-  --secondary-text: #94a3b8;
-  --divider-color: #334155;
-  --card-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
-  --highlight-color: rgba(99, 102, 241, 0.15);
-}
-
 .animationStage {
   position: sticky;
   top: 50%;
